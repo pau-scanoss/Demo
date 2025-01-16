@@ -17,25 +17,16 @@ jobs:
         if: env.DOCKER_AUTH_REQUIRED == 'true'
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Generate SBOM and Extract PURLs
+      - name: Checking the Code for License, Vulnerabilities, Weak Encryption & Provenace
         run: |
           docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL -o results.json
-          
-          echo "Extracting PURLs to purls.json..."
-          jq '[paths | select(.[-1] == "purl") as $path | getpath($path)[] | {purl: .}] | {purls: .}' results.json > purls.json
-          echo "PURLs JSON file created with $(jq '.purls | length' purls.json) PURLs."
 
       - name: Upload SBOM and PURLs JSON as Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: scanoss-results
           path: ./results.json
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: purls-json
-          path: ./purls.json
 
   generate-charts:
     runs-on: ubuntu-latest
