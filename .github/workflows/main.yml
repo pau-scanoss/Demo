@@ -1,0 +1,30 @@
+name: SCANOSS Demo Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  scanoss:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run SCANOSS scan
+        uses: scanoss/scanoss-action@v1
+        with:
+          api-key: ${{ secrets.SCANOSS_API_KEY }}
+          source-dir: . # Directory to scan
+          output-format: clonedx # Options: spdxlite, cyclonedx, etc.
+          output-file: scanoss_sbom.json # Name of the generated SBOM file
+
+      - name: Upload SBOM Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SCANOSS-SBOM
+          path: scanoss_sbom.json
