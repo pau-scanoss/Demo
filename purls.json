@@ -1,0 +1,1222 @@
+{
+  "purls": [
+    {
+      "purl": "pkg:npm/%40angular/animations@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/cdk@14.2.7"
+    },
+    {
+      "purl": "pkg:npm/%40angular/cli@14.2.10"
+    },
+    {
+      "purl": "pkg:npm/%40angular/common@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/compiler@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/compiler-cli@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/core@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular-devkit/build-angular@14.2.10"
+    },
+    {
+      "purl": "pkg:npm/%40angular/flex-layout@10.0.0-beta.32"
+    },
+    {
+      "purl": "pkg:npm/%40angular/forms@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/http@8.0.0-beta.10"
+    },
+    {
+      "purl": "pkg:npm/%40angular/material@14.2.7"
+    },
+    {
+      "purl": "pkg:npm/%40angular-material-extensions/password-strength@6.0.0"
+    },
+    {
+      "purl": "pkg:npm/%40angular/platform-browser@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/platform-browser-dynamic@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/router@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/anuglar2-qrcode@2.0.9998"
+    },
+    {
+      "purl": "pkg:npm/body-parser@1.20.1"
+    },
+    {
+      "purl": "pkg:npm/canvas-confetti@1.6.0"
+    },
+    {
+      "purl": "pkg:npm/check-dependencies@1.1.0"
+    },
+    {
+      "purl": "pkg:npm/clarinet@0.12.5"
+    },
+    {
+      "purl": "pkg:npm/colors@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/compression@1.7.4"
+    },
+    {
+      "purl": "pkg:npm/concurrently@5.3.0"
+    },
+    {
+      "purl": "pkg:npm/config@3.3.8"
+    },
+    {
+      "purl": "pkg:npm/cookie-parser@1.4.6"
+    },
+    {
+      "purl": "pkg:npm/core-js@3.26.1"
+    },
+    {
+      "purl": "pkg:npm/cors@2.8.5"
+    },
+    {
+      "purl": "pkg:npm/dottie@2.0.2"
+    },
+    {
+      "purl": "pkg:npm/download@8.0.0"
+    },
+    {
+      "purl": "pkg:npm/errorhandler@1.5.1"
+    },
+    {
+      "purl": "pkg:npm/exif@0.6.0"
+    },
+    {
+      "purl": "pkg:npm/express@4.18.2"
+    },
+    {
+      "purl": "pkg:npm/express-ipfilter@1.3.1"
+    },
+    {
+      "purl": "pkg:npm/express-jwt@0.1.3"
+    },
+    {
+      "purl": "pkg:npm/express-rate-limit@5.5.1"
+    },
+    {
+      "purl": "pkg:npm/express-robots-txt@0.4.1"
+    },
+    {
+      "purl": "pkg:npm/express-security.txt@2.0.0"
+    },
+    {
+      "purl": "pkg:npm/feature-policy@0.5.0"
+    },
+    {
+      "purl": "pkg:npm/file-saver@2.0.5"
+    },
+    {
+      "purl": "pkg:npm/filesniffer@1.0.3"
+    },
+    {
+      "purl": "pkg:npm/file-stream-rotator@0.5.7"
+    },
+    {
+      "purl": "pkg:npm/file-type@16.5.4"
+    },
+    {
+      "purl": "pkg:npm/finale-rest@1.2.0"
+    },
+    {
+      "purl": "pkg:npm/flag-icons@6.6.6"
+    },
+    {
+      "purl": "pkg:npm/font-mfizz@2.4.1"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/fontawesome-svg-core@1.2.36"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/free-brands-svg-icons@5.15.4"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/free-regular-svg-icons@5.15.4"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/free-solid-svg-icons@5.15.4"
+    },
+    {
+      "purl": "pkg:npm/fs-extra@9.1.0"
+    },
+    {
+      "purl": "pkg:npm/fuzzball@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/glob@7.2.3"
+    },
+    {
+      "purl": "pkg:npm/graceful-fs@4.2.10"
+    },
+    {
+      "purl": "pkg:npm/grunt@1.5.3"
+    },
+    {
+      "purl": "pkg:npm/grunt-contrib-compress@1.6.0"
+    },
+    {
+      "purl": "pkg:npm/grunt-replace-json@0.1.0"
+    },
+    {
+      "purl": "pkg:npm/hashids@2.2.10"
+    },
+    {
+      "purl": "pkg:npm/hbs@4.2.0"
+    },
+    {
+      "purl": "pkg:npm/helmet@4.6.0"
+    },
+    {
+      "purl": "pkg:npm/html-entities@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/i18n@0.11.1"
+    },
+    {
+      "purl": "pkg:npm/is-docker@2.2.1"
+    },
+    {
+      "purl": "pkg:npm/is-gitpod@2.0.9"
+    },
+    {
+      "purl": "pkg:npm/is-heroku@2.0.0"
+    },
+    {
+      "purl": "pkg:npm/is-windows@1.0.2"
+    },
+    {
+      "purl": "pkg:npm/jsonwebtoken@0.4.0"
+    },
+    {
+      "purl": "pkg:npm/jssha@3.3.0"
+    },
+    {
+      "purl": "pkg:npm/js-yaml@3.14.1"
+    },
+    {
+      "purl": "pkg:npm/juicy-chat-bot@0.6.6"
+    },
+    {
+      "purl": "pkg:npm/jwt-decode@2.2.0"
+    },
+    {
+      "purl": "pkg:npm/libxmljs2@0.30.1"
+    },
+    {
+      "purl": "pkg:npm/marsdb@0.6.11"
+    },
+    {
+      "purl": "pkg:npm/material-icons@0.3.1"
+    },
+    {
+      "purl": "pkg:npm/morgan@1.10.0"
+    },
+    {
+      "purl": "pkg:npm/multer@1.4.4"
+    },
+    {
+      "purl": "pkg:npm/ng2-file-upload@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/ng-mat-search-bar@12.0.1"
+    },
+    {
+      "purl": "pkg:npm/ng-simple-slideshow@1.3.0-beta.11"
+    },
+    {
+      "purl": "pkg:npm/%40nguniversal/express-engine@10.0.1"
+    },
+    {
+      "purl": "pkg:npm/ngx-clipboard@15.1.0"
+    },
+    {
+      "purl": "pkg:npm/ngx-cookie@6.0.1"
+    },
+    {
+      "purl": "pkg:npm/ngx-highlightjs@6.1.3"
+    },
+    {
+      "purl": "pkg:npm/ngx-spinner@13.1.1"
+    },
+    {
+      "purl": "pkg:npm/ngx-text-diff@0.6.0"
+    },
+    {
+      "purl": "pkg:npm/%40ngx-translate/core@13.0.0"
+    },
+    {
+      "purl": "pkg:npm/%40ngx-translate/http-loader@6.0.0"
+    },
+    {
+      "purl": "pkg:npm/ngx-window-token@6.0.0"
+    },
+    {
+      "purl": "pkg:npm/node-pre-gyp@0.15.0"
+    },
+    {
+      "purl": "pkg:npm/notevil@1.3.3"
+    },
+    {
+      "purl": "pkg:npm/on-finished@2.4.1"
+    },
+    {
+      "purl": "pkg:npm/otplib@12.0.1"
+    },
+    {
+      "purl": "pkg:npm/pdfkit@0.11.0"
+    },
+    {
+      "purl": "pkg:npm/portscanner@2.2.0"
+    },
+    {
+      "purl": "pkg:npm/prom-client@14.1.0"
+    },
+    {
+      "purl": "pkg:npm/pug@3.0.2"
+    },
+    {
+      "purl": "pkg:npm/replace@1.2.2"
+    },
+    {
+      "purl": "pkg:npm/request@2.88.2"
+    },
+    {
+      "purl": "pkg:npm/rxjs@6.6.3"
+    },
+    {
+      "purl": "pkg:npm/sanitize-filename@1.6.3"
+    },
+    {
+      "purl": "pkg:npm/sanitize-html@1.4.2"
+    },
+    {
+      "purl": "pkg:npm/sass@1.56.2"
+    },
+    {
+      "purl": "pkg:npm/semver@7.3.8"
+    },
+    {
+      "purl": "pkg:npm/sequelize@6.26.0"
+    },
+    {
+      "purl": "pkg:npm/serve-index@1.9.1"
+    },
+    {
+      "purl": "pkg:npm/snarkdown@1.2.2"
+    },
+    {
+      "purl": "pkg:npm/socket.io@3.1.2"
+    },
+    {
+      "purl": "pkg:npm/socket.io-client@3.1.3"
+    },
+    {
+      "purl": "pkg:npm/sqlite3@5.1.2"
+    },
+    {
+      "purl": "pkg:npm/svg-captcha@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/swagger-ui-express@4.6.0"
+    },
+    {
+      "purl": "pkg:npm/ts-node-dev@1.1.8"
+    },
+    {
+      "purl": "pkg:npm/typescript@4.6.4"
+    },
+    {
+      "purl": "pkg:npm/unzipper@0.9.15"
+    },
+    {
+      "purl": "pkg:npm/winston@3.8.2"
+    },
+    {
+      "purl": "pkg:npm/yaml-schema-validator@1.2.3"
+    },
+    {
+      "purl": "pkg:npm/z85@0.0.2"
+    },
+    {
+      "purl": "pkg:npm/zone.js@0.11.8"
+    },
+    {
+      "purl": "pkg:github/openssl/openssl"
+    },
+    {
+      "purl": "pkg:github/hardenedbsd/hardenedbsd-stable"
+    },
+    {
+      "purl": "pkg:github/adobkin/libcapn"
+    },
+    {
+      "purl": "pkg:github/bilibili/openssl"
+    },
+    {
+      "purl": "pkg:bitbucket/luo1291250810/openssl"
+    },
+    {
+      "purl": "pkg:github/hibernate/hibernate-orm"
+    },
+    {
+      "purl": "pkg:gitlab/gitlab-org/build/omnibus-mirror/openssl"
+    },
+    {
+      "purl": "pkg:github/dstucrypt/openssl-dstu"
+    },
+    {
+      "purl": "pkg:github/ledgerhq/lib-ledger-core"
+    },
+    {
+      "purl": "pkg:github/openssl/openssl"
+    },
+    {
+      "purl": "pkg:bitbucket/luo1291250810/openssl"
+    },
+    {
+      "purl": "pkg:github/bilibili/openssl"
+    },
+    {
+      "purl": "pkg:github/hardenedbsd/hardenedbsd-stable"
+    },
+    {
+      "purl": "pkg:github/adobkin/libcapn"
+    },
+    {
+      "purl": "pkg:github/hibernate/hibernate-orm"
+    },
+    {
+      "purl": "pkg:gitlab/gitlab-org/build/omnibus-mirror/openssl"
+    },
+    {
+      "purl": "pkg:github/dstucrypt/openssl-dstu"
+    },
+    {
+      "purl": "pkg:github/ledgerhq/lib-ledger-core"
+    },
+    {
+      "purl": "pkg:github/openssl/openssl"
+    },
+    {
+      "purl": "pkg:github/hardenedbsd/hardenedbsd-stable"
+    },
+    {
+      "purl": "pkg:github/bilibili/openssl"
+    },
+    {
+      "purl": "pkg:bitbucket/luo1291250810/openssl"
+    },
+    {
+      "purl": "pkg:github/adobkin/libcapn"
+    },
+    {
+      "purl": "pkg:github/hibernate/hibernate-orm"
+    },
+    {
+      "purl": "pkg:gitlab/gitlab-org/build/omnibus-mirror/openssl"
+    },
+    {
+      "purl": "pkg:github/dstucrypt/openssl-dstu"
+    },
+    {
+      "purl": "pkg:github/ledgerhq/lib-ledger-core"
+    },
+    {
+      "purl": "pkg:github/openssl/openssl"
+    },
+    {
+      "purl": "pkg:github/bilibili/openssl"
+    },
+    {
+      "purl": "pkg:bitbucket/luo1291250810/openssl"
+    },
+    {
+      "purl": "pkg:github/hardenedbsd/hardenedbsd-stable"
+    },
+    {
+      "purl": "pkg:github/adobkin/libcapn"
+    },
+    {
+      "purl": "pkg:github/hibernate/hibernate-orm"
+    },
+    {
+      "purl": "pkg:gitlab/gitlab-org/build/omnibus-mirror/openssl"
+    },
+    {
+      "purl": "pkg:github/dstucrypt/openssl-dstu"
+    },
+    {
+      "purl": "pkg:github/ledgerhq/lib-ledger-core"
+    },
+    {
+      "purl": "pkg:github/openssl/openssl"
+    },
+    {
+      "purl": "pkg:github/hardenedbsd/hardenedbsd-stable"
+    },
+    {
+      "purl": "pkg:bitbucket/luo1291250810/openssl"
+    },
+    {
+      "purl": "pkg:github/bilibili/openssl"
+    },
+    {
+      "purl": "pkg:github/adobkin/libcapn"
+    },
+    {
+      "purl": "pkg:gitlab/gitlab-org/build/omnibus-mirror/openssl"
+    },
+    {
+      "purl": "pkg:github/dstucrypt/openssl-dstu"
+    },
+    {
+      "purl": "pkg:github/ledgerhq/lib-ledger-core"
+    },
+    {
+      "purl": "pkg:github/hibernate/hibernate-orm"
+    },
+    {
+      "purl": "pkg:npm/%40angular/animations@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/cdk@14.2.7"
+    },
+    {
+      "purl": "pkg:npm/%40angular/cli@14.2.10"
+    },
+    {
+      "purl": "pkg:npm/%40angular/common@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/compiler@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/compiler-cli@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/core@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular-devkit/build-angular@14.2.10"
+    },
+    {
+      "purl": "pkg:npm/%40angular/flex-layout@10.0.0-beta.32"
+    },
+    {
+      "purl": "pkg:npm/%40angular/forms@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/http@8.0.0-beta.10"
+    },
+    {
+      "purl": "pkg:npm/%40angular/material@14.2.7"
+    },
+    {
+      "purl": "pkg:npm/%40angular-material-extensions/password-strength@6.0.0"
+    },
+    {
+      "purl": "pkg:npm/%40angular/platform-browser@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/platform-browser-dynamic@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/router@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/anuglar2-qrcode@2.0.9998"
+    },
+    {
+      "purl": "pkg:npm/body-parser@1.20.1"
+    },
+    {
+      "purl": "pkg:npm/canvas-confetti@1.6.0"
+    },
+    {
+      "purl": "pkg:npm/check-dependencies@1.1.0"
+    },
+    {
+      "purl": "pkg:npm/clarinet@0.12.5"
+    },
+    {
+      "purl": "pkg:npm/colors@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/compression@1.7.4"
+    },
+    {
+      "purl": "pkg:npm/concurrently@5.3.0"
+    },
+    {
+      "purl": "pkg:npm/config@3.3.8"
+    },
+    {
+      "purl": "pkg:npm/cookie-parser@1.4.6"
+    },
+    {
+      "purl": "pkg:npm/core-js@3.26.1"
+    },
+    {
+      "purl": "pkg:npm/cors@2.8.5"
+    },
+    {
+      "purl": "pkg:npm/dottie@2.0.2"
+    },
+    {
+      "purl": "pkg:npm/download@8.0.0"
+    },
+    {
+      "purl": "pkg:npm/errorhandler@1.5.1"
+    },
+    {
+      "purl": "pkg:npm/exif@0.6.0"
+    },
+    {
+      "purl": "pkg:npm/express@4.18.2"
+    },
+    {
+      "purl": "pkg:npm/express-ipfilter@1.3.1"
+    },
+    {
+      "purl": "pkg:npm/express-jwt@0.1.3"
+    },
+    {
+      "purl": "pkg:npm/express-rate-limit@5.5.1"
+    },
+    {
+      "purl": "pkg:npm/express-robots-txt@0.4.1"
+    },
+    {
+      "purl": "pkg:npm/express-security.txt@2.0.0"
+    },
+    {
+      "purl": "pkg:npm/feature-policy@0.5.0"
+    },
+    {
+      "purl": "pkg:npm/file-saver@2.0.5"
+    },
+    {
+      "purl": "pkg:npm/filesniffer@1.0.3"
+    },
+    {
+      "purl": "pkg:npm/file-stream-rotator@0.5.7"
+    },
+    {
+      "purl": "pkg:npm/file-type@16.5.4"
+    },
+    {
+      "purl": "pkg:npm/finale-rest@1.2.0"
+    },
+    {
+      "purl": "pkg:npm/flag-icons@6.6.6"
+    },
+    {
+      "purl": "pkg:npm/font-mfizz@2.4.1"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/fontawesome-svg-core@1.2.36"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/free-brands-svg-icons@5.15.4"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/free-regular-svg-icons@5.15.4"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/free-solid-svg-icons@5.15.4"
+    },
+    {
+      "purl": "pkg:npm/fs-extra@9.1.0"
+    },
+    {
+      "purl": "pkg:npm/fuzzball@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/glob@7.2.3"
+    },
+    {
+      "purl": "pkg:npm/graceful-fs@4.2.10"
+    },
+    {
+      "purl": "pkg:npm/grunt@1.5.3"
+    },
+    {
+      "purl": "pkg:npm/grunt-contrib-compress@1.6.0"
+    },
+    {
+      "purl": "pkg:npm/grunt-replace-json@0.1.0"
+    },
+    {
+      "purl": "pkg:npm/hashids@2.2.10"
+    },
+    {
+      "purl": "pkg:npm/hbs@4.2.0"
+    },
+    {
+      "purl": "pkg:npm/helmet@4.6.0"
+    },
+    {
+      "purl": "pkg:npm/html-entities@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/i18n@0.11.1"
+    },
+    {
+      "purl": "pkg:npm/is-docker@2.2.1"
+    },
+    {
+      "purl": "pkg:npm/is-gitpod@2.0.9"
+    },
+    {
+      "purl": "pkg:npm/is-heroku@2.0.0"
+    },
+    {
+      "purl": "pkg:npm/is-windows@1.0.2"
+    },
+    {
+      "purl": "pkg:npm/jsonwebtoken@0.4.0"
+    },
+    {
+      "purl": "pkg:npm/jssha@3.3.0"
+    },
+    {
+      "purl": "pkg:npm/js-yaml@3.14.1"
+    },
+    {
+      "purl": "pkg:npm/juicy-chat-bot@0.6.6"
+    },
+    {
+      "purl": "pkg:npm/jwt-decode@2.2.0"
+    },
+    {
+      "purl": "pkg:npm/libxmljs2@0.30.1"
+    },
+    {
+      "purl": "pkg:npm/marsdb@0.6.11"
+    },
+    {
+      "purl": "pkg:npm/material-icons@0.3.1"
+    },
+    {
+      "purl": "pkg:npm/morgan@1.10.0"
+    },
+    {
+      "purl": "pkg:npm/multer@1.4.4"
+    },
+    {
+      "purl": "pkg:npm/ng2-file-upload@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/ng-mat-search-bar@12.0.1"
+    },
+    {
+      "purl": "pkg:npm/ng-simple-slideshow@1.3.0-beta.11"
+    },
+    {
+      "purl": "pkg:npm/%40nguniversal/express-engine@10.0.1"
+    },
+    {
+      "purl": "pkg:npm/ngx-clipboard@15.1.0"
+    },
+    {
+      "purl": "pkg:npm/ngx-cookie@6.0.1"
+    },
+    {
+      "purl": "pkg:npm/ngx-highlightjs@6.1.3"
+    },
+    {
+      "purl": "pkg:npm/ngx-spinner@13.1.1"
+    },
+    {
+      "purl": "pkg:npm/ngx-text-diff@0.6.0"
+    },
+    {
+      "purl": "pkg:npm/%40ngx-translate/core@13.0.0"
+    },
+    {
+      "purl": "pkg:npm/%40ngx-translate/http-loader@6.0.0"
+    },
+    {
+      "purl": "pkg:npm/ngx-window-token@6.0.0"
+    },
+    {
+      "purl": "pkg:npm/node-pre-gyp@0.15.0"
+    },
+    {
+      "purl": "pkg:npm/notevil@1.3.3"
+    },
+    {
+      "purl": "pkg:npm/on-finished@2.4.1"
+    },
+    {
+      "purl": "pkg:npm/otplib@12.0.1"
+    },
+    {
+      "purl": "pkg:npm/pdfkit@0.11.0"
+    },
+    {
+      "purl": "pkg:npm/portscanner@2.2.0"
+    },
+    {
+      "purl": "pkg:npm/prom-client@14.1.0"
+    },
+    {
+      "purl": "pkg:npm/pug@3.0.2"
+    },
+    {
+      "purl": "pkg:npm/replace@1.2.2"
+    },
+    {
+      "purl": "pkg:npm/request@2.88.2"
+    },
+    {
+      "purl": "pkg:npm/rxjs@6.6.3"
+    },
+    {
+      "purl": "pkg:npm/sanitize-filename@1.6.3"
+    },
+    {
+      "purl": "pkg:npm/sanitize-html@1.4.2"
+    },
+    {
+      "purl": "pkg:npm/sass@1.56.2"
+    },
+    {
+      "purl": "pkg:npm/semver@7.3.8"
+    },
+    {
+      "purl": "pkg:npm/sequelize@6.26.0"
+    },
+    {
+      "purl": "pkg:npm/serve-index@1.9.1"
+    },
+    {
+      "purl": "pkg:npm/snarkdown@1.2.2"
+    },
+    {
+      "purl": "pkg:npm/socket.io@3.1.2"
+    },
+    {
+      "purl": "pkg:npm/socket.io-client@3.1.3"
+    },
+    {
+      "purl": "pkg:npm/sqlite3@5.1.2"
+    },
+    {
+      "purl": "pkg:npm/svg-captcha@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/swagger-ui-express@4.6.0"
+    },
+    {
+      "purl": "pkg:npm/ts-node-dev@1.1.8"
+    },
+    {
+      "purl": "pkg:npm/typescript@4.6.4"
+    },
+    {
+      "purl": "pkg:npm/unzipper@0.9.15"
+    },
+    {
+      "purl": "pkg:npm/winston@3.8.2"
+    },
+    {
+      "purl": "pkg:npm/yaml-schema-validator@1.2.3"
+    },
+    {
+      "purl": "pkg:npm/z85@0.0.2"
+    },
+    {
+      "purl": "pkg:npm/zone.js@0.11.8"
+    },
+    {
+      "purl": "pkg:npm/%40angular/animations@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/cdk@14.2.7"
+    },
+    {
+      "purl": "pkg:npm/%40angular/cli@14.2.10"
+    },
+    {
+      "purl": "pkg:npm/%40angular/common@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/compiler@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/compiler-cli@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/core@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular-devkit/build-angular@14.2.10"
+    },
+    {
+      "purl": "pkg:npm/%40angular/flex-layout@10.0.0-beta.32"
+    },
+    {
+      "purl": "pkg:npm/%40angular/forms@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/http@8.0.0-beta.10"
+    },
+    {
+      "purl": "pkg:npm/%40angular/material@14.2.7"
+    },
+    {
+      "purl": "pkg:npm/%40angular-material-extensions/password-strength@6.0.0"
+    },
+    {
+      "purl": "pkg:npm/%40angular/platform-browser@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/platform-browser-dynamic@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/%40angular/router@14.2.12"
+    },
+    {
+      "purl": "pkg:npm/anuglar2-qrcode@2.0.9998"
+    },
+    {
+      "purl": "pkg:npm/body-parser@1.20.1"
+    },
+    {
+      "purl": "pkg:npm/canvas-confetti@1.6.0"
+    },
+    {
+      "purl": "pkg:npm/check-dependencies@1.1.0"
+    },
+    {
+      "purl": "pkg:npm/clarinet@0.12.5"
+    },
+    {
+      "purl": "pkg:npm/colors@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/compression@1.7.4"
+    },
+    {
+      "purl": "pkg:npm/concurrently@5.3.0"
+    },
+    {
+      "purl": "pkg:npm/config@3.3.8"
+    },
+    {
+      "purl": "pkg:npm/cookie-parser@1.4.6"
+    },
+    {
+      "purl": "pkg:npm/core-js@3.26.1"
+    },
+    {
+      "purl": "pkg:npm/cors@2.8.5"
+    },
+    {
+      "purl": "pkg:npm/dottie@2.0.2"
+    },
+    {
+      "purl": "pkg:npm/download@8.0.0"
+    },
+    {
+      "purl": "pkg:npm/errorhandler@1.5.1"
+    },
+    {
+      "purl": "pkg:npm/exif@0.6.0"
+    },
+    {
+      "purl": "pkg:npm/express@4.18.2"
+    },
+    {
+      "purl": "pkg:npm/express-ipfilter@1.3.1"
+    },
+    {
+      "purl": "pkg:npm/express-jwt@0.1.3"
+    },
+    {
+      "purl": "pkg:npm/express-rate-limit@5.5.1"
+    },
+    {
+      "purl": "pkg:npm/express-robots-txt@0.4.1"
+    },
+    {
+      "purl": "pkg:npm/express-security.txt@2.0.0"
+    },
+    {
+      "purl": "pkg:npm/feature-policy@0.5.0"
+    },
+    {
+      "purl": "pkg:npm/file-saver@2.0.5"
+    },
+    {
+      "purl": "pkg:npm/filesniffer@1.0.3"
+    },
+    {
+      "purl": "pkg:npm/file-stream-rotator@0.5.7"
+    },
+    {
+      "purl": "pkg:npm/file-type@16.5.4"
+    },
+    {
+      "purl": "pkg:npm/finale-rest@1.2.0"
+    },
+    {
+      "purl": "pkg:npm/flag-icons@6.6.6"
+    },
+    {
+      "purl": "pkg:npm/font-mfizz@2.4.1"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/fontawesome-svg-core@1.2.36"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/free-brands-svg-icons@5.15.4"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/free-regular-svg-icons@5.15.4"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/free-solid-svg-icons@5.15.4"
+    },
+    {
+      "purl": "pkg:npm/fs-extra@9.1.0"
+    },
+    {
+      "purl": "pkg:npm/fuzzball@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/glob@7.2.3"
+    },
+    {
+      "purl": "pkg:npm/graceful-fs@4.2.10"
+    },
+    {
+      "purl": "pkg:npm/grunt@1.5.3"
+    },
+    {
+      "purl": "pkg:npm/grunt-contrib-compress@1.6.0"
+    },
+    {
+      "purl": "pkg:npm/grunt-replace-json@0.1.0"
+    },
+    {
+      "purl": "pkg:npm/hashids@2.2.10"
+    },
+    {
+      "purl": "pkg:npm/hbs@4.2.0"
+    },
+    {
+      "purl": "pkg:npm/helmet@4.6.0"
+    },
+    {
+      "purl": "pkg:npm/html-entities@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/i18n@0.11.1"
+    },
+    {
+      "purl": "pkg:npm/is-docker@2.2.1"
+    },
+    {
+      "purl": "pkg:npm/is-gitpod@2.0.9"
+    },
+    {
+      "purl": "pkg:npm/is-heroku@2.0.0"
+    },
+    {
+      "purl": "pkg:npm/is-windows@1.0.2"
+    },
+    {
+      "purl": "pkg:npm/jsonwebtoken@0.4.0"
+    },
+    {
+      "purl": "pkg:npm/jssha@3.3.0"
+    },
+    {
+      "purl": "pkg:npm/js-yaml@3.14.1"
+    },
+    {
+      "purl": "pkg:npm/juicy-chat-bot@0.6.6"
+    },
+    {
+      "purl": "pkg:npm/jwt-decode@2.2.0"
+    },
+    {
+      "purl": "pkg:npm/libxmljs2@0.30.1"
+    },
+    {
+      "purl": "pkg:npm/marsdb@0.6.11"
+    },
+    {
+      "purl": "pkg:npm/material-icons@0.3.1"
+    },
+    {
+      "purl": "pkg:npm/morgan@1.10.0"
+    },
+    {
+      "purl": "pkg:npm/multer@1.4.4"
+    },
+    {
+      "purl": "pkg:npm/ng2-file-upload@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/ng-mat-search-bar@12.0.1"
+    },
+    {
+      "purl": "pkg:npm/ng-simple-slideshow@1.3.0-beta.11"
+    },
+    {
+      "purl": "pkg:npm/%40nguniversal/express-engine@10.0.1"
+    },
+    {
+      "purl": "pkg:npm/ngx-clipboard@15.1.0"
+    },
+    {
+      "purl": "pkg:npm/ngx-cookie@6.0.1"
+    },
+    {
+      "purl": "pkg:npm/ngx-highlightjs@6.1.3"
+    },
+    {
+      "purl": "pkg:npm/ngx-spinner@13.1.1"
+    },
+    {
+      "purl": "pkg:npm/ngx-text-diff@0.6.0"
+    },
+    {
+      "purl": "pkg:npm/%40ngx-translate/core@13.0.0"
+    },
+    {
+      "purl": "pkg:npm/%40ngx-translate/http-loader@6.0.0"
+    },
+    {
+      "purl": "pkg:npm/ngx-window-token@6.0.0"
+    },
+    {
+      "purl": "pkg:npm/node-pre-gyp@0.15.0"
+    },
+    {
+      "purl": "pkg:npm/notevil@1.3.3"
+    },
+    {
+      "purl": "pkg:npm/on-finished@2.4.1"
+    },
+    {
+      "purl": "pkg:npm/otplib@12.0.1"
+    },
+    {
+      "purl": "pkg:npm/pdfkit@0.11.0"
+    },
+    {
+      "purl": "pkg:npm/portscanner@2.2.0"
+    },
+    {
+      "purl": "pkg:npm/prom-client@14.1.0"
+    },
+    {
+      "purl": "pkg:npm/pug@3.0.2"
+    },
+    {
+      "purl": "pkg:npm/replace@1.2.2"
+    },
+    {
+      "purl": "pkg:npm/request@2.88.2"
+    },
+    {
+      "purl": "pkg:npm/rxjs@6.6.3"
+    },
+    {
+      "purl": "pkg:npm/sanitize-filename@1.6.3"
+    },
+    {
+      "purl": "pkg:npm/sanitize-html@1.4.2"
+    },
+    {
+      "purl": "pkg:npm/sass@1.56.2"
+    },
+    {
+      "purl": "pkg:npm/semver@7.3.8"
+    },
+    {
+      "purl": "pkg:npm/sequelize@6.26.0"
+    },
+    {
+      "purl": "pkg:npm/serve-index@1.9.1"
+    },
+    {
+      "purl": "pkg:npm/snarkdown@1.2.2"
+    },
+    {
+      "purl": "pkg:npm/socket.io@3.1.2"
+    },
+    {
+      "purl": "pkg:npm/socket.io-client@3.1.3"
+    },
+    {
+      "purl": "pkg:npm/sqlite3@5.1.2"
+    },
+    {
+      "purl": "pkg:npm/svg-captcha@1.4.0"
+    },
+    {
+      "purl": "pkg:npm/swagger-ui-express@4.6.0"
+    },
+    {
+      "purl": "pkg:npm/ts-node-dev@1.1.8"
+    },
+    {
+      "purl": "pkg:npm/typescript@4.6.4"
+    },
+    {
+      "purl": "pkg:npm/unzipper@0.9.15"
+    },
+    {
+      "purl": "pkg:npm/winston@3.8.2"
+    },
+    {
+      "purl": "pkg:npm/yaml-schema-validator@1.2.3"
+    },
+    {
+      "purl": "pkg:npm/z85@0.0.2"
+    },
+    {
+      "purl": "pkg:npm/zone.js@0.11.8"
+    },
+    {
+      "purl": "pkg:pypi/torchserve@0.10.0"
+    },
+    {
+      "purl": "pkg:pytorch/openlm-research/open_llama_3b_v2@bce5d60"
+    },
+    {
+      "purl": "pkg:dataset/tiiuae/falcon-refinedweb@c735840"
+    },
+    {
+      "purl": "pkg:dataset/bigcode/starcoderdata@9fc30b5"
+    },
+    {
+      "purl": "pkg:dataset/togethercomputer/RedPajama-Data-1T@2794082"
+    },
+    {
+      "purl": "pkg:pypi/transformers@4.40.2"
+    },
+    {
+      "purl": "pkg:transformers/openai-community/gpt2@607a30d"
+    }
+  ]
+}
