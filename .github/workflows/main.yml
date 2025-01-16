@@ -1,4 +1,4 @@
-name: SCANOSS Demo Workflow
+name: SCANOSS Workflow Demo
 
 on:
   push:
