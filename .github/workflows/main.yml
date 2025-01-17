@@ -45,18 +45,12 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: purls-json
-          path: ./
+          path: ./purls.json
 
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pandas tabulate matplotlib kaleido
-
-      - name: Install SCANOSS CLI Tool and Run Batch Scan
-        run: |
-          pip install scanoss
-          echo "Running SCANOSS vulnerability check..."
-          scanoss-py comp vu --input ./purls.json --output ./vulnerabilities_summary.json
 
       - name: Generate Charts and Results Summary
         run: |
@@ -65,7 +59,6 @@ jobs:
 
       - name: Display Results and Charts in Workflow Summary
         run: |
-          if [ -f summary.md ]; then cat summary.md >> $GITHUB_STEP_SUMMARY; fi
-          if [ -f vulnerabilities_summary.json ]; then
-            jq -r '"## Vulnerabilities Summary\n", (.purls[] | "PURL: " + .purl + ", Vulnerability Count: " + (.vulnerabilities | length | tostring))' vulnerabilities_summary.json >> $GITHUB_STEP_SUMMARY
-          fi
+         cat summary.md >> $GITHUB_STEP_SUMMARY
+       
+           
