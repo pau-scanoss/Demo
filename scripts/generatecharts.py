@@ -39,14 +39,29 @@ for component in components:
 print("[DEBUG] Processing vulnerabilities...")
 for vuln in vulnerabilities:
     severity = vuln.get("ratings", [{}])[0].get("severity", "Unknown")
-    vulnerability_data.append(severity)
+    
+    # Handle case where 'affects' might be a list instead of a dictionary
+    affected_components = []
+    affects = vuln.get("affects", [])
+    if isinstance(affects, list):
+        for affect in affects:
+            components = affect.get("components", [])
+            if isinstance(components, list):
+                affected_components.extend([c.get("name", "Unknown") for c in components])
+
+    vulnerability_data.append({
+        "ID": vuln.get("id", "Unknown ID"),
+        "Severity": severity,
+        "Description": vuln.get("description", "No description provided"),
+        "Affected Components": affected_components
+    })
     print(f"[DEBUG] Processed vulnerability: {vuln.get('id', 'Unknown')} with severity: {severity}")
 
 # Create DataFrames
 print("[DEBUG] Creating DataFrames...")
 license_df = pd.DataFrame(license_data, columns=["License"])
 component_df = pd.DataFrame(component_metadata)
-vuln_df = pd.DataFrame(vulnerability_data, columns=["Severity"])
+vuln_df = pd.DataFrame(vulnerability_data)
 print("[DEBUG] DataFrames created successfully.")
 
 # Summarize licenses
@@ -104,7 +119,20 @@ with open("summary.md", "w") as f:
     if not vuln_summary.empty:
         total_vulnerabilities = vuln_df.shape[0]
         f.write(f"## Notes:\n- {total_vulnerabilities} vulnerabilities detected.\n")
-        f.write("- Refer to the charts and details above for severity and affected components.\n")
+        f.write("- Detailed vulnerability breakdown by severity:\n\n")
+        vuln_details_md = tabulate(
+            vuln_summary.values,
+            headers=["Severity", "Count"],
+            tablefmt="github"
+        )
+        f.write(vuln_details_md + "\n\n")
+        f.write("- Detailed Vulnerabilities:\n\n")
+        for _, row in vuln_df.iterrows():
+            f.write(f"  - **ID**: {row['ID']}\n")
+            f.write(f"    - **Severity**: {row['Severity']}\n")
+            f.write(f"    - **Description**: {row['Description']}\n")
+            affected_components = ", ".join(row['Affected Components'])
+            f.write(f"    - **Affected Components**: {affected_components}\n\n")
     else:
         f.write("## Notes:\n- No vulnerabilities detected.\n")
     f.write("- Full SBOM details are available in the uploaded artifact.\n")
@@ -123,7 +151,15 @@ print(components_md)
 if not vuln_summary.empty:
     total_vulnerabilities = vuln_df.shape[0]
     print(f"\n## Notes:\n- {total_vulnerabilities} vulnerabilities detected.")
-    print("- Refer to the charts and details above for severity and affected components.")
+    print("- Detailed vulnerability breakdown by severity:")
+    print(tabulate(vuln_summary.values, headers=["Severity", "Count"], tablefmt="github"))
+    print("\n- Detailed Vulnerabilities:")
+    for _, row in vuln_df.iterrows():
+        print(f"  - **ID**: {row['ID']}")
+        print(f"    - **Severity**: {row['Severity']}")
+        print(f"    - **Description**: {row['Description']}")
+        affected_components = ", ".join(row['Affected Components'])
+        print(f"    - **Affected Components**: {affected_components}\n")
 else:
     print("\n## Notes:\n- No vulnerabilities detected.")
 print("- Full SBOM details are available in the uploaded artifact.\n")
