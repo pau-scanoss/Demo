@@ -1,0 +1,1946 @@
+{
+    "bomFormat": "CycloneDX",
+    "specVersion": "1.4",
+    "serialNumber": "urn:uuid:871cfe24-2d06-4b77-a20d-096a011944e8",
+    "version": 1,
+    "metadata": {
+      "timestamp": "2025-01-21T20:39:23Z",
+      "tools": [
+        {
+          "vendor": "SCANOSS",
+          "name": "scanoss-py",
+          "version": "1.19.0"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "name": "NOASSERTION",
+      "version": "NOASSERTION"
+    },
+    "components": [
+      {
+        "type": "library",
+        "name": "os",
+        "publisher": "wolfi-dev",
+        "version": "cac2ff8",
+        "purl": "pkg:github/wolfi-dev/os",
+        "bom-ref": "pkg:github/wolfi-dev/os",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "aports",
+        "publisher": "alpinelinux",
+        "version": "20190227",
+        "purl": "pkg:github/alpinelinux/aports",
+        "bom-ref": "pkg:github/alpinelinux/aports",
+        "licenses": [
+          {
+            "license": {
+              "name": "Xfig AND LicenseRef-scancode-warranty-disclaimer"
+            }
+          },
+          {
+            "license": {
+              "id": "BSD-2-Clause"
+            }
+          },
+          {
+            "license": {
+              "name": "Xfig AND LicenseRef-scancode-mit-old-style"
+            }
+          },
+          {
+            "license": {
+              "id": "MIT"
+            }
+          },
+          {
+            "license": {
+              "name": "LicenseRef-scancode-unknown-license-reference AND GPL-1.0-or-later"
+            }
+          },
+          {
+            "license": {
+              "name": "Xfig AND HPND-UC-export-US"
+            }
+          }
+        ],
+        "cpe": "cpe:2.3:a:alpinelinux:aports:3.11.0:-:*:*:*:alpine:*:*"
+      },
+      {
+        "type": "library",
+        "name": "void-packages",
+        "publisher": "void-linux",
+        "version": "9c1bc93",
+        "purl": "pkg:github/void-linux/void-packages",
+        "bom-ref": "pkg:github/void-linux/void-packages",
+        "licenses": [
+          {
+            "license": {
+              "id": "BSD-2-Clause"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "wolfi-os",
+        "publisher": "chainguard-dev",
+        "version": "7ecfe59",
+        "purl": "pkg:github/chainguard-dev/wolfi-os",
+        "bom-ref": "pkg:github/chainguard-dev/wolfi-os",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "CNG",
+        "publisher": "gitlab-org/build",
+        "version": "16.9.0-rc42-ee",
+        "purl": "pkg:gitlab/gitlab-org/build/cng",
+        "bom-ref": "pkg:gitlab/gitlab-org/build/cng",
+        "licenses": [
+          {
+            "license": {
+              "id": "Ruby"
+            }
+          },
+          {
+            "license": {
+              "id": "MIT"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "boringssl-fips",
+        "publisher": "dio",
+        "version": "fips-20210429-no-tls-chacha20-poly1305-sha256-ninja-1.10.2",
+        "purl": "pkg:github/dio/boringssl-fips",
+        "bom-ref": "pkg:github/dio/boringssl-fips",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "images",
+        "publisher": "chainguard-images",
+        "version": "c8ffbab",
+        "purl": "pkg:github/chainguard-images/images",
+        "bom-ref": "pkg:github/chainguard-images/images",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "image-build-multus",
+        "publisher": "rancher",
+        "version": "4.0.2-build20230811",
+        "purl": "pkg:github/rancher/image-build-multus",
+        "bom-ref": "pkg:github/rancher/image-build-multus",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "leo",
+        "publisher": "dio",
+        "version": "0.0.1",
+        "purl": "pkg:github/dio/leo",
+        "bom-ref": "pkg:github/dio/leo",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "unoconv",
+        "publisher": "unoconv",
+        "version": "0.9.0",
+        "purl": "pkg:github/unoconv/unoconv",
+        "bom-ref": "pkg:github/unoconv/unoconv",
+        "licenses": [
+          {
+            "license": {
+              "id": "GPL-1.0-or-later"
+            }
+          },
+          {
+            "license": {
+              "id": "GPL-2.0-only"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "python3",
+        "publisher": "src-openeuler",
+        "version": "openEuler-22.03-LTS-round1",
+        "purl": "pkg:gitee/src-openeuler/python3",
+        "bom-ref": "pkg:gitee/src-openeuler/python3",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "go",
+        "publisher": "golang-fips",
+        "version": "22.3-3-openssl-fips",
+        "purl": "pkg:github/golang-fips/go",
+        "bom-ref": "pkg:github/golang-fips/go",
+        "licenses": [
+          {
+            "license": {
+              "id": "BSD-3-Clause"
+            }
+          },
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          },
+          {
+            "license": {
+              "name": "BSD-3-Clause AND MIT AND OpenSSL"
+            }
+          },
+          {
+            "license": {
+              "name": "BSD-3-Clause AND BSD-2-Clause-Views"
+            }
+          },
+          {
+            "license": {
+              "name": "BSD-3-Clause AND LicenseRef-scancode-unknown-license-reference AND OpenSSL AND ISC AND OpenSSL AND LicenseRef-scancode-openssl AND LicenseRef-scancode-ssleay-windows AND ISC AND BSD-3-Clause"
+            }
+          },
+          {
+            "license": {
+              "name": "BSD-3-Clause AND LicenseRef-scancode-unknown-license-reference AND OpenSSL AND ISC AND OpenSSL AND OpenSSL-standalone AND SSLeay-standalone AND ISC AND BSD-3-Clause"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "mongo",
+        "publisher": "mongodb",
+        "version": "5.0.0-alpha",
+        "purl": "pkg:github/mongodb/mongo",
+        "bom-ref": "pkg:github/mongodb/mongo",
+        "licenses": [
+          {
+            "license": {
+              "name": "Apache-2.0 OR BSD-3-Clause"
+            }
+          },
+          {
+            "license": {
+              "id": "BSD-2-Clause"
+            }
+          },
+          {
+            "license": {
+              "name": "LPPL-1.3c AND MPL-2.0 AND LPPL-1.3c"
+            }
+          },
+          {
+            "license": {
+              "id": "MPL-2.0"
+            }
+          },
+          {
+            "license": {
+              "name": "LPPL-1.3c AND MPL-2.0 AND LPPL-1.3a AND LGPL-2.0-or-later"
+            }
+          },
+          {
+            "license": {
+              "id": "BSD-3-Clause"
+            }
+          },
+          {
+            "license": {
+              "name": "MIT AND Python-2.0"
+            }
+          },
+          {
+            "license": {
+              "id": "BSL-1.0"
+            }
+          },
+          {
+            "license": {
+              "id": "NTP"
+            }
+          },
+          {
+            "license": {
+              "name": "LPPL-1.3c AND MPL-2.0 AND LPPL-1.0"
+            }
+          },
+          {
+            "license": {
+              "id": "FSFAP"
+            }
+          },
+          {
+            "license": {
+              "id": "BSD-2-Clause-Views"
+            }
+          },
+          {
+            "license": {
+              "name": "BSD-3-Clause AND CC-BY-3.0 AND MIT AND CC-BY-4.0 AND LicenseRef-scancode-public-domain"
+            }
+          },
+          {
+            "license": {
+              "name": "Apache-2.0 AND BSD-3-Clause AND MPL-2.0"
+            }
+          },
+          {
+            "license": {
+              "name": "LicenseRef-scancode-public-domain"
+            }
+          },
+          {
+            "license": {
+              "name": "LPPL-1.3c AND MPL-2.0"
+            }
+          },
+          {
+            "license": {
+              "name": "GPL-2.0-or-later AND Apache-2.0 AND GPL-2.0-only AND Apache-2.0"
+            }
+          },
+          {
+            "license": {
+              "name": "LicenseRef-scancode-pcre"
+            }
+          },
+          {
+            "license": {
+              "id": "GPL-2.0-only"
+            }
+          },
+          {
+            "license": {
+              "name": "LPPL-1.3c AND MPL-2.0 AND LPPL-1.3a"
+            }
+          },
+          {
+            "license": {
+              "name": "FSFAP-no-warranty-disclaimer"
+            }
+          },
+          {
+            "license": {
+              "name": "Apache-2.0 WITH LLVM-exception"
+            }
+          },
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          },
+          {
+            "license": {
+              "name": "LicenseRef-scancode-ibm-icu"
+            }
+          },
+          {
+            "license": {
+              "name": "LicenseRef-scancode-protobuf"
+            }
+          },
+          {
+            "license": {
+              "id": "MIT"
+            }
+          },
+          {
+            "license": {
+              "id": "SSPL-1.0"
+            }
+          },
+          {
+            "license": {
+              "name": "GPL-2.0-only OR GPL-3.0-only"
+            }
+          },
+          {
+            "license": {
+              "name": "LicenseRef-scancode-public-domain AND WTFPL"
+            }
+          }
+        ],
+        "cpe": "cpe:2.3:a:mongodb:mongodb:5.0.0:alpha:*:*:*:*:*:*"
+      },
+      {
+        "type": "library",
+        "name": "Liberica",
+        "publisher": "bell-sw",
+        "version": "11.0.21+10",
+        "purl": "pkg:github/bell-sw/liberica",
+        "bom-ref": "pkg:github/bell-sw/liberica",
+        "licenses": [
+          {
+            "license": {
+              "id": "GPL-2.0-only"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "elasticsearch",
+        "publisher": "elastic",
+        "version": "7.6.0",
+        "purl": "pkg:github/elastic/elasticsearch",
+        "bom-ref": "pkg:github/elastic/elasticsearch",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          },
+          {
+            "license": {
+              "id": "SSPL-1.0"
+            }
+          },
+          {
+            "license": {
+              "id": "Elastic-2.0"
+            }
+          }
+        ],
+        "cpe": "cpe:2.3:a:elastic:kibana:7.6.0:*:*:*:*:*:*:*"
+      },
+      {
+        "type": "library",
+        "name": "swift-lang-packaging-fedora",
+        "publisher": "tachoknight",
+        "version": "submitted-to-bodhi",
+        "purl": "pkg:github/tachoknight/swift-lang-packaging-fedora",
+        "bom-ref": "pkg:github/tachoknight/swift-lang-packaging-fedora",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "statsd",
+        "publisher": "Etsy",
+        "version": "0.8.0",
+        "purl": "pkg:npm/statsd",
+        "bom-ref": "pkg:npm/statsd",
+        "licenses": [
+          {
+            "license": {
+              "id": "MIT"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "swift-android-toolchain",
+        "publisher": "readdle",
+        "version": "pre-5.7-r1",
+        "purl": "pkg:github/readdle/swift-android-toolchain",
+        "bom-ref": "pkg:github/readdle/swift-android-toolchain",
+        "licenses": [
+          {
+            "license": {
+              "id": "MIT"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "6306314",
+        "publisher": "Happo",
+        "version": "2",
+        "purl": "pkg:stackoverflow/6306314",
+        "bom-ref": "pkg:stackoverflow/6306314",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          },
+          {
+            "license": {
+              "id": "CC-BY-SA-3.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "gentoo",
+        "publisher": "calculatelinux",
+        "version": "1907",
+        "purl": "pkg:github/calculatelinux/gentoo",
+        "bom-ref": "pkg:github/calculatelinux/gentoo",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "guru",
+        "publisher": "gentoo",
+        "version": "296af6d",
+        "purl": "pkg:github/gentoo/guru",
+        "bom-ref": "pkg:github/gentoo/guru",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "dist",
+        "publisher": "caddyserver",
+        "version": "093d76b",
+        "purl": "pkg:github/caddyserver/dist",
+        "bom-ref": "pkg:github/caddyserver/dist",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "tomcat9",
+        "publisher": "tomcat9",
+        "version": "9.0.43-2~deb11u10",
+        "purl": "pkg:deb/debian/tomcat9",
+        "bom-ref": "pkg:deb/debian/tomcat9",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "sig-storage-local-static-provisioner",
+        "publisher": "kubernetes-sigs",
+        "version": "76b022f",
+        "purl": "pkg:github/kubernetes-sigs/sig-storage-local-static-provisioner",
+        "bom-ref": "pkg:github/kubernetes-sigs/sig-storage-local-static-provisioner",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "mariadb",
+        "publisher": "linuxcontainers",
+        "version": "10.10.2",
+        "purl": "pkg:github/linuxcontainers/mariadb",
+        "bom-ref": "pkg:github/linuxcontainers/mariadb",
+        "licenses": [
+          {
+            "license": {
+              "id": "AGPL-3.0-only"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "Spring-Boot-2.x-In-Action",
+        "publisher": "duqicauc",
+        "version": "7cc8583",
+        "purl": "pkg:github/duqicauc/spring-boot-2.x-in-action",
+        "bom-ref": "pkg:github/duqicauc/spring-boot-2.x-in-action",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "argo-cd",
+        "publisher": "VadBuka",
+        "version": "2.8.20",
+        "purl": "pkg:github/vadbuka/argo-cd",
+        "bom-ref": "pkg:github/vadbuka/argo-cd",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "gdb",
+        "publisher": "pantacor/build-deps",
+        "version": "binutils-csl-sourcerygxx-4_1-4",
+        "purl": "pkg:gitlab/pantacor/build-deps/gdb",
+        "bom-ref": "pkg:gitlab/pantacor/build-deps/gdb",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "46277128",
+        "publisher": "Marcin",
+        "version": "1",
+        "purl": "pkg:stackoverflow/46277128",
+        "bom-ref": "pkg:stackoverflow/46277128",
+        "licenses": [
+          {
+            "license": {
+              "id": "CC-BY-SA-3.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "golang",
+        "publisher": "redhat/centos-stream/rpms",
+        "version": "327a94f0",
+        "purl": "pkg:gitlab/redhat/centos-stream/rpms/golang",
+        "bom-ref": "pkg:gitlab/redhat/centos-stream/rpms/golang",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "go",
+        "publisher": "microsoft",
+        "version": "1.22.2-1",
+        "purl": "pkg:github/microsoft/go",
+        "bom-ref": "pkg:github/microsoft/go",
+        "licenses": [
+          {
+            "license": {
+              "id": "BSD-3-Clause"
+            }
+          },
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          },
+          {
+            "license": {
+              "id": "MIT"
+            }
+          },
+          {
+            "license": {
+              "name": "BSD-3-Clause AND BSD-2-Clause-Views"
+            }
+          },
+          {
+            "license": {
+              "name": "BSD-3-Clause AND LicenseRef-scancode-unknown-license-reference AND OpenSSL AND ISC AND OpenSSL AND LicenseRef-scancode-openssl AND LicenseRef-scancode-ssleay-windows AND ISC AND BSD-3-Clause"
+            }
+          },
+          {
+            "license": {
+              "name": "BSD-3-Clause AND LicenseRef-scancode-unknown-license-reference AND OpenSSL AND ISC AND OpenSSL AND OpenSSL-standalone AND SSLeay-standalone AND ISC AND BSD-3-Clause"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "argo-cd",
+        "publisher": "argoproj",
+        "version": "2.9.18",
+        "purl": "pkg:github/argoproj/argo-cd",
+        "bom-ref": "pkg:github/argoproj/argo-cd",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ],
+        "cpe": "cpe:2.3:a:argoproj:argo_cd:2.9.18:*:*:*:*:*:*:*"
+      },
+      {
+        "type": "library",
+        "name": "build-scripts",
+        "publisher": "ppc64le",
+        "version": "349e5ae",
+        "purl": "pkg:github/ppc64le/build-scripts",
+        "bom-ref": "pkg:github/ppc64le/build-scripts",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "gentoo-overlay",
+        "publisher": "stefantalpalaru",
+        "version": "366c2c5",
+        "purl": "pkg:github/stefantalpalaru/gentoo-overlay",
+        "bom-ref": "pkg:github/stefantalpalaru/gentoo-overlay",
+        "licenses": [
+          {
+            "license": {
+              "id": "GPL-2.0-only"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "go_crypto",
+        "publisher": "elijahmorg",
+        "version": "1.18.0",
+        "purl": "pkg:github/elijahmorg/go_crypto",
+        "bom-ref": "pkg:github/elijahmorg/go_crypto",
+        "licenses": [
+          {
+            "license": {
+              "id": "BSD-3-Clause"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "benchmark",
+        "publisher": "google",
+        "version": "06b4a07",
+        "purl": "pkg:github/google/benchmark",
+        "bom-ref": "pkg:github/google/benchmark",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ]
+      },
+      {
+        "type": "library",
+        "name": "fluentd",
+        "publisher": "fluent",
+        "version": "1.14.5",
+        "purl": "pkg:github/fluent/fluentd",
+        "bom-ref": "pkg:github/fluent/fluentd",
+        "licenses": [
+          {
+            "license": {
+              "id": "Apache-2.0"
+            }
+          }
+        ],
+        "cpe": "cpe:2.3:a:fluentd:fluentd:1.14.6:*:*:*:*:*:*:*"
+      },
+      {
+        "type": "library",
+        "name": "java-1.8.0-openjdk",
+        "publisher": "redhat/centos-stream/rpms",
+        "version": "f7c0e114",
+        "purl": "pkg:gitlab/redhat/centos-stream/rpms/java-1.8.0-openjdk",
+        "bom-ref": "pkg:gitlab/redhat/centos-stream/rpms/java-1.8.0-openjdk",
+        "licenses": []
+      },
+      {
+        "type": "library",
+        "name": "envoy-test-releases",
+        "publisher": "phlax",
+        "version": "1.27.0",
+        "purl": "pkg:github/phlax/envoy-test-releases",
+        "bom-ref": "pkg:github/phlax/envoy-test-releases",
+        "licenses": []
+      }
+    ],
+    "vulnerabilities": [
+      {
+        "id": "CVE-2021-36158",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-36158"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/alpinelinux/aports"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2014-8180",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2014-8180"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/mongodb/mongo"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-32036",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-32036"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/mongodb/mongo"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-32037",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-32037"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/mongodb/mongo"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-32040",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-32040"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/mongodb/mongo"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2022-24272",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-24272"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/mongodb/mongo"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-1409",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-1409"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/mongodb/mongo"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-6375",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-6375"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/mongodb/mongo"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-7553",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-7553"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/mongodb/mongo"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-8207",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-8207"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/mongodb/mongo"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-c77j-p484-h84m",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-c77j-p484-h84m"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-285m-vhfq-xx4h",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-285m-vhfq-xx4h"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-cqgv-256r-m9r8",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-cqgv-256r-m9r8"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-gfv5-grx2-9jw2",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-gfv5-grx2-9jw2"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-g9fw-9x87-rmrj",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-g9fw-9x87-rmrj"
+        },
+        "ratings": [
+          {
+            "severity": "low"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-5v8f-xx9m-wj44",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-5v8f-xx9m-wj44"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-w5gg-2q56-6h4f",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-w5gg-2q56-6h4f"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-2hjr-vmf3-xwvp",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-2hjr-vmf3-xwvp"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2020-7009",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7009"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2020-7014",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7014"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2020-7019",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7019"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2020-7020",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7020"
+        },
+        "ratings": [
+          {
+            "severity": "low"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2020-7021",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7021"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22134",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22134"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22144",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22144"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-31417",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-31417"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-31418",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-31418"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-31419",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-31419"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-46673",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-46673"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-46674",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-46674"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-49921",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-49921"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2020-7012",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7012"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2020-7013",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7013"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2020-7015",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7015"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22136",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22136"
+        },
+        "ratings": [
+          {
+            "severity": "low"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22139",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22139"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22141",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22141"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22142",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22142"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-37936",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-37936"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2022-23707",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-23707"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2022-23711",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-23711"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2022-23713",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-23713"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2022-38778",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-38778"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2022-38779",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-38779"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-23442",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-23442"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-23443",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-23443"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-q394-h7f5-7f44",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-q394-h7f5-7f44"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-hr65-qq6p-87r4",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-hr65-qq6p-87r4"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22135",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22135"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22137",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22137"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22145",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22145"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22147",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22147"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22150",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22150"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-22151",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-22151"
+        },
+        "ratings": [
+          {
+            "severity": "low"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-37938",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-37938"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2021-37939",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-37939"
+        },
+        "ratings": [
+          {
+            "severity": "low"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2022-23709",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-23709"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-37287",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-37287"
+        },
+        "ratings": [
+          {
+            "severity": "critical"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-v8wx-v5jq-qhhw",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-v8wx-v5jq-qhhw"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/argoproj/argo-cd"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-jmvp-698c-4x3w",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-jmvp-698c-4x3w"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/argoproj/argo-cd"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-40634",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-40634"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/argoproj/argo-cd"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-41666",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-41666"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/argoproj/argo-cd"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-31414",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-31414"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-46671",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-46671"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2023-46675",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-46675"
+        },
+        "ratings": [
+          {
+            "severity": "high"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2024-23446",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-23446"
+        },
+        "ratings": [
+          {
+            "severity": "medium"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/elastic/elasticsearch"
+          }
+        ]
+      },
+      {
+        "id": "GHSA-fppq-mj76-fpj2",
+        "source": {
+          "name": "GitHub Advisories",
+          "url": "https://github.com/advisories/GHSA-fppq-mj76-fpj2"
+        },
+        "ratings": [
+          {
+            "severity": "low"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/fluent/fluentd"
+          }
+        ]
+      },
+      {
+        "id": "CVE-2022-39379",
+        "source": {
+          "name": "NVD",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-39379"
+        },
+        "ratings": [
+          {
+            "severity": "low"
+          }
+        ],
+        "affects": [
+          {
+            "ref": "pkg:github/fluent/fluentd"
+          }
+        ]
+      }
+    ]
+  }
+  

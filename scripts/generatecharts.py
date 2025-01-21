@@ -4,7 +4,7 @@ from collections import Counter
 from tabulate import tabulate
 
 # Load SCANOSS SBOM results
-with open("results.json", "r") as file:
+with open("cycloneDX.json", "r") as file:
     data = json.load(file)
 
 licenses = []
