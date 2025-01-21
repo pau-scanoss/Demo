@@ -1,77 +1,75 @@
 import json
 import pandas as pd
 from collections import Counter
+import matplotlib.pyplot as plt
 from tabulate import tabulate
 
-# Load SCANOSS SBOM results
+# Load the CycloneDX JSON file
 with open("cycloneDX.json", "r") as file:
     data = json.load(file)
 
-licenses = []
-components_metadata = []
-crypto_algorithms = []
+# Extract relevant sections
+components = data.get("components", [])
+vulnerabilities = data.get("vulnerabilities", [])
 
-# Extract relevant data
-for component, file_data in data.items():
-    if isinstance(file_data, list):  # Ensure file_data is a list
-        for entry in file_data:
-            if isinstance(entry, dict):  # Ensure entry is a dictionary
-                # Extract licenses
-                licenses_in_entry = entry.get("licenses", [])
-                for license_info in licenses_in_entry:
-                    licenses.append(license_info.get("name", "Unknown License"))
+# Data containers
+license_data = []
+component_metadata = []
+vulnerability_data = []
 
-                # Extract cryptographic algorithms
-                cryptos_in_entry = entry.get("cryptography", [])
-                for crypto_info in cryptos_in_entry:
-                    algorithm = crypto_info.get("algorithm", "Unknown Algorithm")
-                    strength = crypto_info.get("strength", "Unknown Strength")
-                    crypto_algorithms.append(f"{algorithm} ({strength}-bit)")
+# Process components for licenses and metadata
+for component in components:
+    licenses = component.get("licenses", [])
+    license_names = [lic.get("license", {}).get("id", "Unknown") for lic in licenses]
+    license_data.extend(license_names)
 
-                # Extract component metadata
-                provenance = entry.get("health", {}).get("country", "Unknown")
-                component_name = entry.get("component", "Unknown Component")
-                stars = entry.get("health", {}).get("stars", "N/A")
-                forks = entry.get("health", {}).get("forks", "N/A")
-                issues = entry.get("health", {}).get("issues", "N/A")
-                last_updated = entry.get("health", {}).get("last_update", "N/A")
-                version = entry.get("version", "N/A")
-                author = entry.get("vendor", "N/A")
-                quality_data = entry.get("quality", [])
-                quality_score = quality_data[0].get("score", "N/A") if quality_data else "N/A"
+    component_metadata.append({
+        "Name": component.get("name", "Unknown"),
+        "Publisher": component.get("publisher", "Unknown"),
+        "Version": component.get("version", "Unknown"),
+        "Licenses": ", ".join(license_names) if license_names else "None",
+    })
 
-                # Collect metadata for components
-                components_metadata.append({
-                    "Component": component_name,
-                    "Stars": stars,
-                    "Forks": forks,
-                    "Issues": issues,
-                    "Last Updated": last_updated,
-                    "Provenance": provenance,
-                    "Version": version,
-                    "Author": author,
-                    "License": licenses_in_entry[0].get("name", "Unknown License") if licenses_in_entry else "Unknown License",
-                    "Quality Score": quality_score
-                })
-            else:
-                print(f"Skipping non-dictionary entry: {entry}")
-    else:
-        print(f"Skipping non-list file_data: {file_data}")
+# Process vulnerabilities
+for vuln in vulnerabilities:
+    severity = vuln.get("ratings", [{}])[0].get("severity", "Unknown")
+    vulnerability_data.append(severity)
 
 # Create DataFrames
-license_df = pd.DataFrame({"License": licenses})
-crypto_df = pd.DataFrame({"Algorithm": crypto_algorithms})
-components_df = pd.DataFrame(components_metadata)
+license_df = pd.DataFrame(license_data, columns=["License"])
+component_df = pd.DataFrame(component_metadata)
+vuln_df = pd.DataFrame(vulnerability_data, columns=["Severity"])
 
-# Generate summaries
-license_summary = license_df["License"].value_counts().head(10).reset_index().values
-crypto_summary = crypto_df["Algorithm"].value_counts().head(10).reset_index().values
-provenance_summary = Counter(entry.get("health", {}).get("country", "Unknown") for entry in data.get("components", [])).items()
+# Summarize licenses
+license_summary = license_df["License"].value_counts().reset_index()
+license_summary.columns = ["License", "Count"]
+license_md = tabulate(license_summary.head(10).values, headers=["License", "Count"], tablefmt="github")
 
-# Markdown sections
-license_md = tabulate(license_summary, headers=["License", "Count"], tablefmt="github")
-crypto_md = tabulate(crypto_summary, headers=["Algorithm", "Count"], tablefmt="github")
-components_md = tabulate(components_df.head(10), headers="keys", tablefmt="github")
+# Summarize vulnerabilities
+vuln_summary = vuln_df["Severity"].value_counts().reset_index()
+vuln_summary.columns = ["Severity", "Count"]
+
+# Generate charts
+plt.figure(figsize=(8, 6))
+license_summary.head(10).plot(kind="bar", x="License", y="Count", legend=False)
+plt.title("Top Licenses in Components")
+plt.xlabel("License")
+plt.ylabel("Count")
+plt.tight_layout()
+plt.savefig("top_licenses.png")
+plt.close()
+
+plt.figure(figsize=(8, 6))
+vuln_summary.plot(kind="bar", x="Severity", y="Count", legend=False, color="orange")
+plt.title("Vulnerabilities by Severity")
+plt.xlabel("Severity")
+plt.ylabel("Count")
+plt.tight_layout()
+plt.savefig("vulnerability_severity.png")
+plt.close()
+
+# Save component metadata to CSV
+component_df.to_csv("component_metadata.csv", index=False)
 
 # Generate Markdown summary
 with open("summary.md", "w") as f:
@@ -79,11 +77,10 @@ with open("summary.md", "w") as f:
     f.write("## License Distribution (Top 10)\n")
     f.write(license_md + "\n\n")
     f.write("## Cryptographic Algorithm Usage (Top 10)\n")
-    f.write(crypto_md if not crypto_df.empty else "No cryptographic data available.\n")
-    f.write("\n\n## Repository Component Metadata\n")
+    f.write("No cryptographic data available.\n\n")
+    f.write("## Repository Component Metadata\n")
+    components_md = tabulate(component_df.head(10).values, headers=component_df.columns, tablefmt="github")
     f.write(components_md + "\n\n")
-    f.write("### Provenance Summary:\n")
-    f.write("\n".join([f"- **{country}**: {count} components" for country, count in provenance_summary]) + "\n\n")
     f.write("## Notes:\n- No vulnerabilities detected.\n- Full SBOM details are available in the uploaded artifact.\n")
 
 print("Text-only dashboard summary generated successfully.")
