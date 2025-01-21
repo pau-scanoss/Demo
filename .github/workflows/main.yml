@@ -55,7 +55,7 @@ jobs:
       - name: Generate Charts and Results Summary
         run: |
           mkdir -p charts
-          python scripts/generate_charts.py
+          python scripts/generatecharts.py
 
       - name: Display Results and Charts in Workflow Summary
         run: |
