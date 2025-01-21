@@ -19,6 +19,7 @@ print(f"[DEBUG] Found {len(components)} components and {len(vulnerabilities)} vu
 license_data = []
 component_metadata = []
 vulnerability_data = []
+crypto_data = []
 
 # Process components for licenses and metadata
 print("[DEBUG] Processing components...")
@@ -33,7 +34,18 @@ for component in components:
         "Publisher": component.get("publisher", "Unknown"),
         "Version": component.get("version", "Unknown"),
         "Licenses": ", ".join(license_names) if license_names else "None",
+        "Provenance": component.get("provenance", {}).get("country", "Unknown")
     })
+
+    # Extract cryptographic data if available
+    cryptos = component.get("cryptography", [])
+    for crypto in cryptos:
+        crypto_data.append({
+            "Component": component.get("name", "Unknown"),
+            "Algorithm": crypto.get("algorithm", "Unknown"),
+            "Strength": crypto.get("strength", "Unknown"),
+            "ECCN": crypto.get("eccn", "Unknown")
+        })
 
 # Process vulnerabilities
 print("[DEBUG] Processing vulnerabilities...")
@@ -53,6 +65,8 @@ for vuln in vulnerabilities:
         "ID": vuln.get("id", "Unknown ID"),
         "Severity": severity,
         "Description": vuln.get("description", "No description provided"),
+        "Fix Version": vuln.get("fix_version", "Unknown"),
+        "CWEs": ", ".join(vuln.get("cwes", [])),
         "Affected Components": affected_components
     })
     print(f"[DEBUG] Processed vulnerability: {vuln.get('id', 'Unknown')} with severity: {severity}")
@@ -62,6 +76,7 @@ print("[DEBUG] Creating DataFrames...")
 license_df = pd.DataFrame(license_data, columns=["License"])
 component_df = pd.DataFrame(component_metadata)
 vuln_df = pd.DataFrame(vulnerability_data)
+crypto_df = pd.DataFrame(crypto_data)
 print("[DEBUG] DataFrames created successfully.")
 
 # Summarize licenses
@@ -111,14 +126,23 @@ with open("summary.md", "w") as f:
     f.write("## License Distribution (Top 10)\n")
     f.write(license_md + "\n\n")
     f.write("## Cryptographic Algorithm Usage (Top 10)\n")
-    f.write("No cryptographic data available.\n\n")
+    if not crypto_df.empty:
+        crypto_md = tabulate(
+            crypto_df.head(10).values,
+            headers=crypto_df.columns,
+            tablefmt="github"
+        )
+        f.write(crypto_md + "\n\n")
+    else:
+        f.write("No cryptographic data available.\n\n")
+
     f.write("## Repository Component Metadata\n")
     components_md = tabulate(component_df.head(10).values, headers=component_df.columns, tablefmt="github")
     f.write(components_md + "\n\n")
 
     if not vuln_summary.empty:
         total_vulnerabilities = vuln_df.shape[0]
-        f.write(f"## Notes:\n- {total_vulnerabilities} vulnerabilities detected.\n")
+        f.write(f"## Vulnerability Summary\n- {total_vulnerabilities} vulnerabilities detected.\n")
         f.write("- Detailed vulnerability breakdown by severity:\n\n")
         vuln_details_md = tabulate(
             vuln_summary.values,
@@ -127,12 +151,12 @@ with open("summary.md", "w") as f:
         )
         f.write(vuln_details_md + "\n\n")
         f.write("- Detailed Vulnerabilities:\n\n")
-        for _, row in vuln_df.iterrows():
-            f.write(f"  - **ID**: {row['ID']}\n")
-            f.write(f"    - **Severity**: {row['Severity']}\n")
-            f.write(f"    - **Description**: {row['Description']}\n")
-            affected_components = ", ".join(row['Affected Components'])
-            f.write(f"    - **Affected Components**: {affected_components}\n\n")
+        vuln_table_md = tabulate(
+            vuln_df.head(10).values,
+            headers=vuln_df.columns,
+            tablefmt="github"
+        )
+        f.write(vuln_table_md + "\n\n")
     else:
         f.write("## Notes:\n- No vulnerabilities detected.\n")
     f.write("- Full SBOM details are available in the uploaded artifact.\n")
@@ -143,23 +167,31 @@ print("\n# SCANOSS SBOM Dashboard 📊\n")
 print("## License Distribution (Top 10)\n")
 print(license_md)
 print("\n## Cryptographic Algorithm Usage (Top 10)\n")
-print("No cryptographic data available.\n")
+if not crypto_df.empty:
+    crypto_md = tabulate(
+        crypto_df.head(10).values,
+        headers=crypto_df.columns,
+        tablefmt="github"
+    )
+    print(crypto_md)
+else:
+    print("No cryptographic data available.\n")
 print("## Repository Component Metadata\n")
 components_md = tabulate(component_df.head(10).values, headers=component_df.columns, tablefmt="github")
 print(components_md)
 
 if not vuln_summary.empty:
     total_vulnerabilities = vuln_df.shape[0]
-    print(f"\n## Notes:\n- {total_vulnerabilities} vulnerabilities detected.")
+    print(f"\n## Vulnerability Summary\n- {total_vulnerabilities} vulnerabilities detected.")
     print("- Detailed vulnerability breakdown by severity:")
     print(tabulate(vuln_summary.values, headers=["Severity", "Count"], tablefmt="github"))
     print("\n- Detailed Vulnerabilities:")
-    for _, row in vuln_df.iterrows():
-        print(f"  - **ID**: {row['ID']}")
-        print(f"    - **Severity**: {row['Severity']}")
-        print(f"    - **Description**: {row['Description']}")
-        affected_components = ", ".join(row['Affected Components'])
-        print(f"    - **Affected Components**: {affected_components}\n")
+    vuln_table_md = tabulate(
+        vuln_df.head(10).values,
+        headers=vuln_df.columns,
+        tablefmt="github"
+    )
+    print(vuln_table_md)
 else:
     print("\n## Notes:\n- No vulnerabilities detected.")
 print("- Full SBOM details are available in the uploaded artifact.\n")
