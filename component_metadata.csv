@@ -1,0 +1,332 @@
+Name,Publisher,Version,Licenses,Provenance
+world-editor,V-Sekai,latest.v-sekai-editor-164,"CC0-1.0, Apache-2.0, MIT, BSD-3-Clause, Unknown, BSL-1.0, Unknown, Libpng, MPL-2.0, Unknown, Unknown, Unknown, Unknown, Unknown, Zlib, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+world-godot,V-Sekai,latest.v-sekai-editor-7,"CC0-1.0, Apache-2.0, MIT, BSD-3-Clause, Unknown, BSL-1.0, Unknown, Libpng, MPL-2.0, Unknown, Unknown, Unknown, Unknown, Zlib, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+arcdot,BurntAussieTyre,4.3-stable-old,"CC0-1.0, Unknown, Apache-2.0, MIT, BSD-3-Clause, BSL-1.0, Libpng, Unknown, Unknown, Unknown, Unknown, Unknown, Zlib, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+godot,godotengine,94255356,"Unknown, CC0-1.0, Unknown, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, BSL-1.0, Unknown, Libpng, Unknown, Unknown, Unknown, Unknown, Zlib, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+pre-commit,Anthony Sottile,2.0.0,MIT,Unknown
+godot-for-3d-open-worlds,roalyr,4.x-2024.02.22,"Unknown, CC0-1.0, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, BSL-1.0, Unknown, Libpng, Unknown, Unknown, Unknown, Unknown, Zlib, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+godot,V-Sekai,groups-4.x.2022-09-20T190218Z,MIT,Unknown
+bc-java,bcgit,1rv58,MIT,Unknown
+godot-engine,trial-migrate1,3.4-stable,"MIT, Bitstream-Vera, FTL, MPL-2.0, Unknown, CC0-1.0, OFL-1.1, CC-BY-4.0, Unlicense, Unknown, Apache-2.0, Zlib, BSD-3-Clause, BSD-2-Clause, BSL-1.0",Unknown
+godot,godotengine,3.0-stable,"Unknown, CC0-1.0, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, BSL-1.0, Unknown, Libpng, Unknown, Unknown, Unknown, Zlib, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+godot,dmtrofimov,3.2.3-stable,"MIT, Unknown, Unknown, OpenSSL, Libpng, CC0-1.0, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, ISC, Apache-2.0, Zlib, BSD-3-Clause, Unknown, Unknown",Unknown
+genepattern-server,genepattern,GenePattern_1.3.1,"Unknown, LGPL-2.1-only, Unknown, Unknown, Apache-2.0, BSD-2-Clause, Unknown",Unknown
+letters,ccgus,ad35821,None,Unknown
+godot-builds,godotengine,4.2-dev5,MIT,Unknown
+world_editor,V-Sekai,latest.v-sekai-editor,"CC0-1.0, Apache-2.0, MIT, BSD-3-Clause, Unknown, BSL-1.0, Unknown, Libpng, MPL-2.0, Unknown, Unknown, Unknown, Zlib, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+bradot,bradotengine,4.4-beta1,MIT,Unknown
+folium,xdccrlz,3b273e1,GPL-3.0-only,Unknown
+redot-engine,Redot-Engine,redot-4.3-rc.1,MIT,Unknown
+godot-nir-static,bruvzg,23.1.0-devel,MIT,Unknown
+godot-dotnet,raulsntos,c067b3f,MIT,Unknown
+tekisasu,TekisasuEngine,4.3-rc1,"Libpng, Unknown, Unknown, Zlib, CC0-1.0, Unknown, Unknown, Unknown, Unknown, BSD-3-Clause, Unknown, Apache-2.0, MIT, Unknown, Unknown, BSD-2-Clause, BSL-1.0, Unknown",Unknown
+godot,MissingEStudios,0.1,"CC0-1.0, Apache-2.0, MIT, BSD-3-Clause, BSL-1.0, Libpng, Unknown, Unknown, Unknown, Unknown, Zlib, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+Tekisasu-Engine,Tekisasu-JohnK,4.3p5,"Unknown, Libpng, BSD-2-Clause, Unknown, Zlib, CC0-1.0, Unknown, Unknown, Unknown, Unknown, BSD-3-Clause, Unknown, Apache-2.0, MIT, Unknown, Unknown, Unknown, BSL-1.0",Unknown
+godot-fire,godot-extended-libraries,extended-fire-master.2021-03-05T173929Z,"Unknown, Libpng, Unknown, Zlib, CC0-1.0, Unknown, Unknown, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, Unknown, Unknown, Unknown",Unknown
+artillery-command,MyAngelShibuyaKanon,1.0,None,Unknown
+ludum-dare-56,imberny,ld56-submission,"CC-BY-SA-4.0, MIT",Unknown
+Microsoft.NETCore.App.Runtime.Mono.android-x64,nuget,8.0.2,MIT,Unknown
+unrealtournament,jimmiekj,cac883d,Apache-2.0,Unknown
+survey,odk-x,2.0_alpha_rev_100,Apache-2.0,Unknown
+https-github.com-epicgames-unrealengine,superhellcat,4.14.0-preview-2,"CC-BY-NC-SA-3.0, Unknown, Apache-2.0, MIT, BSD-3-Clause, Unknown, Unknown, Libpng, Unknown, Unknown, Unknown, Zlib, BSD-2-Clause, Unknown, LGPL-2.0-only, Unknown, X11, Unknown, Unknown, GPL-2.0-only, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+play-licensing,google,eb57657,Apache-2.0,Unknown
+offspring-calculator-mobile,mgvx,0.1,Apache-2.0,Unknown
+platform_tools_apksig,CalyxOS,android-14.0.0_r1,Apache-2.0,Unknown
+platform/tools/apksig,android,android-13.0.0_r1,Apache-2.0,Unknown
+Android-GetAPKInfo,bihe0832,2.0,Apache-2.0,Unknown
+apksig,com.android.tools.build,3.1.0,Apache-2.0,Unknown
+android-platform-tools-apksig,android-platform-tools-apksig,0.4+git162~g85a854b-1,Apache-2.0,Unknown
+place-holder,rogeryoungh,0.2,Apache-2.0,Unknown
+verify,armadillo-arm,e060262,Apache-2.0,Unknown
+tools-apksig,com.jakewharton.android.repackaged,0.3,Apache-2.0,Unknown
+apksig-android,muntashirakon,android-cts-8.0_r26,Apache-2.0,Unknown
+haxe,HaxeFoundation,4.3.1,"Unknown, Unknown, LGPL-2.1-only, Unknown, GPL-2.0-only",Unknown
+intellij-community,jetbrains,pycharm/231.8109.91,Apache-2.0,Unknown
+hacktoberfest-2020,crystal-bit,a8a2533,GPL-3.0-only,Unknown
+noise,Nathan3-14,V3.0,None,Unknown
+godot-demo-projects,godotengine,3.2-57baf0a,MIT,Unknown
+xalan-test,apache,xalan_2_0_0,Apache-2.0,Unknown
+gdb,pantacor/build-deps,binutils-csl-sourcerygxx-4_1-4,None,Unknown
+gdscript,IceExplosive,2.0.0,MIT,Unknown
+dotnet-freebsd-crossbuild,Thefrank,7.0.100-preview.7.22353.99-freebsd-arm64,"Unknown, MIT",Unknown
+runtime,dotnet,5.0.0-preview.8.20407.11,"BSD-3-Clause, Zlib, MIT",Unknown
+segsengine,segs,4.0.0.7-alpha,"MIT, Libpng, CC0-1.0, Unknown, Unknown, ISC, Apache-2.0, Zlib, BSD-3-Clause, Unknown, Unknown",Unknown
+Godot.NET.Sdk,nuget,4.4.0-dev.3,MIT,Unknown
+pandemonium_engine,Relintai,4.0.0,"MIT, Libpng, Unknown, CC0-1.0, Unknown, Unknown, Unlicense, ISC, Apache-2.0, Zlib, BSD-3-Clause, BSD-2-Clause, Unknown",Unknown
+thorvg,thorvg,0.15.5,MIT,Unknown
+ProjectF,umerov1999,67,"GPL-3.0-only, Unknown",Unknown
+thorvg,samsung,0.13.5,MIT,Unknown
+Bforartists,Bforartists,2.69,"Unknown, CC0-1.0, Unknown, Python-2.0, Unknown, Apache-2.0, MIT, BSD-3-Clause, BSL-1.0, MPL-2.0, Unknown, BSD-3-Clause-LBNL, GPL-3.0-only, Zlib, BSD-2-Clause, Unknown, Unknown, Unknown, GPL-2.0-only, Unknown, Unknown",Unknown
+smol-v,aras-p,9dd54c3,"BSD-3-Clause, Unknown, Unknown",Unknown
+r128,fahickman,6fc1776,Unlicense,Unknown
+FastLZ,ariya,0.5.0,MIT,Unknown
+stb,nothings,3a11740,"Unlicense, Unknown, Unknown, MIT",Unknown
+bcdec,iorange,3b29f8f,Unknown,Unknown
+qoa,phoboslab,a2d927f,MIT,Unknown
+dps8m,dps8m,b78a2200,"BSD-3-Clause, Unknown, Unknown, MIT",Unknown
+corev-gcc,openhwgroup,a6c793a,"LGPL-3.0-only, LGPL-2.1-only, BSD-3-Clause, GPL-2.0-only, BSD-2-Clause",Unknown
+ydb,ydb-platform,CLI_2.1.0,Apache-2.0,Unknown
+libbacktrace,ianlancetaylor,d48f840,BSD-3-Clause,Unknown
+src,netbsd,241d5d7,"GPL-1.0-or-later, GPL-1.0-only, Unknown, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, Unknown, Unknown, BSL-1.0, MPL-2.0, Unknown, OLDAP-2.8, bzip2-1.0.6, Unknown, Unknown, Unknown, GPL-3.0-only, Unknown, SMLNJ, Zlib, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, CPL-1.0, Unknown, Unknown, Unknown, GPL-2.0-only, Unknown, OpenSSL, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+fluent-bit,fluent,1.4.3,"Unknown, CC0-1.0, Unknown, Unknown, NTP, Apache-2.0, MIT, BSD-3-Clause, BSD-2-Clause, Unknown, Unknown",Unknown
+Dolphin-MPN,MarioPartyNetplay,4/23/22,"GPL-2.0-or-later, GPL-3.0-only",Unknown
+vengi,mgerhardy,0.0.21,"MIT, Artistic-1.0-Perl, Unknown, Unknown, Unknown, Unknown, CC-BY-3.0, Unknown, Unknown, Zlib, BSD-3-Clause",Unknown
+enet,lsalzman,1.3.0,MIT,Unknown
+KTX-Software,KhronosGroup,4.3.0-beta1,"MIT, Unknown, CC0-1.0, Unknown, Unknown, Unknown, Unknown, Apache-2.0, Unknown, BSD-3-Clause",Unknown
+VulkanPBRT,Lachei,684f7d3,"Apache-2.0, MIT",Unknown
+tesseract,lsalzman,7dc2087,None,Unknown
+xsbs,greghaynes,2.2,None,Unknown
+enet,enet,1.3.12,None,Unknown
+enigma,enigma-game,0.92,GPL-2.0-only,Unknown
+meshoptimizer,zeux,0.22,MIT,Unknown
+ezengine,ezengine,147218c,MIT,Unknown
+app-wasm,webaverse,d8b3097,None,Unknown
+pegasus-frontend,mmatyas,alpha1,"Unknown, Python-2.0, Unknown",Unknown
+bgfx,bkaradzic,dd4199b,BSD-2-Clause,Unknown
+filament,google,sceneform-1.7pr2,Apache-2.0,Unknown
+libpng,glennrp,1.6.41,"Libpng, Unknown, Unknown, Unknown, MIT, GPL-2.0-only, Unknown",Unknown
+platform/external/jetbrains/JetBrainsRuntime,android,jbr-release-17.0.10b1207.1,"Libpng, Unknown, Unknown, Unknown, Apache-2.0, MIT, BSD-3-Clause, GPL-2.0-only, Unknown",Unknown
+dragonwell8_jdk,alibaba,jdk8u222-b03,"GPL-2.0-only, Unknown, Libpng",Unknown
+apothecary,openframeworks,bleeding,"Libpng, curl, Unknown, Unknown, Zlib, Unknown, SGI-B-2.0, Unknown, Unknown, Unlicense, Unknown, GPL-3.0-or-later, Apache-2.0, MIT, BSD-3-Clause, BSL-1.0, OpenSSL, Unknown",Unknown
+slik-linux-jolt,simargl,stage0-a5,Libpng,Unknown
+libpng-android-prefab,LimeVista,1.6.43.1,None,Unknown
+tinyexr,syoyo,2a5ea89,"BSD-3-Clause, Zlib, MIT",Unknown
+MetaverseKit,wabiverse,1.1.6,"Libpng, Unknown, CC-BY-3.0, Unknown, Apache-2.0, MIT",Unknown
+godot,sks7420643,3.5-stable,"Unknown, CC0-1.0, Unknown, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, BSL-1.0, Unknown, Libpng, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Zlib, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, OpenSSL, Unknown, Unknown, Unknown",Unknown
+dependencies,supertuxkart,preview,"CC-BY-NC-SA-3.0, CC0-1.0, Unknown, Apache-2.0, MIT, BSD-3-Clause, Libpng, Unknown, Unknown, Unknown, Unknown, Zlib, LGPL-2.0-only, Unknown, Unknown, Unknown, GPL-2.0-only, curl, Unknown, OFL-1.1, Unknown",Unknown
+miniupnpc,transmission,2_2_8,BSD-3-Clause,Unknown
+miniupnp,miniupnp,2_2_3,BSD-3-Clause,Unknown
+miniupnpc,Thomas BERNARD,2.2.7,BSD-3-Clause,Unknown
+MiniUPnP-for-Android-Prebuilt,r4sas,84a4bab,None,Unknown
+asuswrt-rtn18u,gzenux,rtn18u_384.13-beta1,"Unknown, Unknown, NCSA, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, curl, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, BSD-2-Clause-Views, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, GPL-2.0-or-later, Unknown, Unknown, Unknown, BSD-2-Clause, Unknown, Unknown, Unlicense, CC-PDDC, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, ISC, Unknown, BSD-3-Clause, Unknown, Unknown, Libpng, Unknown, Unknown, Unknown, Unknown, Unknown, GPL-3.0-only, X11-distribute-modifications-variant, LGPL-2.0-only, Unknown, Unknown, Unknown, Unknown, OpenSSL, Unknown, Unknown, Unknown, Unknown, MIT, bzip2-1.0.6, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, X11, Unknown, GPL-2.0-only, Unknown, Unknown, LGPL-2.1-only, Unknown, Unknown, Unknown",Unknown
+warzone2100,Warzone2100,3.3.0,"Unknown, MIT, MPL-2.0, Unknown, Unknown, LGPL-2.1-only, OFL-1.1, Unknown, GPL-3.0-only, Apache-2.0, BSD-3-Clause, GPL-2.0-only, BSL-1.0, Unknown",Unknown
+codecollection,zzilla,4062273,Apache-2.0,Unknown
+tomato-arm-kille72,ledudu,2018.1.031,BSD-3-Clause,Unknown
+xatlas,jpcy,16ace52,MIT,Unknown
+SPIRV-Cross,KhronosGroup,sdk-1.3.231.0,"Apache-2.0, MIT",Unknown
+zerotierone,zerotier,1.1.0,"MIT, Unknown, Unknown, Apache-2.0, GPL-3.0-only, BSD-3-Clause",Unknown
+compushady,rdeioris,e787af3,"Unknown, Apache-2.0, MIT",Unknown
+MapleEngine,flwmxd,64d9c68,"Apache-2.0, MIT",Unknown
+SHADERed,dfranx,1.5.4,"Apache-2.0, MIT",Unknown
+tempest,try,e532d4a,"Unknown, MIT",Unknown
+PhasmaEngine,christoskaramou,358c103,"Apache-2.0, MIT",Unknown
+abstract-gpu,desromech,0.1.24-alpha,"Unknown, Unknown, Apache-2.0, MIT, BSD-3-Clause, Unknown",Unknown
+proton-ge-custom-tarball-maker,Lctrs,6.13-GE-1-1,Apache-2.0,Unknown
+volk,zeux,vulkan-sdk-1.3.283.0,MIT,Unknown
+vkdispatch,pypi,0.0.4,"Unknown, Unknown, Unknown, Apache-2.0, MIT",Unknown
+temurin11-binaries,adoptium,jdk-11.0.23+9,"Libpng, FTL, Unknown, Unknown, MIT, BSD-3-Clause, BSD-2-Clause",Unknown
+xpydf,pypi,0.1.4.5,FTL,Unknown
+libwebrtc-bin,crow-misia,112.5615.0.0,"Unknown, FTL, GPL-1.0-or-later, CC0-1.0, NCSA, Unknown, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, Unknown, Unknown, BSD-4-Clause-UC, MPL-2.0, IJG, Unknown, ICU, Unknown, Unknown, Unknown, Unknown, Zlib, SMLNJ, BSD-2-Clause, Unknown, Unknown, HPND, SGI-B-2.0, NAIST-2003, LGPL-2.1-or-later, LGPL-2.0-or-later, Unknown, Unknown, Unknown, OpenSSL, BSD-4-Clause, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+freetype2,sailfishos-mirror,VER-2-13-1,"FTL, Unknown, GPL-1.0-or-later, Zlib, Unknown, GPL-3.0-only, MIT, BSD-3-Clause, GPL-2.0-only, Unknown",Unknown
+jdk11u,openjdk,jdk-11.0.7+1,"Libpng, FTL, Unknown, Unknown, Unknown, Unknown, MIT, BSD-3-Clause, GPL-2.0-only, BSD-2-Clause",Unknown
+freetype,hexops,bb024a0,"FTL, Unknown, GPL-1.0-or-later, Zlib, Unknown, GPL-3.0-only, MIT, BSD-3-Clause, GPL-2.0-only, Unknown",Unknown
+unarchiver,incbee,release-3.5,"Unknown, Unknown",Unknown
+freetype2,aseprite,VER-2-6-4,"Unknown, Unknown",Unknown
+openxr-sdk,khronosgroup,release-1.1.41,"Unknown, Apache-2.0, MIT",Unknown
+openxr-sdk-source,khronosgroup,release-1.0.33,"Unknown, CC-BY-4.0, Apache-2.0, MIT",Unknown
+openxr_loader_for_android,org.khronos.openxr,1.1.36,"Unknown, Apache-2.0, MIT",Unknown
+jsoncpp,uasonice,1.9.4-bin-x64,"Unknown, MIT",Unknown
+HITSZ_RMVISION_2021,cxnaive,3951c09,"Unknown, MIT",Unknown
+ps2dev,ps2dev,latest,"Unknown, MIT",Unknown
+domoticz,domoticz,2020.1,"Unknown, GPL-3.0-only, MIT",Unknown
+ubuntuwebrtcdemo,shifengjin,47cd084,"Unknown, MIT",Unknown
+jsoncpp,microsure-gen-3,1.9.3,"Unknown, Unknown, Unknown, MIT",Unknown
+skia_build,fandawei009,chrome/m109,Apache-2.0,Unknown
+WebKit,WebKit,tk-2.41.1,"Unknown, Unknown, Unknown, CC-BY-3.0, Python-2.0, Unknown, ISC, Unknown, MIT, BSD-3-Clause, Apache-2.0, Unknown, BSD-2-Clause-Patent, MPL-2.0, Unknown, Unknown, BSD-3-Clause-Clear, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, GPL-3.0-only, Unknown, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, GPL-2.0-only, CC-BY-ND-2.5, Unknown, WTFPL, LGPL-2.1-only, OFL-1.1, Unknown, Unknown, Unknown",Unknown
+WebKit,oven-sh,autobuild-6e5bbee4a3f5fe81a095067e5d0f8d8f891f79d1,"Unknown, CC-BY-3.0, Unknown, Python-2.0, Unknown, ISC, Apache-2.0, Unknown, BSD-3-Clause, MIT, Unknown, BSD-2-Clause-Patent, MPL-2.0, Unknown, BSD-3-Clause-Clear, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, GPL-3.0-only, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, GPL-2.0-only, Unknown, Unknown, CC-BY-ND-2.5, Unknown, WTFPL, LGPL-2.1-only, OFL-1.1, Unknown",Unknown
+vorbis,xiph,1.3.7,BSD-3-Clause,Unknown
+vdhcoapp,aclap-dev,1.0.0,GPL-2.0-only,Unknown
+server_frame,hero1s,b7ac375,MIT,Unknown
+Cardano-SCK,MitchellTesla,1.0.3-beta,"Unknown, Apache-2.0, MIT",Unknown
+BlackWindow,saulzini,2.0,"Unknown, MIT",Unknown
+wajic,schellingb,bin,"Unknown, Zlib",Unknown
+supermariowar,mmatyas,2.0-beta.0,Zlib,Unknown
+hyperrogue,zenorogue,113a,"GPL-2.0-only, BSD-2-Clause, Unknown",Unknown
+woff2-next,Ruben Maher,0.0.1,MIT,Unknown
+pkgeval.jl,juliaci,0.1,"Unknown, Unknown, Python-2.0, Unknown, Unknown, Apache-2.0, MIT, BSD-3-Clause, Unknown, BSD-2-Clause-Patent, Unknown, OLDAP-2.8, bzip2-1.0.6, Unknown, FSFULLR, Unknown, GPL-3.0-only, Zlib, Unknown, BSD-2-Clause, Unknown, Unknown, X11-distribute-modifications-variant, Unknown, Unknown, Unknown, X11, Unknown, Unknown, Unknown, OpenSSL, curl, Unknown, Unknown, Unknown",Unknown
+brotli,google,1.0.5,MIT,Unknown
+Brotli,The Brotli Authors,1.1.0,MIT,Unknown
+embree,embree,4.3.0,"Apache-2.0, MIT",Unknown
+Brotli4j,hyperxpro,1.12.0,"Apache-2.0, MIT",Unknown
+RedisDesktopManager-Windows,lework,2021.9,MIT,Unknown
+mORMotBP,eugeneilyin,2.0,MIT,Unknown
+openpgl,renderkit,0.3.1-beta,Apache-2.0,Unknown
+ogg,xiph,1.3.4,BSD-3-Clause,Unknown
+fake_icu,mihnita,release.76.1a,"Unknown, Unknown",Unknown
+mpc-be,jeeb,caeed0b,BSD-3-Clause,Unknown
+dj-engine,matteogodzilla,0.9-pre-pre-alpha,"LGPL-3.0-only, Unknown, Unknown, Zlib, BSD-3-Clause, LGPL-2.0-only",Unknown
+icu,unicode-org,cldr/2020-09-22,"Unknown, Unknown, ICU, Unknown, Unknown, Unknown, Unicode-TOU, Unknown, Unknown, Unknown, Unknown, BSD-3-Clause, Unknown, Unknown",Unknown
+icu,hugovdm,pr1597/presquash,Unknown,Unknown
+ciriquant,bioinfo-biols,1.1.2,"Python-2.0, Unknown, Unknown, TCL, Unknown, BSD-3-Clause-Open-MPI, Unknown, Unknown, Apache-2.0, MIT, BSD-3-Clause, GPL-2.0-only, Unknown",Unknown
+aview,aview,1.3.0rc1-6,"GPL-2.0-or-later, Unknown",Unknown
+FreeCAD-ports-cache,FreeCAD,0.17,Unknown,Unknown
+vs_pdfium,jwezorek,387ea5c,BSD-3-Clause,Unknown
+harfbuzz,harfbuzz,6864769,"MIT-Modern-Variant, MIT",Unknown
+texlive-source,tex-live,svn69767b,"Unknown, Unknown, Unknown, MIT, Apache-2.0, BSD-3-Clause, BSL-1.0, Unknown, MakeIndex, Libpng, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, GPL-3.0-only, Zlib, Unknown, Unknown, Unknown, GPL-2.0-only, Unknown, LGPL-2.1-only, Unknown, Unknown, Unknown, Unknown",Unknown
+pspdev,pspdev,latest,"MIT-Modern-Variant, MIT",Unknown
+luatex,tex-live,f52b099,GPL-2.0-only,Unknown
+packages,vitasdk,master,"LGPL-3.0-only, Python-2.0, MIT",Unknown
+zlib,madler,1.3,Zlib,Unknown
+doctest,onqtam,2.4.11,"BSL-1.0, MIT",Unknown
+mbedtls,Mbed-TLS,3.6.1,"Unknown, Unknown, Unknown, GPL-2.0-or-later, Apache-2.0",Unknown
+mbedtls,armmbed,3.5.1,"GPL-2.0-or-later, Unknown, Apache-2.0, Unknown",Unknown
+riscv32_crypto_demo_sim_tool,stvfu,1.0.0,"GPL-2.0-or-later, Apache-2.0, Unknown",Unknown
+mbedtls1.3,yuhaoth,saved/pr/add-ticket-lifetime-check-for-tls13-server,"GPL-2.0-or-later, Apache-2.0, Unknown",Unknown
+tdesktop,telegramdesktop,4.14.3,"LGPL-3.0-only, MIT, Unknown, Unknown, CC0-1.0, Unknown, Unknown, Unknown, Apache-2.0, Zlib, Unknown, GPL-2.0-only, BSD-2-Clause, BSL-1.0, Unknown",Unknown
+nip44,paulmillr,2593b6b,"Unknown, Unknown, GPL-2.0-or-later, Unlicense, Apache-2.0, MIT, GPL-2.0-only, BSD-2-Clause",Unknown
+Clipper2,AngusJohnson,1.4.0,BSL-1.0,Unknown
+mbedtls,zephyrproject-rtos,2f24831,"GPL-2.0-or-later, Unknown, Apache-2.0, Unknown",Unknown
+bmx-ng,bmx-ng,0.143.3.57.202402250135.linux.x64,"Unknown, Unknown, Unknown, Unknown, ISC, Apache-2.0, MIT, Unknown, Unknown, Unknown, Unknown, BSL-1.0, Unknown, BSD-3-Clause, Unknown, Libpng, Unknown, Unknown, bzip2-1.0.6, Unknown, Unknown, GPL-3.0-only, Zlib, Unknown, BSD-2-Clause, SGI-B-2.0, Unknown, Unknown, Unlicense, NTP, Unknown, GPL-2.0-only, Unknown, curl, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+etcpak,wolfpld,bb20685,"BSD-3-Clause, Unknown",Unknown
+basis_universal,BinomialLLC,1_50_0,"BSD-3-Clause, Apache-2.0",Unknown
+dmd,dlang,nightly,"BSL-1.0, Zlib",Unknown
+dragonflybsd,dragonflybsd,3.6.0rc,"Unknown, GPL-1.0-only, Unknown, ISC, MIT, Unknown, BSD-3-Clause, Unknown, bzip2-1.0.6, Unknown, Unknown, GPL-3.0-only, Zlib, SMLNJ, BSD-2-Clause, X11-distribute-modifications-variant, Unknown, Unknown, Unknown, GPL-2.0-only, BSD-4-Clause, Unknown, LGPL-2.1-only, Unknown, BSD-Source-Code, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+rstudio,rstudio,0.97.18,"Unknown, Unknown, Unknown, Apache-2.0, MIT, BSD-3-Clause, Unknown, Unknown, Unknown",Unknown
+popgenome,cran,1.2.0,None,Unknown
+buildscripts,devkitpro,sources,"MIT, LGPL-2.0-only, bzip2-1.0.6, Apache-2.0, GPL-3.0-only, BSD-3-Clause, GPL-2.0-only, BSL-1.0, Unknown, Unknown",Unknown
+glslang,KhronosGroup,14.2.0,"Unknown, Unknown, Unknown, Unknown",Unknown
+firmware,openipc,latest,"Zlib, MIT",Unknown
+bravely-offline-citra,rtiangha,2024-04-24a,"Unknown, Unknown, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, BSL-1.0, Unknown, Unknown, 0BSD, Unknown, Zlib, BSD-2-Clause, Unknown, Unknown, Unknown, GPL-2.0-only, Unknown, LGPL-2.1-only, FDK-AAC, Unknown",Unknown
+Pomelo,stossy11,0.0.8,"BSD-3-Clause, LGPL-3.0-only, GPL-3.0-only",Unknown
+glslang.zig,tiawl,1.3.280,"BSD-3-Clause, MIT",Unknown
+DiligentEngine,DiligentGraphics,2.5.5,"MIT, Unknown, Libpng, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Apache-2.0, Zlib, BSD-3-Clause, Unknown, BSD-2-Clause, GPL-2.0-only",Unknown
+aml_npu_sdk,khadas,591f6d3,"GPL-2.0-only, Unknown",Unknown
+@webgpu/glslang,npmjs,0.0.9,BSD-3-Clause,Unknown
+effekseer,effekseer,NightlyBuild,MIT,Unknown
+proton-ge-custom,GloriousEggroll,GE-Proton7-34,"BSD-3-Clause, BSD-2-Clause",Unknown
+emuThreeDS-externals,emuPlace,1.0.0,BSD-3-Clause,Unknown
+third_party_glslang,eclipse-oniro-mirrors,OpenHarmony-v5.0.0-Release,"BSD-3-Clause, Unknown, Unknown, Unknown",Unknown
+GLSLangSharp,aardvark-community,0.4.7,Unknown,Unknown
+VkFFT,DTolm,1.1.1,"BSD-3-Clause, MPL-2.0, MIT",Unknown
+ncnn-on-mingw,futz12,1.0.20221119,BSD-3-Clause,Unknown
+SPIRV-Reflect,KhronosGroup,sdk-1.3.261.0,"Unknown, Apache-2.0",Unknown
+jpeg-compressor,richgel999,aeb7d3b,Unknown,Unknown
+libwebp,webmproject,6c484cb,BSD-3-Clause,Unknown
+GbxDump,Electron-x,1.66,"BSD-3-Clause, Unknown",Unknown
+python-realesrgan-ncnn-vulkan,Özgür Ateş Fırat,1.1,"BSD-3-Clause, Unknown, MIT",Unknown
+libwebp,freedesktop-sdk/mirrors/chromium/webm,05c46984,"BSD-3-Clause, Unknown",Unknown
+xtinypng-cli,Mathieu Aubin,0.1.0,"BSD-3-Clause, Unknown, MIT",Unknown
+osgall,shelltdf,83c009d,"BSD-3-Clause, Unknown",Unknown
+aros,deadwood2,AxRT_40.2,"Unknown, Unknown, Unknown, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, Libpng, bzip2-1.0.6, Unknown, Unknown, Unknown, GPL-3.0-only, BSD-2-Clause, Unknown, LGPL-2.0-only, Unknown, Unknown, Unknown, Unknown, GPL-2.0-only, Unknown, LGPL-2.1-only, Unknown, Unknown, Unknown",Unknown
+rife-ncnn-vulkan-python,ArchieMeng,1.1.0,"BSD-3-Clause, Unknown, MIT",Unknown
+udpsample,webmproject,163fc9c,"BSD-3-Clause, Unknown",Unknown
+firefox,AOSC-Tracking,130.0,"Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Zlib, CC-BY-SA-4.0, Unknown, ClArtistic, Unknown, Unknown, Unknown, Unknown, Unknown, curl, Unknown, Unknown, Unknown, Unknown, Unknown, BSD-2-Clause-Views, Unknown, Unknown, Apache-2.0, Unknown, LGPL-3.0-only, Unknown, Unknown, MPL-2.0, Unknown, BSD-Protection, Unknown, Unknown, Unknown, Unknown, BSD-2-Clause, Unknown, blessing, Unknown, Unknown, OFL-1.1, Unknown, BSD-Source-Code, Unknown, Unknown, Unknown, Unknown, ISC, BSD-3-Clause, Libpng, OLDAP-2.8, BSD-3-Clause-Clear, Unknown, Unknown, Unknown, Unknown, GPL-3.0-only, Unknown, FSFAP, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Python-2.0, MIT, Unknown, BSL-1.0, Unknown, Unknown, bzip2-1.0.6, Unknown, Unknown, Unknown, Unknown, GPL-2.0-only, CC-BY-SA-3.0, Unknown, LGPL-2.1-only, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+manifold,elalish,3.0.0,"BSD-3-Clause, Apache-2.0, MIT",Unknown
+wickedengine,turanszkij,0.71.137,"BSD-3-Clause, Unknown, MIT",Unknown
+vanguardengine,adepke,437bb8a,MIT,Unknown
+FidelityFX-FSR2,GPUOpen-Effects,2.2.0,MIT,Unknown
+Vulkan-Headers,KhronosGroup,1.3.282,"Unknown, Unknown, Apache-2.0, MIT",Unknown
+Alabaster,edvn0,0.0.3,MIT,Unknown
+Vulkan-Docs,KhronosGroup,1.3.275,"Apache-2.0, MIT",Unknown
+vulkanmemoryallocator,gpuopen-librariesandsdks,19b940e,MIT,Unknown
+vulkan-hpp,khronosgroup,1.3.280,"Apache-2.0, MIT",Unknown
+MoltenVK,KhronosGroup,1.2.7-rc1,Apache-2.0,Unknown
+zstd,unypkg,1.5.6-2024-04-05T18.30.52Z,"BSD-3-Clause, GPL-2.0-only, Unknown",Unknown
+zstd,facebook,a58b48e,"BSD-3-Clause, GPL-2.0-only",Unknown
+Fenrir-for-VK,umerov1999,EOF-3,"BSD-3-Clause, GPL-2.0-only, GPL-3.0-only",Unknown
+build-tools,loongson,2024.06.01,"Unknown, Unknown, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, 0BSD, Unknown, Unknown, Unknown, GPL-3.0-only, MIT-0, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, GPL-2.0-only, curl, WTFPL, LGPL-2.1-only, Unknown, Unknown, Unknown",Unknown
+stage1,unypkg,2024-04-05T18.30.52Z,"Unknown, Zlib, bzip2-1.0.6, MS-RL, Unknown, Unlicense, Unknown, Unknown, GPL-3.0-only, MIT, BSD-3-Clause, GPL-2.0-only, BSD-2-Clause, Unknown, Unknown",Unknown
+ZELDA-TOTK-ZSdecomp,SilverEzredes,1.0.0,"BSD-3-Clause, GPL-2.0-only",Unknown
+csbindgen,Cysharp,0.1.1,"BSD-3-Clause, GPL-2.0-only, MIT",Unknown
+zstd,Sergey Dryabzhinsky; Anton Stuk,1.5.4.0,"BSD-3-Clause, GPL-2.0-only, 0BSD",Unknown
+theora,theora,1.2.0alpha1,None,Unknown
+unvanquished,unvanquished,0.2.5-deb,"BSD-3-Clause, Zlib",Unknown
+love-android,love2d,0.10.0,"Libpng, Unknown, Unknown, LGPL-2.1-only, Unknown, Unknown, Unknown, MIT, BSD-3-Clause, Unknown, GPL-2.0-only, LGPL-2.0-only, JasPer-2.0",Unknown
+theoraplayer,aprilandfriends,a85af45,"BSD-3-Clause, BSD-2-Clause",Unknown
+services-central-old,rnewman,thunderbird_3_3a1_release,"Unknown, Unknown, Unknown, ISC, Apache-2.0, MIT, BSD-3-Clause, Libpng, bzip2-1.0.6, Unknown, BSD-Protection, Unknown, Unknown, Unknown, Unknown, LGPL-2.1-only, Unknown, Unknown, MIT-Modern-Variant",Unknown
+theora,xiph,7180717,BSD-3-Clause,Unknown
+FFMPEG,ztwlla,31077f5,"BSD-3-Clause, MIT",Unknown
+wmelite_theoraplayer,hcdaniel,1.0.0,BSD-3-Clause,Unknown
+xray-oxygen,daagvda,8535ffe,BSD-3-Clause,Unknown
+EGL-Registry,KhronosGroup,f4cc936,Apache-2.0,Unknown
+supernova,supernovaengine,0.3.3,"Zlib, MIT",Unknown
+JoltPhysicsSharp,amerkoleci,0cb55e5,MIT,Unknown
+JoltPhysics,jrouwe,5.2.0,"LGPL-3.0-only, MIT",Unknown
+NauEditorPublic,NauEngine,0.10.1,"Unknown, BSL-1.0, LGPL-2.1-only, MIT",Unknown
+aria2,aria2,release-1.36.0,"GPL-2.0-only, MIT",Unknown
+wslay,tatsuhiro-t,0e7d106,MIT,Unknown
+pulseaudio,otcshare,8.99.1,"Unknown, GPL-1.0-or-later, Unknown, Unknown, LGPL-2.1-or-later, Unknown, Unknown",Unknown
+pulseaudio,pulseaudio,5.99.3,"Unknown, Unknown, Unknown, LGPL-2.1-or-later, Unknown, Unknown",Unknown
+speech-dispatcher-contrib,speech-dispatcher-contrib,0.8.8.orig,"LGPL-2.1-or-later, Unknown",Unknown
+speechd,brailcom,0.8.8,"LGPL-2.1-or-later, GPL-2.0-only, Unknown, Unknown",Unknown
+dbus,freedesktop,1.11.8,"GPL-2.0-or-later, AFL-2.1",Unknown
+dbus,dbus,1.7.6-2,"GPL-2.0-or-later, Unknown, AFL-2.1, Unknown",Unknown
+dbus,d-bus,1.5.10,"GPL-2.0-or-later, AFL-2.1, Unknown",Unknown
+wayland,wayland-project,1.20.91,MIT,Unknown
+kiosk_system_x86_64,nerves-web-kiosk,1.0.0,"Unknown, Unknown, Unknown, Unknown, GPL-2.0-or-later, Unknown, ISC, Apache-2.0, Unknown, Unknown, AFL-2.0",Unknown
+vcxsrv,ArcticaProject,1.15.0.1,GPL-3.0-only,Unknown
+xorg-xorgproto,freedesktop,xorgproto-2021.4,"MIT-open-group, HPND",Unknown
+massos,massos-linux,2022.08,"Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Zlib, Unknown, Unknown, JasPer-2.0, Unknown, Unknown, Unknown, Unknown, MPL-1.0, Unknown, Unknown, Unknown, Unknown, curl, WTFPL, Unknown, Unknown, Unknown, AGPL-3.0-only, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Apache-2.0, Unknown, Unknown, LGPL-3.0-only, Unknown, Unknown, Unknown, MPL-2.0, Unknown, Unknown, Unknown, Unknown, GPL-2.0-or-later, Vim, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, OFL-1.1, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, ISC, EPL-1.0, BSD-3-Clause, Unknown, Unknown, Unknown, Libpng, Unknown, Unknown, OLDAP-2.8, Unknown, Unknown, Unknown, GPL-3.0-only, Unknown, X11-distribute-modifications-variant, LGPL-2.0-only, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, HPND-sell-variant, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, OpenSSL, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Artistic-2.0, Unknown, Unknown, MIT-open-group, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, MIT, Unknown, Unknown, Unknown, Unknown, Unknown, bzip2-1.0.6, Unknown, 0BSD, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, HPND, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, X11, NTP, Unknown, Unknown, Unknown, Unknown, Unknown, GPL-2.0-only, Unknown, Unknown, Unknown, Unknown, LGPL-2.1-only, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+vcxsrv,jagd,0.1,MIT-open-group,Unknown
+ubuntu-on-android,randomcoderorg,3,"MIT-open-group, Unknown, MPL-2.0, Unknown, Python-2.0, Unknown, Unknown, Apache-2.0, MIT, BSD-3-Clause, GPL-2.0-only, GPL-3.0-only, Unknown, Unknown",Unknown
+libx11,mirror,1.5.99.901,"MIT-open-group, HPND",Unknown
+unix-history-repo,dspinellis,bsd-4_4,None,Unknown
+x11,nomad-software,1.0.0,"MIT-open-group, HPND, BSL-1.0, LGPL-3.0-only",Unknown
+macos,apple-open-source,10.7,"Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, BSD-3-Clause-Open-MPI, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, BSD-2-Clause-Patent, Unknown, Unknown, Libpng, BSD-3-Clause-Clear, Unknown, Unknown, Unknown, Unknown, X11-distribute-modifications-variant, LGPL-2.0-only, Unknown, Unknown, Unknown, OpenSSL, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, X11, Unknown, Apache-1.1, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Zlib, SMLNJ, Unknown, Unknown, curl, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, FSFULLR, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, GPL-2.0-only, Unknown, Unknown, Unknown, BSD-4-Clause, CC-BY-SA-3.0, Unknown, Unknown, Zend-2.0, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, PHP-3.01, Unknown, Unknown, Unknown, BSD-Source-Code, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, JPNIC, Unknown, Unknown, ISC, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, TCL, Unknown, ANTLR-PD, Unknown, MIT, Unknown, Unknown, Unknown, bzip2-1.0.6, MIT-CMU, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, OLDAP-2.7, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, SGI-B-2.0, Unknown, MPL-1.1, Unknown, Unknown, Unknown, GPL-1.0-only, Unknown, Apache-2.0, Unknown, Unknown, Vim, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, BSD-3-Clause, Unknown, Unknown, OLDAP-2.8, Unknown, Unknown, Unknown, GPL-3.0-only, Unknown, Unknown, Unknown, Unknown, HPND-sell-variant, Bitstream-Charter, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Artistic-2.0, MIT-open-group, Unknown, IPL-1.0, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, ICU, Unknown, Unknown, Unknown, Unknown, HPND, Unknown, NTP, Unknown, Unknown, Unknown, LGPL-2.1-only, Unknown, Unknown, Unknown",Unknown
+xorg-libXfixes,freedesktop,libXfixes-6.0.0,"HPND-sell-variant, MIT",Unknown
+flinux,flyskywhy,4c2e56a,"GPL-3.0-only, HPND-sell-variant",Unknown
+bitrig-xenocara,bitrig,sync_20140609,MIT,Unknown
+alsa-lib,alsa-project,1.1.2,"LGPL-2.1-or-later, GPL-2.0-only, LGPL-2.1-only",Unknown
+alsa-lib,alsa-lib,1.1.3,None,Unknown
+libxcursor,libxcursor,1.2.0.orig,HPND-sell-variant,Unknown
+libxrender,libxrender,0.9.7.orig,"Unknown, Unknown, HPND-sell-variant, Unknown",Unknown
+termux-wayland,suhan-paradkar,1.0,"MIT-open-group, HPND, Unknown, MIT",Unknown
+libxkbcommon,xkbcommon,xkbcommon-1.1.0,"HPND, Unknown, Unknown, X11, MIT",Unknown
+msdfgen,chlumsky,aa9478e,MIT,Unknown
+msdfgen,lonewolfstudios,1.9,"BSD-3-Clause, MIT",Unknown
+libdecor-0,libdecor-0,0.1.99~git20230907-1,"MIT, Unknown",Unknown
+linaro-multimedia-ucm,launchpad,2011.12,"GPL-2.0-or-later, GPL-2.0-only",Unknown
+kernel,openSUSE,2.6.3-rc1,"GPL-2.0-only, Unknown",Unknown
+ircd-ratbox,ircd-ratbox,3.0.7.dfsg-1,"GPL-2.0-or-later, GPL-2.0-only",Unknown
+pcre2,philiphazel,10.43-RC1,"BSD-3-Clause, Unknown",Unknown
+pcre,rurban,86919c9,"BSD-3-Clause, Unknown",Unknown
+pcre2,pcre2project,10.43,"Unknown, GPL-3.0-only",Unknown
+sqlean,nalgeon,0.18.0,"BSD-3-Clause, CC0-1.0, MIT",Unknown
+superstring,Nathan Sobo,1.3.0-2,"BSD-3-Clause, MIT",Unknown
+pcre2-win-build,kiyolee,10.35,"BSD-3-Clause, Unknown",Unknown
+sljit,zherczeg,4212818,BSD-2-Clause,Unknown
+astc-encoder,ARM-software,4.8.0,Apache-2.0,Unknown
+DirectX-Headers,microsoft,1.710.0-preview,MIT,Unknown
+XUSG,StarsX,4.0,MIT,Unknown
+terrafx.interop.windows,terrafx,10.0.22621.4,MIT,Unknown
+Vortice.Windows,amerkoleci,1.9.130,"Unknown, Unknown, Unknown, MIT",Unknown
+fidelityfx-fsr,gpuopen-effects,1.0,MIT,Unknown
+UnrealEngine,chenyong2github,ssr-dev,Apache-2.0,Unknown
+The-Forge,ConfettiFX,1.56,"Zlib, OFL-1.1, Unknown, Unknown, Apache-2.0, MIT, BSD-3-Clause, BSD-2-Clause, Unknown",Unknown
+android-activity,rust-mobile,0.5.0-beta.0,"Unknown, Apache-2.0",Unknown
+recastnavigation,recastnavigation,1.6.0,"MIT, Zlib",Unknown
+moon,sniper00,0.8,"Zlib, MIT",Unknown
+unreal-engine-4.19.2,andra-games-entertainment,4.19.0-preview-1,"CC-BY-NC-SA-3.0, Apache-2.0, MIT, BSD-3-Clause, Unknown, Unknown, Libpng, MPL-2.0, Unknown, Unknown, GPL-3.0-only, Zlib, BSD-2-Clause, Unknown, Unknown, LGPL-2.0-only, Unknown, ClArtistic, Unknown, Unknown, Unknown, GPL-2.0-only, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown
+bullet3,bulletphysics,2.84,"MIT, CC-BY-SA-3.0, MPL-2.0, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Apache-2.0, Zlib, BSD-3-Clause, BSD-2-Clause, Unknown",Unknown
+v-hacd,kmammou,1a49edf,"BSD-3-Clause, BSD-2-Clause",Unknown
+v-hacd,virneo,ef3d46b,None,Unknown
+ufbx,ufbx,0.15.0,Unknown,Unknown
+vhacd,unity-technologies,refs/heads/master,"BSD-2-Clause, Apache-2.0",Unknown
+lib-ledger-core,LedgerHQ,0.9.0,MIT,Unknown
+hardenedbsd-stable,hardenedbsd,hardenedbsd-10-stable-20151204-1,"Unknown, OpenSSL",Unknown
+openssl,bilibili,0_9_2b,Apache-2.0,Unknown
+openssl,gitlab-org/build/omnibus-mirror,1_0_1n,"Unknown, BSD-2-Clause",Unknown
+openssl,openssl,1_0_1u,"Unknown, GPL-2.0-only, OpenSSL, Apache-2.0",Unknown
+openssl,luo1291250810,1_0_2k,"GPL-2.0-only, BSD-2-Clause, OpenSSL",Unknown
+openssl,blurrr,0_9_8,"BSD-2-Clause, OpenSSL",Unknown
+platform_external_openssl,aosp-mirror,android-4.3.1_r1,"GPL-2.0-only, OpenSSL",Unknown
+openssl,pointerra,engine-0_9_6-beta1,Unknown,Unknown
+hibernate-orm,hibernate,4.0.0.beta1,AGPL-3.0-only,Unknown
+freebsd10_vendor,sobomax,FreeBSD.RELENG_10_2.295455,BSD-2-Clause,Unknown
+openspotify,noahwilliamsson,570b95d,"Unknown, BSD-2-Clause",Unknown
+postgresapp,postgresapp,9.3.12,"PostgreSQL, Unknown, OpenSSL, MIT",Unknown
+heimdal,heimdal,0.0j,"Unlicense, BSD-3-Clause",Unknown
+lorikeet-heimdal,samba-team/devel,heimdal-0.0j,None,Unknown
+illumos-extra,joyent,20150319,"CDDL-1.0, Unknown, OpenSSL",Unknown
+openbsd,libressl-portable,4_2_base,"ISC, Unknown, MIT",Unknown
+libcapn,adobkin,2.0.0-beta,"Unknown, BSD-2-Clause, OpenSSL, MIT",Unknown
+openssl-android,devpack,507a5cd,"BSD-3-Clause, OpenSSL",Unknown
+openssl-dstu,dstucrypt,OpenSSL_1_0_1c,OpenSSL,Unknown
+globus-toolkit,globus,OPENSSL_0_9_7c,Apache-2.0,Unknown
+bud,indutny,1.3.7,None,Unknown
+manpages-fr-extra,manpages-fr-extra,20130226,None,Unknown
+node,electron,0.10.41,"Unknown, ISC, Unknown, MIT, BSD-3-Clause, Unknown, MITNFA, Apache-2.0, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, bzip2-1.0.6, Unknown, Unknown, Unknown, MIT-0, MIT-Wu, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unlicense, NTP, Unknown, Unknown, Unknown, Unknown, Unknown, OpenSSL, Unknown, WTFPL, LGPL-2.1-only, Unknown, Unknown",Unknown
+streamster2-pyopenssl,mysterie,70129ca,None,Unknown
+src,tworaz,3ef3701,None,Unknown
+openssl-cmake,pol51,openssl_1_0_2b,None,Unknown
+airyx,mszoek,release/4.8.0,"GPL-1.0-or-later, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Zlib, SMLNJ, libtiff, Unknown, Unknown, Unknown, curl, Unknown, Unknown, Unknown, Unknown, GPL-1.0-only, Unknown, Apache-2.0, CDDL-1.0, Unknown, Unknown, BSD-4-Clause-UC, Unknown, Unknown, Unknown, Unknown, Unknown, BSD-2-Clause, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, ISC, BSD-3-Clause, Unknown, Unknown, Unknown, Libpng, Unknown, Unknown, Unknown, GPL-3.0-only, Unknown, X11-distribute-modifications-variant, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, OpenSSL, Unknown, Unknown, Unknown, Unknown, Sendmail, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, Unknown, MIT, bzip2-1.0.6, Unknown, Unknown, MS-RL, 0BSD, Unknown, Unknown, Unknown, Unknown, GPL-2.0-only, LGPL-2.1-only, Unknown, Unknown, Unknown, Unknown, Unknown",Unknown

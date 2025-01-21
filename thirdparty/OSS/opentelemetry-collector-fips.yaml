@@ -1,0 +1,77 @@
+package:
+  name: opentelemetry-collector-fips
+  version: 0.117.0
+  epoch: 0
+  description: OpenTelemetry Collector
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime:
+      - openssl-config-fipshardened
+      - so:libcrypto.so.3
+      - so:libssl.so.3
+
+environment:
+  contents:
+    packages:
+      - busybox
+      - curl
+      - go-fips
+      - openssl-config-fipshardened
+      - yq
+
+pipeline:
+  - runs: |
+      set -x
+
+      # Use the build config from the official otel-core release
+      # https://github.com/open-telemetry/opentelemetry-collector-releases/blob/main/distributions/otelcol/manifest.yaml
+      # The manifest is updated as part of the release process and so should match the
+      # lastest version released from open-telemetry/opentelemetry-collector
+      curl -o builder-config.yaml https://raw.githubusercontent.com/open-telemetry/opentelemetry-collector-releases/main/distributions/otelcol/manifest.yaml
+
+  - uses: git-checkout
+    with:
+      repository: https://github.com/open-telemetry/opentelemetry-collector
+      tag: v${{package.version}}
+      expected-commit: 795f727e05eb29120690d9c5bc0fc5d1c60a9252
+
+  # We need to disable the "-s" ldflags for the build to be FIPS.
+  - uses: go/remove-cgo-enabled-0
+    with:
+      files: cmd/builder/internal/builder/main.go
+      seds: |
+        s,-s -w,-w,g
+
+  - uses: go/build
+    with:
+      packages: .
+      modroot: ./cmd/builder
+      output: ocb
+      go-package: go-fips
+
+  - runs: |
+      set -x
+      # Use the builder to compile opentelemetry-collector
+      yq eval '.replaces += ["golang.org/x/crypto => golang.org/x/crypto v0.31.0"]' builder-config.yaml -i
+      yq eval '.replaces += ["golang.org/x/net => golang.org/x/net v0.33.0"]' builder-config.yaml -i
+      ${{targets.destdir}}/usr/bin/ocb --config=builder-config.yaml
+
+
+      install -Dm755 ./_build/otelcol "${{targets.destdir}}"/usr/bin/otelcol
+      rm -f ${{targets.destdir}}/usr/bin/ocb
+
+  - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: open-telemetry/opentelemetry-collector
+    strip-prefix: v
+    use-tag: true
+    tag-filter: v
+
+test:
+  pipeline:
+    - runs: otelcol --version
+    - uses: test/go-fips-check

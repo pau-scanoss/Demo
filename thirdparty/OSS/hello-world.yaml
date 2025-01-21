@@ -1,0 +1,26 @@
+package:
+  name: hello-world
+  version: 0.0.1
+  epoch: 9
+  description: "testing the chainguard enterprise repository"
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime:
+      - openjdk-11-default-jvm-bcfips
+
+environment:
+  contents:
+    packages:
+      - busybox
+      - helm-fips
+      - openjdk-11-default-jvm-bcfips
+
+pipeline:
+  - runs: |
+      mkdir -p ${{targets.destdir}}/usr
+      echo test > ${{targets.destdir}}/usr/tester
+
+update:
+  enabled: false
+  exclude-reason: "example package, doesn't need updates"

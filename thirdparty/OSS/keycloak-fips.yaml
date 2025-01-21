@@ -1,0 +1,289 @@
+package:
+  name: keycloak-fips
+  version: "26.1.0"
+  epoch: 0
+  description: Open Source Identity and Access Management For Modern Applications and Services
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime:
+      - ${{package.name}}-policy
+      - bash # Keycloak helper scripts require bash, aren't compatible with busybox.
+      - openjdk-17-default-jvm
+
+var-transforms:
+  - from: ${{package.version}}
+    match: ^(\d+).*
+    replace: $1
+    to: major-version
+
+environment:
+  contents:
+    packages:
+      - bash
+      - bouncycastle-fips~2.0
+      - build-base
+      - busybox
+      - ca-certificates-bundle
+      - gcc-13-default
+      - openjdk-17-default-jdk
+      - wolfi-base
+      - wolfi-baselayout
+  environment:
+    LANG: en_US.UTF-8
+    JAVA_HOME: /usr/lib/jvm/java-17-openjdk
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/keycloak/keycloak
+      tag: ${{package.version}}
+      expected-commit: 90f25533be7a7fe2f97e9c0d2040343a8e3e8738
+
+  - uses: patch
+    with:
+      # Disables a redundant FIPS host check in Keycloak which expects the
+      # underlying host to be RHEL and running a RHEL patched version of JDK.
+      # We use vanilla JDK with bcfips, so this is not applicable.
+      patches: disable-rhel-fips-check.patch
+
+  - uses: maven/pombump
+
+  - runs: |
+      gcc napi-static-assert.c -o /tmp/preload.so -fPIC -shared -ldl
+
+  - runs: |
+      # Keycloak installation. Note we use the maven wrapper as configured in
+      # the source repo to build - ensures the correct maven version for
+      # building the project, preventing issues such as CI hangs.
+
+      # Gross hack to work around broken NAPI ast-grep module that has
+      # undefined symbol: static_assert
+      export LD_PRELOAD=/tmp/preload.so
+      ./mvnw clean install -DskipTests=true -Pdistribution -q
+      unset LD_PRELOAD
+
+      mkdir -p ${{targets.destdir}}/usr/share/java
+      unzip -d ${{targets.destdir}}/usr/share/java quarkus/dist/target/keycloak-*.zip
+      cp -avR ${{targets.destdir}}/usr/share/java/keycloak-* ${{targets.destdir}}/usr/share/java/keycloak
+
+      # Create an empty data directory for keycloak. Required by the UI to store some data.
+      mkdir -p ${{targets.destdir}}/usr/share/java/keycloak/data
+
+      mkdir -p ${{targets.destdir}}/usr/bin
+      for i in kc.sh kcadm.sh kcreg.sh; do
+        ln -sf /usr/share/java/keycloak/bin/$i ${{targets.destdir}}/usr/bin/$i
+      done
+
+  - runs: |
+      mkdir -p ${{targets.destdir}}/usr/share/java/keycloak/providers
+      mkdir -p ${{targets.destdir}}/usr/share/java/keycloak/bin/client/lib
+
+      # Keycloak requires bcfips jars.
+      ln -sf /usr/share/java/bouncycastle-fips/*.jar ${{targets.destdir}}/usr/share/java/keycloak/providers/
+      ln -sf /usr/share/java/bouncycastle-fips/*.jar ${{targets.destdir}}/usr/share/java/keycloak/bin/client/lib/
+
+subpackages:
+  - name: ${{package.name}}-policy-140-2
+    description: bcfips 140-2 dependencies
+    checks:
+      disabled:
+        - empty
+    dependencies:
+      runtime:
+        - bcfips-policy-140-2-j17
+      # Lower than 140-3
+      provider-priority: 10
+      provides:
+        - ${{package.name}}-policy=${{package.full-version}}
+
+  - name: ${{package.name}}-policy-140-3
+    description: bcfips 140-3 dependencies
+    dependencies:
+      runtime:
+        - bcfips-policy-140-3-j17
+      # Higher than 140-2
+      provider-priority: 15
+      provides:
+        - ${{package.name}}-policy=${{package.full-version}}
+    pipeline:
+      - runs: |
+          # Move bcutil-fips.jar to 140-3 subpackage
+          mkdir -p ${{targets.contextdir}}/usr/share/java/keycloak/providers/
+          mkdir -p ${{targets.contextdir}}/usr/share/java/keycloak/bin/client/lib/
+          mkdir -p ${{targets.contextdir}}/opt/bitnami/keycloak/providers
+          mv ${{targets.destdir}}/usr/share/java/keycloak/providers/bcutil-fips.jar ${{targets.contextdir}}/usr/share/java/keycloak/providers/
+          mv ${{targets.destdir}}/usr/share/java/keycloak/bin/client/lib/bcutil-fips.jar ${{targets.contextdir}}/usr/share/java/keycloak/bin/client/lib/
+          cp -P ${{targets.contextdir}}/usr/share/java/keycloak/providers/bcutil-fips.jar ${{targets.contextdir}}/opt/bitnami/keycloak/providers/
+
+  # NOTE: This is forked from the non-FIPS keycloak-bitnami-compat package so that
+  # the steps copying Keycloak binaries to the expected path include the required
+  # BC FIPS Jars
+  - name: ${{package.name}}-bitnami-compat
+    description: "compat package for using FIPS with bitnami/keycloak image"
+    dependencies:
+      runtime:
+        - coreutils # Keycloak Helm Chart scripts require coreutils, aren't compatible with busybox. (i.e., `cp` with `--preserve` option)
+        - krb5
+        - libaio
+        - procps
+        - zlib
+        - wait-for-port
+        - net-tools
+        - posix-libc-utils
+        - su-exec
+    pipeline:
+      - uses: bitnami/compat
+        with:
+          image: keycloak
+          version-path: ${{vars.major-version}}/debian-12
+      - runs: |
+          mkdir -p ${{targets.contextdir}}/bitnami/keycloak
+          mkdir -p ${{targets.contextdir}}/opt/bitnami/keycloak
+          mkdir -p ${{targets.contextdir}}/docker-entrypoint-initdb.d
+
+          for dir in bin conf conf.default lib providers themes; do
+            mkdir -p ${{targets.contextdir}}/opt/bitnami/keycloak/$dir
+          done
+
+          chmod g+rwX ${{targets.contextdir}}/opt/bitnami
+
+          # Copy keycloak files to /opt/bitnami/keycloak for compatibility with
+          # their Helm Chart, which copies the directories into an emptyDir in
+          # an initContainer
+          cp -r ${{targets.destdir}}/usr/share/java/keycloak/* ${{targets.contextdir}}/opt/bitnami/keycloak
+
+          # Replace the incorrect Java paths in the Bitnami scripts
+          sed -i 's/JAVA_HOME="\/opt\/bitnami\/java"/JAVA_HOME="\/usr\/lib\/jvm\/java-17-openjdk"/g' ${{targets.contextdir}}/opt/bitnami/scripts/keycloak-env.sh
+          sed -i 's/\/opt\/bitnami\/java\/lib\/security/\/usr\/lib\/jvm\/java-17-openjdk\/conf\/security/g' ${{targets.contextdir}}/opt/bitnami/scripts/java/postunpack.sh
+
+          # Disable some commands used in Bitnami scripts. These commands more likely fail in this since this image take non root approach
+          sed -i 's/chown -R "$KEYCLOAK_DAEMON_USER" "$dir"/# chown -R "$KEYCLOAK_DAEMON_USER" "$dir"/g' ${{targets.contextdir}}/opt/bitnami/scripts/keycloak/postunpack.sh
+          sed -i 's/ensure_user_exists/# ensure_user_exists/g' ${{targets.contextdir}}/opt/bitnami/scripts/keycloak/postunpack.sh
+          sed -i 's/am_i_root/# am_i_root/g' ${{targets.contextdir}}/opt/bitnami/scripts/keycloak/setup.sh
+          sed -i 's/hostname --fqdn/hostname -f/g' ${{targets.contextdir}}/opt/bitnami/scripts/keycloak-env.sh
+
+          # The `--userspec`` flag belongs to GNU's chroot, whereas we are use BusyBox's. As a workaround, use `su-exec` instead.
+          sed -i 's|exec chroot --userspec="$userspec" /|exec chroot / su-exec "$userspec"|' ${{targets.contextdir}}/opt/bitnami/scripts/libos.sh
+          sed -i 's|chroot --userspec="$userspec" /|chroot / su-exec "$userspec"|' ${{targets.contextdir}}/opt/bitnami/scripts/libos.sh
+
+          # Use package path while unpacking
+          find . -iname "*.sh" -exec sed 's#/opt/bitnami#${{targets.contextdir}}/opt/bitnami#g' -i {} \;
+            ${{targets.contextdir}}/opt/bitnami/scripts/keycloak/postunpack.sh || true
+          # Restore path
+          find ${{targets.contextdir}}/opt/bitnami -type f -exec sed 's#${{targets.contextdir}}##g' -i {} \;
+
+          # Link binaries used by Bitnami config
+          ln -sf /opt/bitnami/scripts/keycloak/entrypoint.sh ${{targets.contextdir}}/entrypoint.sh
+          ln -sf /opt/bitnami/scripts/keycloak/run.sh ${{targets.contextdir}}/run.sh
+    test:
+      environment:
+        contents:
+          packages:
+            - curl
+            - postgresql
+            - postgresql-client
+            - shadow
+            - sudo-rs
+            - jq
+            - keycloak-fips
+            - keycloak-fips-bitnami-compat
+        accounts:
+          groups:
+            - groupname: nonroot
+              gid: 65532
+          users:
+            - username: nonroot
+              gid: 65532
+              uid: 65532
+          run-as: 0
+        environment:
+          PGDATA: /tmp/test_db
+          PGUSER: bn_keycloak
+          PGDB: bitnami_keycloak
+          ALLOW_EMPTY_PASS: true
+      pipeline:
+        - working-directory: /opt/bitnami/keycloak
+          pipeline:
+            - name: "Check for BouncyCastle symlinks"
+              runs: |
+                stat providers/bc-fips.jar
+                stat providers/bctls-fips.jar
+                stat providers/bcpkix-fips.jar
+                stat bin/client/lib/bc-fips.jar
+                stat bin/client/lib/bctls-fips.jar
+                stat bin/client/lib/bcpkix-fips.jar
+        - working-directory: /tmp
+          pipeline:
+            - name: "Test database creation"
+              with:
+                setup: echo "127.0.0.1 postgresql" >> /etc/hosts
+              runs: |
+                useradd $PGUSER
+                sudo -u $PGUSER initdb -D $PGDATA
+                sudo -u $PGUSER pg_ctl -D $PGDATA -l /tmp/logfile start
+                sudo -u $PGUSER createdb $PGDB
+                sudo -u $PGUSER psql -lqt | cut -d \| -f 1 | grep -qw $PGDB
+            - name: "Set up crypto"
+            - name: "start daemon on localhost"
+              uses: test/daemon-check-output
+              with:
+                setup: |
+                  #!/bin/sh -e
+                  echo "127.0.0.1 postgresql" >> /etc/hosts
+                  echo "$(hostname) postgresql" >> /etc/hosts
+                start: |
+                  env "BITNAMI_APP_NAME=keycloak" \
+                    "APP_VERSION=${{package.version}}" \
+                    "PATH=/opt/bitnami/keycloak/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+                    "KEYCLOAK_ADMIN=admin" \
+                    "KEYCLOAK_ADMIN_PASSWORD=PASSWORD-FOR-ADMIN-USER" \
+                    "KEYCLOAK_EXTRA_ARGS=--features=fips --fips-mode=non-strict --https-key-store-password=LongKeystorePassword" \
+                    "KEYCLOAK_ENABLE_HEALTH_ENDPOINTS=true" \
+                    /opt/bitnami/scripts/keycloak/entrypoint.sh \
+                    /opt/bitnami/scripts/keycloak/run.sh
+                timeout: 120
+                # NOTE: We ignore spurious ERROR logs here that stem from the
+                # additional complexity fully configuring Keycloak for BCFIPS.
+                # There is additional coverage in the image test + a stricter
+                # version of this test for the non-FIPS bitnami keycloak
+                # package.
+                error_strings: |
+                  FATAL
+                  FAIL
+                expected_output: |
+                  Welcome to the Bitnami keycloak container
+                  keycloak setup finished!
+                  server listening on
+                  Keycloak ${{package.version}}
+                  Profile dev activated.
+                post: |
+                  #!/bin/sh -e
+                  url=http://localhost:9000/health/ready
+                  response=$(curl -fsS --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 --retry-max-time 40 "$url") || {
+                    echo "curl ${url} failed $?"
+                    exit 1
+                  }
+                  echo "$response" | jq .status | grep -q UP || {
+                    echo "response from $url did not contain \"UP\""
+                    echo "response: $response"
+                    exit 1
+                  }
+                  echo "$url had expected output: $response"
+
+test:
+  pipeline:
+    - uses: java-fips/algorithms
+      with:
+        java-version: 17
+        fips-compliance-version: 140-3
+        classpath: /usr/share/java/keycloak/providers/*:.
+
+update:
+  # The upstream repos releases contains a 'nightly' release. Which we want to
+  # exclude from discovery.
+  ignore-regex-patterns:
+    - '.*nightly.*'
+  enabled: true
+  github:
+    identifier: keycloak/keycloak

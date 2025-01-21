@@ -1,0 +1,41 @@
+package:
+  name: prometheus-statsd-exporter-fips
+  version: 0.28.0
+  epoch: 2
+  description: StatsD exporter for Prometheus
+  copyright:
+    - license: Apache-2.0
+
+vars:
+  PKG: "github.com/prometheus/common"
+
+pipeline:
+  - uses: git-checkout
+    with:
+      expected-commit: c0a390a2c43f77863278615b47d46e886bdca726
+      repository: https://github.com/prometheus/statsd_exporter
+      tag: v${{package.version}}
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+
+  - uses: go/build
+    with:
+      go-package: go-fips
+      packages: .
+      output: statsd_exporter
+      ldflags: -X ${{vars.PKG}}/version.Revision=$(git rev-parse --short HEAD) -X ${{vars.PKG}}/version.BuildDate=$(date -u +'%Y-%m-%dT%H:%M:%SZ') -X ${{vars.PKG}}/version.Branch=$(git branch --show-current) -X ${{vars.PKG}}/version.Version=v${{package.version}}
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        statsd_exporter --version
+        statsd_exporter --help
+
+update:
+  enabled: true
+  github:
+    identifier: prometheus/statsd_exporter
+    strip-prefix: v

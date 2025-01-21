@@ -1,0 +1,48 @@
+package:
+  name: metrics-server-fips
+  version: 0.7.2
+  epoch: 4
+  description: Scalable and efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines.
+  copyright:
+    - license: Apache-2.0
+
+environment:
+  contents:
+    packages:
+      - go-fips
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/kubernetes-sigs/metrics-server
+      tag: v${{package.version}}
+      expected-commit: 096960107da4a1b2e2ec83b2ac3424248cfc0ad5
+
+  - uses: go/remove-cgo-enabled-0
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+
+  - runs: |
+      set -x
+      make metrics-server ARCH="$(go env GOARCH)"
+      mkdir -p ${{targets.destdir}}/usr/bin
+      mv metrics-server ${{targets.destdir}}/usr/bin/
+
+  - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: kubernetes-sigs/metrics-server
+    use-tag: true
+    tag-filter: v
+    strip-prefix: v
+
+test:
+  pipeline:
+    - runs: |
+        metrics-server --version
+        metrics-server --help
+    - uses: test/go-fips-check

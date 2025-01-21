@@ -1,0 +1,52 @@
+package:
+  name: hubble-fips
+  version: 1.16.5
+  epoch: 1
+  description: hubble is a command to list and diagnose Go processes currently running on your system.
+  copyright:
+    - license: Apache-2.0
+
+environment:
+  contents:
+    packages:
+      - build-base
+      - busybox
+      - git
+      - go-fips~1.22
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/cilium/hubble
+      tag: v${{package.version}}
+      expected-commit: 6dbbd44ded00a6b22a68053c5de3cc48aba70bfb
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/net@v0.33.0
+
+  - runs: |
+      DESTDIR=${{targets.destdir}} BINDIR=/usr/bin make install
+
+  - uses: strip
+
+subpackages:
+  - name: ${{package.name}}-compat
+    description: Compatibility package for hubble
+    pipeline:
+      - runs: |
+          mkdir -p ${{targets.subpkgdir}}/usr/local/bin
+          ln -sf /usr/bin/hubble ${{targets.subpkgdir}}/usr/local/bin/hubble
+      - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: cilium/hubble
+    strip-prefix: v
+
+test:
+  pipeline:
+    - runs: |
+        hubble --version
+        hubble --help

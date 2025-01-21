@@ -1,0 +1,50 @@
+package:
+  name: external-dns-fips
+  version: 0.15.1
+  epoch: 0
+  description: Configure external DNS servers (AWS Route53, Google CloudDNS and others) for Kubernetes Ingresses and Services.
+  copyright:
+    - license: Apache-2.0
+      paths:
+        - "*"
+
+environment:
+  contents:
+    packages:
+      - go-fips
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/kubernetes-sigs/external-dns
+      tag: v${{package.version}}
+      expected-commit: c55b1a1127df024b95f927869a1bcd662ec4337a
+
+  # We need to disable the "-s" ldflags for the build to be FIPS.
+  - uses: go/remove-cgo-enabled-0
+    with:
+      seds: |
+        s,CGO_ENABLED=0[ ]*,,g
+        s,-w -s,-w,g
+
+  - runs: |
+      # Our global LDFLAGS conflict with a Makefile parameter
+      unset LDFLAGS
+      make build
+      mkdir -p ${{targets.destdir}}/usr/bin
+      mv build/external-dns ${{targets.destdir}}/usr/bin/
+
+update:
+  enabled: true
+  github:
+    identifier: kubernetes-sigs/external-dns
+    strip-prefix: v
+    tag-filter: v
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        external-dns --help
+    - runs: |
+        external-dns --version

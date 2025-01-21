@@ -1,0 +1,56 @@
+package:
+  name: cadvisor-fips
+  version: 0.50.0
+  epoch: 3
+  description: Analyzes resource usage and performance characteristics of running containers.
+  copyright:
+    - license: Apache-2.0
+
+environment:
+  contents:
+    packages:
+      - bash
+      - build-base
+      - busybox
+      - ca-certificates-bundle
+      - go-fips
+  environment:
+    CGO_ENABLED: "1"
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/google/cadvisor
+      tag: v${{package.version}}
+      expected-commit: 256737f329f705a0a8a95578efb9b36a5401d36d
+
+  - uses: go/bump
+    with:
+      deps: github.com/docker/docker@v26.1.5 github.com/opencontainers/runc@v1.2.0-rc.3
+
+  - uses: go/bump
+    with:
+      deps: github.com/docker/docker@v26.1.5 github.com/opencontainers/runc@v1.2.0-rc.3 golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+      modroot: cmd
+
+  - runs: |
+      ./build/build.sh
+
+  - runs: |
+      install -Dm755 _output/cadvisor "${{targets.destdir}}"/usr/bin/cadvisor
+
+  - uses: strip
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        cadvisor --help
+    - runs: cadvisor --version
+
+update:
+  enabled: true
+  github:
+    identifier: google/cadvisor
+    strip-prefix: v
+    tag-filter: v

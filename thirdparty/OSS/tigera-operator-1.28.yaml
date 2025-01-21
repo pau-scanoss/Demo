@@ -1,0 +1,60 @@
+package:
+  name: tigera-operator-1.28
+  version: 1.28.15
+  epoch: 13
+  description: Kubernetes operator for installing Calico and Calico Enterprise
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    provides:
+      - tigera-operator=1.28
+
+environment:
+  contents:
+    packages:
+      - build-base
+      - busybox
+      - ca-certificates-bundle
+      - git
+      - go
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/tigera/operator
+      tag: v${{package.version}}
+      expected-commit: 6a87979f97be99f5b0b3ece19abb14a8291327a0
+
+  - uses: go/bump
+    with:
+      deps: google.golang.org/protobuf@v1.33.0 golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+
+  - runs: |
+      PACKAGE_NAME=github.com/tigera/operator
+      ARCH=$(go env GOARCH)
+      BINDIR=build/_output/bin
+      GIT_VERSION=$(git describe --tags --dirty --always --abbrev=12)
+      if [ "${ARCH}" = "amd64" ]; then
+        CGO_ENABLED=1
+        GOEXPERIMENT=boringcrypto
+        TAGS="osusergo,netgo"
+      else
+        CGO_ENABLED=0
+      fi
+      echo "Building operator for ${ARCH} with CGO_ENABLED=${CGO_ENABLED} GOEXPERIMENT=${GOEXPERIMENT} TAGS=${TAGS}"
+      GOEXPERIMENT=${GOEXPERIMENT} GO111MODULE=on CGO_ENABLED=${CGO_ENABLED} go build -buildvcs=false -v -o ${BINDIR}/operator-${ARCH} -tags "${TAGS}" -ldflags "-X ${PACKAGE_NAME}/version.VERSION=${GIT_VERSION} -s -w" ./main.go
+      install -Dm755 build/_output/bin/operator-$(go env GOARCH) "${{targets.destdir}}"/usr/bin/operator
+
+update:
+  enabled: true
+  github:
+    identifier: tigera/operator
+    use-tag: true
+    tag-filter: v1.28.
+    strip-prefix: v
+
+test:
+  pipeline:
+    - runs: |
+        operator --version
+        operator --help

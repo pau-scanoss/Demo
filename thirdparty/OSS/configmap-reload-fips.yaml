@@ -1,0 +1,42 @@
+package:
+  name: configmap-reload-fips
+  version: 0.14.0
+  epoch: 0
+  description: Simple binary to trigger a reload when a Kubernetes ConfigMap is updated
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime:
+      - ca-certificates-bundle
+
+environment:
+  contents:
+    packages:
+      - busybox
+      - ca-certificates-bundle
+      - go-fips
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/jimmidyson/configmap-reload
+      expected-commit: 098b65ffe3e0e0e1b2a9b8b3bc848788e381fb94
+      tag: v${{package.version}}
+
+  - uses: go/build
+    with:
+      packages: configmap-reload.go
+      output: configmap-reload
+      go-package: go-fips
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+
+update:
+  enabled: true
+  github:
+    identifier: jimmidyson/configmap-reload
+    strip-prefix: v
+    tag-filter: v
+    use-tag: true

@@ -1,0 +1,62 @@
+package:
+  name: skopeo-fips
+  version: 1.17.0
+  epoch: 2
+  description: Work with remote images registries - retrieving information, images, signing content
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime:
+      - ca-certificates-bundle
+
+pipeline:
+  - uses: git-checkout
+    with:
+      expected-commit: e354a1431a2319619bb3fea9e8aa81a9e1bfcbb0
+      repository: https://github.com/containers/skopeo
+      tag: v${{package.version}}
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+
+  - uses: go/build
+    with:
+      packages: ./cmd/skopeo
+      output: skopeo
+      vendor: true
+      tags: exclude_graphdriver_devicemapper,exclude_graphdriver_btrfs,containers_image_openpgp
+      go-package: go-fips
+
+  - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: containers/skopeo
+    strip-prefix: v
+    use-tag: true
+
+test:
+  environment:
+    contents:
+      packages:
+        - jq
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        skopeo --help
+    - name: Verify Skopeo installation
+      runs: |
+        skopeo --version || exit 1
+    - name: Validate image existence
+      runs: |
+        skopeo inspect docker://cgr.dev/chainguard/static:latest && echo "Image exists" || exit 1
+    - name: List tags for a public image
+      runs: |
+        skopeo list-tags docker://cgr.dev/chainguard/static | jq -r '.Tags[]' | grep -E 'latest|v[0-9]+.[0-9]+.[0-9]+' || exit 1
+    - name: Pull and save an image locally
+      runs: |
+        tmpdir=$(mktemp -d)
+        skopeo copy --insecure-policy docker://cgr.dev/chainguard/static:latest dir:$tmpdir || exit 1
+        [ -f $tmpdir/manifest.json ] || exit 1

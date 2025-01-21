@@ -1,0 +1,59 @@
+package:
+  name: cosign-fips
+  version: 2.4.1
+  epoch: 3
+  description: Container Signing
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime:
+      - ca-certificates-bundle
+
+environment:
+  contents:
+    packages:
+      - busybox
+      - ca-certificates-bundle
+  environment:
+    CGO_ENABLED: "1"
+
+pipeline:
+  - uses: fetch
+    with:
+      uri: https://github.com/sigstore/cosign/archive/v${{package.version}}/cosign-v${{package.version}}.tar.gz
+      expected-sha256: a81e5ceeb03df0e3afd43f4fd211420e85f2980159a683c31e4f9baddba26070
+
+  - uses: go/bump
+    with:
+      deps: github.com/sigstore/sigstore-go@v0.6.1 github.com/open-policy-agent/opa@v0.68.0 github.com/theupdateframework/go-tuf/v2@v2.0.1 github.com/golang-jwt/jwt/v4@v4.5.1 golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+      replaces: github.com/docker/docker=github.com/docker/docker@v26.1.5+incompatible
+
+  - uses: go/build
+    with:
+      packages: ./cmd/cosign
+      output: cosign
+      ldflags: -w -X sigs.k8s.io/release-utils/version.gitVersion=${{package.version}}
+      go-package: go-fips
+
+  - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: sigstore/cosign
+    strip-prefix: v
+
+test:
+  environment:
+    contents:
+      packages:
+        - jq
+  pipeline:
+    - name: Verify Cosign installation
+      runs: |
+        cosign version || exit 1
+    - name: Get an attestation and test
+      runs: |
+        cosign download attestation --platform=linux/amd64 \
+        --predicate-type=https://spdx.dev/Document \
+        chainguard/curl | jq -r .payload | base64 -d | jq .predicate

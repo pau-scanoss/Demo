@@ -1,0 +1,50 @@
+package:
+  name: trivy-fips
+  version: "0.58.2"
+  epoch: 0
+  description: Simple and comprehensive vulnerability scanner for containers
+  copyright:
+    - license: Apache-2.0
+
+pipeline:
+  - uses: git-checkout
+    with:
+      expected-commit: 936f06a57864d073aa77b38f77fe76c4fcb1f7c1
+      repository: https://github.com/aquasecurity/trivy
+      tag: v${{package.version}}
+
+  - uses: go/bump
+    with:
+      deps: github.com/go-git/go-git/v5@v5.13.0
+
+  - uses: go/build
+    with:
+      go-package: go-fips
+      packages: ./cmd/trivy
+      output: trivy
+      ldflags: -X github.com/aquasecurity/trivy/pkg/version/app.ver=${{package.version}}
+
+test:
+  environment:
+    contents:
+      packages:
+        - jq
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        trivy --version
+        trivy --help
+    - name: Check trivy version
+      runs: |
+        trivy version
+        trivy version | grep '^Version: ${{package.version}}$'
+    - name: Check trivy version as JSON
+      runs: |
+        trivy version -f json | jq -M
+        [ "$(trivy version -f json 2>/dev/null | jq -r .Version)" == "${{package.version}}" ]
+
+update:
+  enabled: true
+  github:
+    identifier: aquasecurity/trivy
+    strip-prefix: v

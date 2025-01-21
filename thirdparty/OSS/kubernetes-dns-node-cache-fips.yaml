@@ -1,0 +1,51 @@
+package:
+  name: kubernetes-dns-node-cache-fips
+  version: "1.25.0"
+  epoch: 0
+  description: NodeLocal DNSCache improves Cluster DNS performance by running a DNS caching agent on cluster nodes as a DaemonSet.
+  copyright:
+    - license: Apache-2.0
+
+environment:
+  contents:
+    packages:
+      - build-base
+      - busybox
+      - ca-certificates-bundle
+      - wolfi-baselayout
+
+pipeline:
+  - uses: git-checkout
+    with:
+      expected-commit: 5c42a3c949d674474912c0d93e355b54a4296afb
+      repository: https://github.com/kubernetes/dns
+      tag: ${{package.version}}
+
+  - uses: go/bump
+    with:
+      deps: |-
+        github.com/quic-go/quic-go@v0.48.2
+        golang.org/x/crypto@v0.31.0
+        golang.org/x/net@v0.33.0
+
+  - uses: go/build
+    with:
+      ldflags: -X github.com/kubernetes/dns/pkg/version.Version=v${{package.version}}
+      output: node-cache
+      packages: ./cmd/node-cache
+      go-package: go-fips
+
+  - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: kubernetes/dns
+    strip-prefix: v
+
+test:
+  environment:
+  pipeline:
+    - runs: |
+        node-cache --help
+    - uses: test/go-fips-check

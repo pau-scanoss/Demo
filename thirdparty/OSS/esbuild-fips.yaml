@@ -1,0 +1,48 @@
+package:
+  name: esbuild-fips
+  version: 0.24.2
+  epoch: 0
+  description: An extremely fast bundler for the web
+  copyright:
+    - license: MIT
+  dependencies:
+    # Prevent apk add esbuild installing esbuild-fips
+    provider-priority: 0
+    # Yet still allow to directly install esbuild-fips to satisfy
+    # esbuild dependencies
+    provides:
+      - esbuild=${{package.full-version}}
+
+environment:
+  contents:
+    packages:
+      - nodejs
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/evanw/esbuild
+      tag: v${{package.version}}
+      expected-commit: 745abd9f0c06f73ca40fbe198546a9bc36c23b81
+
+  - runs: |
+      node scripts/esbuild.js --update-version-go
+
+  - uses: go/build
+    with:
+      go-package: go-fips
+      packages: ./cmd/esbuild
+      output: esbuild
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        esbuild --version
+        esbuild --help
+
+update:
+  enabled: true
+  github:
+    identifier: evanw/esbuild
+    strip-prefix: v

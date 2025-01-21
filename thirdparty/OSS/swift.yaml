@@ -1,0 +1,148 @@
+package:
+  name: swift
+  version: 6.0.3
+  epoch: 0
+  description: Swift is a high-performance system programming language. It has a clean and modern syntax, offers seamless access to existing C and Objective-C code and frameworks, and is memory-safe by default.
+  copyright:
+    - license: Apache-2.0
+  resources:
+    cpu: 16
+    memory: 32Gi
+  dependencies:
+    provider-priority: 10 # bootstrap is 5
+    runtime:
+      # Without this, when you run swift, you get:
+      # <unknown>:0: warning: libc not found for 'x86_64-unknown-linux-gnu'; C stdlib may be unavailable
+      - glibc-dev
+
+environment:
+  contents:
+    packages:
+      - bash
+      - binutils
+      - busybox
+      - cmake
+      - curl
+      - curl-dev
+      - gcc
+      - glibc-dev
+      - gnutar # busybox tar doesn't like --owner flag.
+      - libedit
+      - libedit-dev
+      - libuuid
+      - libxml2
+      - libxml2-dev
+      - make
+      - ncurses
+      - ncurses-dev
+      - ninja-build # We need ninja-build instead of ninja because it's samurai
+      - openssh-client
+      - patch
+      - perl
+      - posix-libc-utils # Tests require this for something
+      # Lock to Python 3.10 because of "error: use of undeclared identifier 'PyEval_ThreadsInitialized'"
+      # This function is deprecated, and removed in 3.11.
+      # See: https://docs.python.org/3/whatsnew/3.9.html#:~:text=PyEval_ThreadsInitialized
+      - py3.10-pip # for setuptools
+      - python-3.10
+      - python-3.10-dev
+      - rsync # Needed to package the swiftpm
+      - sqlite
+      - sqlite-dev
+      # This uses "previous" swift since it needs swift to build swift.
+      - swift
+      - swig
+      - util-linux-dev # for uuid/uuid.h
+      - wasi-libc # For tests
+      - wasi-sdk-libclang-rt-builtins # For tests
+
+pipeline:
+  - runs: |
+      # Get ninja where the build tools expect it.
+      ln -s /usr/lib/ninja-build/bin/ninja /usr/bin/ninja
+
+  - uses: git-checkout
+    with:
+      repository: https://github.com/swiftlang/swift
+      tag: swift-${{package.version}}-RELEASE
+      expected-commit: 6a862d2eb7128ff1f317b07e8ad1a6da939775f3
+      destination: swift-project/swift
+
+  - runs: |
+      # This is the way the project tells you to update the dependent repos.
+      # I also tried independently checking out the various repos at various
+      # tags but that seemed like a maintenance nightmare. However, if this
+      # is something that we would prefer, then we can do that.
+      cd swift-project/swift
+      MAX_RETRIES=5
+
+      attempt=1
+      success=0
+      while [ $attempt -le $MAX_RETRIES ]; do
+        echo "Attempt $attempt of $MAX_RETRIES: Running update-checkout"
+        ./utils/update-checkout --all-repositories --tag swift-${{package.version}}-RELEASE --skip-history --clone && success=1 || success=0
+
+        if [ $success -eq 1 ]; then
+          echo "Command succeeded on attempt $attempt"
+          exit 0
+        fi
+
+        attempt=$(( attempt + 1 ))
+      done
+
+      # If we've reached here, all attempts failed
+      echo "update-checkout failed after $MAX_RETRIES attempts"
+      exit 1
+
+  - runs: |
+      # Apply fedora patches from: https://src.fedoraproject.org/rpms/swift-lang/tree/rawhide
+      cd swift-project
+      patch -p0 < ../enable_lzma.patch
+      patch -p0 < ../need_pic.patch
+      patch -p0 < ../no_pipes.patch
+      patch -p0 < ../have_strcat.patch
+
+      cd swift
+      patch -p1 < ../../lldb-server.patch
+
+  - runs: |
+      cd swift-project
+      swift/utils/build-script --preset=wolfi install_destdir=${{targets.contextdir}} installable_package=${{targets.contextdir}}/swift-${{package.version}}-wolfi.tar.gz
+      # We do not use this but release script creates it, just remove it so
+      # it doesn't get packaged.
+      rm ${{targets.contextdir}}/swift-${{package.version}}-wolfi.tar.gz
+
+  - uses: strip
+
+test:
+  pipeline:
+    - name: Hello world
+      runs: |
+        echo 'print("Hello, World!")' > /tmp/hello.swift
+        swift /tmp/hello.swift | grep "Hello, World!"
+
+# The above test pipeline should run swift repl tests below since there were
+# problems in the past with it, so we should catch these as early as possible.
+# We do test them in the image tests, but catching them earlier would be better.
+# https://github.com/chainguard-images/images-private/blob/main/images/swift/tests/main.tf#L65
+#
+# Unfortunately we do not have the rights to run these as package tests, they
+# fail with:
+# error: failed to launch REPL process: Cannot launch '/usr/bin/repl_swift': personality set failed: Operation not permitted name="Hello world with repl"
+#
+# https://github.com/chainguard-dev/enterprise-packages/issues/9193
+#
+# https://github.com/swiftlang/swift-docker/issues/9
+#- name: Hello world with repl
+#  runs: |
+#    echo 'print("Hello, World!")' > /tmp/hello.swift
+#    cat /tmp/hello.swift | swift repl | grep "Hello, World!"
+#- name: Hard math
+#  runs: |
+#    echo "1+1" | swift repl | grep "Int = 2":
+update:
+  enabled: true
+  github:
+    identifier: swiftlang/swift
+    strip-prefix: swift-
+    strip-suffix: -RELEASE

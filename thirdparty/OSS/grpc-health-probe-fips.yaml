@@ -1,0 +1,45 @@
+package:
+  name: grpc-health-probe-fips
+  version: "0.4.37"
+  # bump to epoch 1 when 0.4.29 is released
+  epoch: 0
+  description: A command-line tool to perform health-checks for gRPC applications in Kubernetes and elsewhere
+  copyright:
+    - license: Apache-2.0
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/grpc-ecosystem/grpc-health-probe
+      tag: v${{package.version}}
+      expected-commit: c500e0d74f5444f4643ec1d2499208da23d2e3cc
+
+  - uses: go/build
+    with:
+      go-package: go-fips
+      packages: .
+      output: grpc-health-probe
+      ldflags: -X main.versionTag=v${{package.version}}
+
+subpackages:
+  - name: grpc-health-probe-fips-compat
+    pipeline:
+      - runs: |
+          # Symlink the binary from usr/bin to /bin
+          mkdir -p "${{targets.subpkgdir}}"/bin
+          ln -sf /usr/bin/grpc-health-probe ${{targets.subpkgdir}}/bin/grpc-health-probe
+    dependencies:
+      runtime:
+        - grpc-health-probe-fips
+
+update:
+  enabled: true
+  github:
+    identifier: grpc-ecosystem/grpc-health-probe
+    strip-prefix: v
+    use-tag: true
+
+test:
+  pipeline:
+    - runs: |
+        grpc-health-probe --version

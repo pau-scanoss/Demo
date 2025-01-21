@@ -1,0 +1,45 @@
+package:
+  name: opa-fips
+  version: 1.0.0
+  epoch: 0
+  description: Open Policy Agent (OPA) is an open source, general-purpose policy engine.
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime:
+      - openssl-config-fipshardened
+
+environment:
+  contents:
+    packages:
+      - busybox
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/open-policy-agent/opa
+      tag: v${{package.version}}
+      expected-commit: 00cc7ae2757b456f60e211ea55319175ae669556
+
+  - uses: go/build
+    with:
+      ldflags: "-X github.com/open-policy-agent/opa/version.Version=${{package.version}}"
+      modroot: .
+      packages: .
+      output: opa
+      go-package: go-fips
+
+  - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: open-policy-agent/opa
+    strip-prefix: v
+    use-tag: true
+
+test:
+  pipeline:
+    - runs: |
+        opa version
+        opa test . -v

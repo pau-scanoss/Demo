@@ -1,0 +1,76 @@
+package:
+  name: amazon-cloudwatch-agent-fips
+  version: 1.300051.0
+  epoch: 2
+  description: CloudWatch Agent enables you to collect and export host-level metrics and logs on instances running Linux or Windows server.
+  copyright:
+    - license: Apache-2.0
+
+data:
+  - name: amazon-cloudwatch-agent-packages
+    items:
+      config-downloader: config-downloader
+      config-translator: config-translator
+      start-amazon-cloudwatch-agent: start-amazon-cloudwatch-agent
+      amazon-cloudwatch-agent-config-wizard: amazon-cloudwatch-agent-config-wizard
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/aws/amazon-cloudwatch-agent
+      tag: v${{package.version}}
+      expected-commit: 2c8e72f671b762087ea2d6de9b961c1d6eba8ba6
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+
+  - uses: go/build
+    with:
+      go-package: go-fips
+      packages: ./cmd/amazon-cloudwatch-agent
+      ldflags: |
+        -X github.com/aws/amazon-cloudwatch-agent/cfg/agentinfo.VersionStr=${{package.version}}
+        -X github.com/aws/amazon-cloudwatch-agent/cfg/agentinfo.BuildStr=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+      output: amazon-cloudwatch-agent
+
+subpackages:
+  - range: amazon-cloudwatch-agent-packages
+    name: amazon-cloudwatch-agent-${{range.key}}-fips
+    pipeline:
+      - uses: go/build
+        with:
+          go-package: go-fips
+          packages: ./cmd/${{range.key}}
+          ldflags: |
+            -X github.com/aws/amazon-cloudwatch-agent/cfg/agentinfo.VersionStr=${{package.version}}
+            -X github.com/aws/amazon-cloudwatch-agent/cfg/agentinfo.BuildStr=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          output: ${{range.key}}
+    test:
+      pipeline:
+        - uses: test/go-fips-check
+          with:
+            package-match: "^amazon-cloudwatch-agent-${{range.key}}-fips"
+
+update:
+  enabled: true
+  github:
+    identifier: aws/amazon-cloudwatch-agent
+    strip-prefix: v
+    tag-filter: v
+    use-tag: true
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        amazon-cloudwatch-agent --version
+        amazon-cloudwatch-agent --help
+    - name: Version Check
+      runs: |
+        set +e
+        amazon-cloudwatch-agent -version
+        amazon-cloudwatch-agent-config-wizard -help
+        config-downloader -help
+        config-translator -help
+        RUN_IN_CONTAINER="True" start-amazon-cloudwatch-agent | grep amazon-cloudwatch-agent

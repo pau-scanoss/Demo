@@ -1,0 +1,221 @@
+# mysql-8.0 is LTS stream 8.0.x
+# mysql-8.4 is future LTS stream 8.4.x
+package:
+  name: mysql-8.0
+  version: 8.0.40
+  epoch: 0
+  description: "The MySQL open source relational database"
+  copyright:
+    - license: GPL-2.0-only # https://downloads.mysql.com/docs/licenses/mysqld-8.0-gpl-en.pdf
+  resources:
+    cpu: 30
+    memory: 60Gi
+  dependencies:
+    runtime:
+      - ${{package.name}}-client
+      - pwgen
+
+environment:
+  contents:
+    packages:
+      - wolfi-baselayout
+      - busybox
+      - bison
+      - ca-certificates-bundle
+      - build-base
+      - cmake
+      - openssl-dev
+      - ncurses-dev
+      - libaio-dev
+      - pcre2-dev
+      - xz-dev
+      - libevent-dev
+      - readline-dev
+      - linux-pam-dev
+      - libtirpc-dev
+      - rpcsvc-proto
+      - zlib-dev
+
+pipeline:
+  # MySQL requires boost 1.77 and we are not building that version only >1.83, so we are using the existing package for now
+  - working-directory: /home/build/boost
+    pipeline:
+      - uses: fetch
+        with:
+          uri: https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_77_0.tar.bz2
+          expected-sha256: fc9f85fc030e233142908241af7a846e60630aa7388de9a5fafb1f3a26840854
+
+  - working-directory: /home/build/mysql
+    pipeline:
+      - uses: fetch
+        with:
+          uri: https://dev.mysql.com/get/Downloads/${{package.name}}/mysql-${{package.version}}.tar.gz
+          expected-sha256: 02dfd943f96742f7f9cd78855b32708ea4df548c9c14af9273817f3bbd9d22b2
+      - uses: cmake/configure
+        with:
+          opts: |
+            -DWITH_BOOST=/home/build/boost \
+            -DWITH_UNIT_TESTS=OFF \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+            -DSYSCONFDIR=/etc \
+            -DMYSQL_DATADIR=/var/lib/mysql \
+            -DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock \
+            -DDEFAULT_CHARSET=utf8mb4 \
+            -DDEFAULT_COLLATION=utf8mb4_general_ci \
+            -DENABLED_LOCAL_INFILE=ON \
+            -DINSTALL_INFODIR=share/info \
+            -DINSTALL_MANDIR=share/man \
+            -DINSTALL_PLUGINDIR=lib/${{package.name}}/plugin \
+            -DINSTALL_INCLUDEDIR=include/mysql \
+            -DINSTALL_DOCREADMEDIR=share/doc/${{package.name}} \
+            -DINSTALL_SUPPORTFILESDIR=share/support/${{package.name}} \
+            -DINSTALL_MYSQLSHAREDIR=share/${{package.name}} \
+            -DINSTALL_DOCDIR=share/doc/${{package.name}} \
+            -DWITH_ASAN=OFF \
+            -DWITH_JEMALLOC=OFF \
+            -DWITH_LIBWRAP=OFF \
+            -DWITH_SYSTEMD=OFF \
+            -DWITH_SSL=system \
+            -DWITH_VALGRIND=OFF \
+            -DWITH_ZLIB=system
+      - uses: cmake/build
+      - uses: cmake/install
+      - name: "Remove extras"
+        runs: |
+          rm -r "${{targets.destdir}}"/usr/mysql-test/
+
+  - uses: strip
+
+subpackages:
+  - name: "mysql-8.0-dev"
+    description: "headers for mysql"
+    pipeline:
+      - uses: split/dev
+    test:
+      pipeline:
+        - runs: |
+            mysql_config --version
+
+  - name: "${{package.name}}-client"
+    dependencies:
+      provides:
+        - mysql-client=${{package.full-version}}
+    pipeline:
+      - runs: |
+          mkdir -p "${{targets.subpkgdir}}"/usr/bin
+          mv "${{targets.destdir}}"/usr/bin/mysql "${{targets.subpkgdir}}"/usr/bin/
+
+  - name: mysql-8.0-oci-entrypoint
+    description: Entrypoint for MySQL in OCI containers
+    dependencies:
+      runtime:
+        - bash
+        - busybox
+        - openssl
+    pipeline:
+      - runs: |
+          mkdir -p ${{targets.subpkgdir}}/usr/bin/
+          cp docker-entrypoint.sh ${{targets.subpkgdir}}/usr/bin/
+          chmod +x ${{targets.subpkgdir}}/usr/bin/docker-entrypoint.sh
+
+  - name: mysql-8.0-oci-entrypoint-compat
+    pipeline:
+      - runs: |
+          # Symlink the binary from usr/bin to /
+          mkdir -p "${{targets.subpkgdir}}"
+          mkdir -p "${{targets.subpkgdir}}"/usr/local/bin
+          ln -sf /usr/bin/docker-entrypoint.sh ${{targets.subpkgdir}}/entrypoint.sh
+          ln -sf /usr/bin/docker-entrypoint.sh ${{targets.subpkgdir}}/usr/local/bin/docker-entrypoint.sh
+    dependencies:
+      runtime:
+        - mysql-8.0-oci-entrypoint
+
+update:
+  enabled: true
+  github:
+    identifier: mysql/mysql-server
+    strip-prefix: mysql-
+    use-tag: true
+    tag-filter: mysql-8.0.
+
+test:
+  environment:
+    contents:
+      packages:
+        - ${{package.name}}
+        - ${{package.name}}-client
+    environment:
+      DBDATA: /var/lib/mysql
+  pipeline:
+    - name: Check versions
+      runs: |
+        mysql --version
+        mysqladmin --version
+        comp_err --version
+        comp_err --help
+        ibd2sdi --version
+        ibd2sdi --help
+        innochecksum --version
+        innochecksum --help
+        my_print_defaults --version
+        my_print_defaults --help
+        myisamchk --version
+        myisamchk --help
+        myisampack --version
+        myisampack --help
+        mysql_client_test --help
+        mysql_config_editor --version
+        mysql_config_editor --help
+        mysql_migrate_keyring --version
+        mysql_migrate_keyring --help
+        mysql_secure_installation --help
+        mysql_ssl_rsa_setup --version
+        mysql_ssl_rsa_setup --help
+        mysql_upgrade --version
+        mysql_upgrade --help
+        mysqlbinlog --version
+        mysqlbinlog --help
+        mysqlcheck --version
+        mysqlcheck --help
+        mysqld --version
+        mysqld --help
+        mysqld_multi --version
+        mysqld_multi --help
+        mysqldump --version
+        mysqldump --help
+        mysqldumpslow version
+        mysqldumpslow --help
+        mysqlimport --version
+        mysqlimport --help
+        mysqlpump --version
+        mysqlpump --help
+        mysqlrouter --version
+        mysqlrouter --help
+        mysqlrouter_keyring --version
+        mysqlrouter_keyring --help
+        mysqlrouter_passwd --version
+        mysqlrouter_passwd --help
+        mysqlrouter_plugin_info --version
+        mysqlrouter_plugin_info --help
+        mysqlshow --version
+        mysqlshow --help
+        mysqlslap --version
+        mysqlslap --help
+        mysqltest --version
+        mysqltest --help
+        perror --version
+        perror --help
+    - name: Test
+      uses: test/daemon-check-output
+      with:
+        setup: |
+          mkdir -p "$DBDATA" /var/tmp /var/log/mysql /run/mysqld
+          mysqld --initialize-insecure --datadir="$DBDATA"
+        start: mysqld --user=root --datadir="$DBDATA"
+        post: |
+          mysqladmin --user=root ping --wait=5
+        timeout: 60
+        expected_output: |
+          starting as process
+          ready for connections

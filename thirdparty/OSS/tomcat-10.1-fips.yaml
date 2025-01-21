@@ -1,0 +1,140 @@
+package:
+  name: tomcat-10.1-fips
+  version: 10.1.34
+  epoch: 0
+  description: FIPS compliant Apache Tomcat Web Server
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    provides:
+      - tomcat-fips=${{package.full-version}}
+      - tomcat-10-fips=${{package.full-version}}
+
+var-transforms:
+  - from: ${{package.version}}
+    match: ^(\d+\.\d+)\.\d+$
+    replace: "$1"
+    to: major-minor-version
+
+data:
+  - name: openjdk-versions
+    items:
+      21: "openjdk-21"
+      17: "openjdk-17"
+      11: "openjdk-11"
+
+  - name: openjdk-versions-140-2
+    items:
+      17: "openjdk-17"
+      11: "openjdk-11"
+
+environment:
+  contents:
+    packages:
+      - ant
+      - build-base
+      - busybox
+      - ca-certificates-bundle
+      # Only 17 is used during the build process
+      - openjdk-17
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/apache/tomcat
+      tag: ${{package.version}}
+      expected-commit: acf7da1801a4751b282a70ced24b73c1046db831
+
+  - uses: patch
+    with:
+      patches: Enable-FIPS.patch
+
+  - runs: |
+      cat <<EOF > build.properties
+      skip.installer=true
+      base.path=$PWD
+      compile.debug=false
+      EOF
+
+subpackages:
+  - range: openjdk-versions
+    name: tomcat-${{vars.major-minor-version}}-${{range.value}}-fips
+    dependencies:
+      runtime:
+        - tomcat-${{vars.major-minor-version}}-${{range.value}}-fips-policy
+        - ${{range.value}}-default-jvm
+        - tomcat-native
+    pipeline:
+      - runs: |
+          # Only OpenJDK 17 is supported at buildtime
+          # However, we're able to run Tomcat with OpenJDK 11-21
+          export JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
+
+          ant -Dskip.build.java.version=true
+
+          mkdir -p ${{targets.contextdir}}/usr/share/tomcat
+          cp LICENSE ${{targets.contextdir}}/usr/share/tomcat/
+
+          mkdir -p ${{targets.contextdir}}/usr/share/tomcat/bin
+          cp output/build/bin/* ${{targets.contextdir}}/usr/share/tomcat/bin
+
+          mkdir -p ${{targets.contextdir}}/usr/share/tomcat/conf
+          cp output/build/conf/* ${{targets.contextdir}}/usr/share/tomcat/conf
+
+          mkdir -p ${{targets.contextdir}}/usr/share/tomcat/lib
+          cp output/build/lib/* ${{targets.contextdir}}/usr/share/tomcat/lib
+
+          mkdir -p ${{targets.contextdir}}/usr/share/tomcat/logs
+          mkdir -p ${{targets.contextdir}}/usr/share/tomcat/temp
+          mkdir -p ${{targets.contextdir}}/usr/share/tomcat/webapps
+
+          # This includes the manager and host-manager apps.
+          # The apps are not directly usable without copying into the webapps directory.
+          # See https://github.com/docker-library/tomcat/pull/181 for more context.
+          mkdir -p ${{targets.contextdir}}/usr/share/tomcat/webapps.dist
+          rm -rf output/build/webapps/examples
+          cp -r output/build/webapps/* ${{targets.contextdir}}/usr/share/tomcat/webapps.dist/
+
+  - range: openjdk-versions-140-2
+    name: tomcat-${{vars.major-minor-version}}-${{range.value}}-fips-policy-140-2
+    description: bcfips 140-2 dependencies
+    checks:
+      disabled:
+        - empty
+    dependencies:
+      runtime:
+        - bcfips-policy-140-2-j${{range.key}}
+      # Higher than 140-3
+      provider-priority: 10
+      provides:
+        - tomcat-${{vars.major-minor-version}}-${{range.value}}-fips-policy=${{package.full-version}}
+
+  - range: openjdk-versions
+    name: tomcat-${{vars.major-minor-version}}-${{range.value}}-fips-policy-140-3
+    description: bcfips 140-3 dependencies
+    checks:
+      disabled:
+        - empty
+    dependencies:
+      runtime:
+        - bcfips-policy-140-3-j${{range.key}}
+      # Lower than 140-2
+      provider-priority: 5
+      provides:
+        - tomcat-${{vars.major-minor-version}}-${{range.value}}-fips-policy=${{package.full-version}}
+
+test:
+  pipeline:
+    - uses: java-fips/algorithms
+      with:
+        java-version: 17
+        fips-compliance-version: 140-2
+
+update:
+  enabled: true
+  ignore-regex-patterns:
+    - '-M\d+$'
+  github:
+    identifier: apache/tomcat
+    use-tag: true
+    tag-filter: 10.1.

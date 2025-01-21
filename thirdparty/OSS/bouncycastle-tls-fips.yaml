@@ -1,0 +1,32 @@
+package:
+  name: bouncycastle-tls-fips
+  version: 2.0.19
+  epoch: 0
+  description: BouncyCastle FIPS TLS APIs
+  copyright:
+    - license: MIT
+
+environment:
+  contents:
+    packages:
+      - busybox
+
+pipeline:
+  - uses: fetch
+    with:
+      uri: https://repo1.maven.org/maven2/org/bouncycastle/bctls-fips/${{package.version}}/bctls-fips-${{package.version}}.jar
+      expected-sha512: 8736ec0773c614290b195ee6d782ab47108fbe123347117651f796043e4a886b180372f8314912f89c4aa660d1997afb5ef037ddc2dae42f1ec886336c7ac46b
+      extract: false
+
+  - runs: |
+      mkdir -p ${{targets.destdir}}/usr/share/java/bouncycastle-fips
+      cp bctls-fips-${{package.version}}.jar ${{targets.destdir}}/usr/share/java/bouncycastle-fips/bctls-fips.jar
+
+update:
+  enabled: false
+  exclude-reason: |
+    Please upgrade this always. Note this jar is outside of FIPS
+    boundary, and should always be updated to latest published version
+    on maven. There is no git repository where one can track version
+    numbers for it, as the upstream repo is private. Unless we write a
+    maven version tracker.

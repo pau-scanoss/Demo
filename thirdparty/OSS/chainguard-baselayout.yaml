@@ -1,0 +1,40 @@
+package:
+  name: chainguard-baselayout
+  version: 20230214
+  epoch: 12
+  description: "baselayout data for Chainguard"
+  copyright:
+    - license: MIT
+  dependencies:
+    replaces:
+      - wolfi-baselayout
+    runtime:
+      - glibc-locale-posix
+      - wolfi-baselayout
+
+environment:
+  contents:
+    packages:
+      - busybox
+
+pipeline:
+  - name: Generate /etc/os-release
+    runs: |
+      mkdir -p ${{targets.destdir}}/etc
+      cat >${{targets.destdir}}/etc/os-release <<EOF
+      ID=chainguard
+      NAME="Chainguard"
+      PRETTY_NAME="Chainguard"
+      VERSION_ID="${{package.version}}"
+      HOME_URL="https://chainguard.dev/"
+      EOF
+
+  - name: Add secfixes.d
+    runs: |
+      mkdir -p ${{targets.destdir}}/etc/secfixes.d
+      install -m644 chainguard ${{targets.destdir}}/etc/secfixes.d/chainguard
+
+update:
+  enabled: false
+  exclude-reason: |
+    This package is a base package and does not need to be updated automatically

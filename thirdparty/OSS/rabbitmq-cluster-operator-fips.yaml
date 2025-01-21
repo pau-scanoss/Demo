@@ -1,0 +1,41 @@
+package:
+  name: rabbitmq-cluster-operator-fips
+  version: 2.12.0
+  epoch: 0
+  description: Open source RabbitMQ cluster operator. Kubernetes operator to deploy and manage RabbitMQ clusters.
+  copyright:
+    - license: MPL-2.0
+
+environment:
+  environment:
+    GO111MODULE: on
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/rabbitmq/cluster-operator
+      tag: v${{package.version}}
+      expected-commit: d43d457228dc23682e349f3d53fb957a922e1f1b
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/net@v0.33.0
+
+  - uses: go/build
+    with:
+      packages: .
+      output: manager
+      tags: timetzdata
+      go-package: go-fips
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        manager --help
+
+update:
+  enabled: true
+  github:
+    identifier: rabbitmq/cluster-operator
+    strip-prefix: v

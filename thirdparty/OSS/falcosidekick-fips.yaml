@@ -1,0 +1,43 @@
+package:
+  name: falcosidekick-fips
+  version: 2.30.0
+  epoch: 2
+  description: Connect Falco to your ecosystem
+  copyright:
+    - license: MIT
+
+environment:
+  contents:
+    packages:
+      - build-base
+      - busybox
+      - ca-certificates-bundle
+      - go-fips
+
+pipeline:
+  - uses: git-checkout
+    with:
+      expected-commit: d4483901926f3ac55d0546fde2b51f1da9dc1aaa
+      repository: https://github.com/falcosecurity/falcosidekick
+      tag: ${{package.version}}
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+
+  - runs: |
+      make falcosidekick RELEASE=${{package.version}}
+      mkdir -p ${{targets.destdir}}/usr/bin
+      mv falcosidekick ${{targets.destdir}}/usr/bin/
+
+  - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: falcosecurity/falcosidekick
+    strip-prefix: v
+
+test:
+  pipeline:
+    - uses: test/go-fips-check

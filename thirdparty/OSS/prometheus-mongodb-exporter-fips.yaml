@@ -1,0 +1,35 @@
+package:
+  name: prometheus-mongodb-exporter-fips
+  version: 0.43.1
+  epoch: 2
+  description: A Prometheus exporter for MongoDB including sharding, replication and storage engines
+  copyright:
+    - license: MIT
+
+pipeline:
+  - uses: git-checkout
+    with:
+      expected-commit: 2b2cccca21104c2a00cb53bd0d785b3d656fe803
+      repository: https://github.com/percona/mongodb_exporter
+      tag: v${{package.version}}
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+
+  - uses: go/build
+    with:
+      go-package: go-fips-md5
+      packages: .
+      output: mongodb_exporter
+      ldflags: -X main.version=$(git describe --abbrev=0 --always) -X main.buildDate=$(date +%FT%T%z) -X main.commit=$(git rev-parse HEAD) -X main.Branch=$(git describe --always --contains --all)
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+
+update:
+  enabled: true
+  github:
+    identifier: percona/mongodb_exporter
+    strip-prefix: v

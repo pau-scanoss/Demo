@@ -1,0 +1,88 @@
+package:
+  name: prometheus-operator-fips
+  version: 0.79.2
+  epoch: 1
+  description: Prometheus Operator creates/configures/manages Prometheus clusters atop Kubernetes
+  copyright:
+    - license: Apache-2.0
+
+vars:
+  PKG: "github.com/prometheus/common"
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/prometheus-operator/prometheus-operator.git
+      tag: v${{package.version}}
+      expected-commit: 1d2dca5a93d50fe09d7662860f80448d2e37ff1a
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/net@v0.33.0
+
+  - uses: go/build
+    with:
+      go-package: go-fips
+      packages: ./cmd/operator
+      output: operator
+      ldflags: -X ${{vars.PKG}}/version.Revision=$(git rev-parse --short HEAD) -X ${{vars.PKG}}/version.BuildDate=$(date -u +'%Y-%m-%dT%H:%M:%SZ') -X ${{vars.PKG}}/version.Branch=$(git branch --show-current) -X ${{vars.PKG}}/version.Version=v${{package.version}}
+
+  - runs: |
+      # test uses the -race flag which is incompatible with -buildmode=pie
+      unset GOFLAGS
+      make test-unit
+
+subpackages:
+  - name: prometheus-config-reloader-fips
+    description: Prometheus Operator creates/configures/manages Prometheus clusters atop Kubernetes
+    pipeline:
+      - uses: go/build
+        with:
+          go-package: go-fips
+          packages: ./cmd/prometheus-config-reloader
+          output: prometheus-config-reloader
+          ldflags: -X ${{vars.PKG}}/version.Revision=$(git rev-parse --short HEAD) -X ${{vars.PKG}}/version.BuildDate=$(date -u +'%Y-%m-%dT%H:%M:%SZ') -X ${{vars.PKG}}/version.Branch=$(git branch --show-current) -X ${{vars.PKG}}/version.Version=v${{package.version}}
+    test:
+      pipeline:
+        - runs: |
+            prometheus-config-reloader --version
+            prometheus-config-reloader --help
+
+  - name: prometheus-config-reloader-oci-entrypoint-compat-fips
+    pipeline:
+      - runs: |
+          mkdir -p "${{targets.contextdir}}/bin"
+          ln -s /usr/bin/prometheus-config-reloader "${{targets.contextdir}}/bin/prometheus-config-reloader"
+
+  - name: prometheus-admission-webhook-fips
+    description: Prometheus Operator creates/configures/manages Prometheus clusters atop Kubernetes
+    pipeline:
+      - uses: go/build
+        with:
+          go-package: go-fips
+          packages: ./cmd/admission-webhook
+          output: admission-webhook
+          ldflags: -X ${{vars.PKG}}/version.Revision=$(git rev-parse --short HEAD) -X ${{vars.PKG}}/version.BuildDate=$(date -u +'%Y-%m-%dT%H:%M:%SZ') -X ${{vars.PKG}}/version.Branch=$(git branch --show-current) -X ${{vars.PKG}}/version.Version=v${{package.version}}
+    test:
+      pipeline:
+        - runs: |
+            admission-webhook --version
+            admission-webhook --help
+
+test:
+  environment:
+    contents:
+      packages:
+        - prometheus-config-reloader-fips
+        - prometheus-admission-webhook-fips
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        operator --version
+        operator --help
+
+update:
+  enabled: true
+  github:
+    identifier: prometheus-operator/prometheus-operator
+    strip-prefix: v

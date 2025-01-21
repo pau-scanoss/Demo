@@ -1,0 +1,91 @@
+package:
+  name: istio-envoy-fips-1.22
+  version: 1.22.7
+  epoch: 0
+  description: Envoy with additional Istio plugins (wasm, telemetry, etc)
+  copyright:
+    - license: Apache-2.0
+  resources:
+    cpu: 30
+    memory: 60Gi
+  dependencies:
+    provides:
+      - istio-envoy-fips=${{package.full-version}}
+
+environment:
+  contents:
+    packages:
+      # We don't use automake/autoconf directly, but the Bazel rule uses them
+      - autoconf
+      - automake
+      - busybox
+      - ca-certificates-bundle
+      - wolfi-baselayout
+      - binutils
+      - build-base
+      - git
+      - bazel-6
+      - openjdk-11
+      - bash
+      - libtool
+      - cmake
+      - samurai
+      - python3-dev
+      - clang~15
+      - llvm-libcxx-15
+      - llvm-libcxx-15-dev
+      - llvm15
+      - llvm15-dev
+      - llvm-lld-15
+      - llvm15-tools
+      - llvm15-cmake-default
+      - coreutils
+      - patch
+      - boringssl-fips-static
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/istio/proxy
+      tag: ${{package.version}}
+      expected-commit: d17e607ff67ff7b6eccbf396d370d7a2c53a5238
+
+  - name: Add use-precompiled-boringssl-from-build-env patch
+    runs: |
+      # Append new patch use-precompiled-boringssl-from-build-environment.patch to the envoy in WORKSPACE.
+      # it will search for the entry `sha256 = ENVOY_SHA256`` and append the patch entry after it.
+      # This patch is sets the code to use the precompiled boringssl from the build environment.
+      sed -i "/sha256 = ENVOY_SHA256/a\\
+         patches = [\"//:use-precompiled-boringssl-from-build-environment.patch\"], patch_args = [\"-p1\"]," WORKSPACE
+
+  - name: Build envopy
+    runs: |
+      export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+      mkdir -p .cache/bazel/_bazel_root
+
+      # The flag boringssl=fips is to build with FIPS boringssl
+      # See https://github.com/envoyproxy/envoy/blob/v1.27.0/bazel/BUILD#L475
+      bazel build \
+        --define=boringssl=fips \
+        --discard_analysis_cache \
+        --nokeep_state_after_build \
+        --notrack_incremental_state \
+        --verbose_failures \
+        -c opt envoy
+
+      # Bazel sometimes fails to build with an exit code 0.
+      if [ ! -f bazel-bin/envoy ]; then
+        echo "Bazel build did not complete"
+        exit -1
+      fi
+      mkdir -p ${{targets.destdir}}/usr/bin/
+      cp bazel-bin/envoy ${{targets.destdir}}/usr/bin/envoy
+
+  - uses: strip
+
+update:
+  enabled: true
+  github:
+    identifier: istio/proxy
+    use-tag: true
+    tag-filter: 1.22.

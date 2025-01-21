@@ -1,0 +1,55 @@
+package:
+  name: atlantis-fips
+  version: 0.32.0
+  epoch: 0
+  description: Terraform Pull Request Automation
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime:
+      - terraform-fips
+
+environment:
+  contents:
+    packages:
+      - build-base
+      - busybox
+      - ca-certificates-bundle
+      - go-fips
+      - libcap-utils
+      - wolfi-baselayout
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/runatlantis/atlantis
+      tag: v${{package.version}}
+      expected-commit: ea838accd4d83f50b75fbe968f680337381f3f15
+
+  - uses: go/build
+    with:
+      modroot: .
+      packages: .
+      output: atlantis
+      ldflags: -w -X main.version=${{package.version}} -X main.commit=$(git rev-parse HEAD) -X main.date=$(date ${SOURCE_DATE_EPOCH:+ -d@${SOURCE_DATE_EPOCH}} "+%Y-%m-%dT%H:%M:%SZ")
+      go-package: go-fips
+
+  - uses: strip
+
+  # This must come after strip!
+  - runs: |
+      setcap "cap_net_bind_service=+ep" "${{targets.destdir}}"/usr/bin/atlantis
+
+update:
+  enabled: true
+  github:
+    identifier: runatlantis/atlantis
+    strip-prefix: v
+    use-tag: true
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        atlantis version
+        atlantis --help

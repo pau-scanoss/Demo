@@ -1,0 +1,64 @@
+package:
+  name: kuberay-operator-fips
+  version: 1.2.2
+  epoch: 1
+  description: A toolkit to run Ray applications on Kubernetes
+  copyright:
+    - license: Apache-2.0
+
+pipeline:
+  - uses: git-checkout
+    with:
+      expected-commit: 0ea404b84e45b7b8822b071c7c02b2afb3bb3eae
+      repository: https://github.com/ray-project/kuberay.git
+      tag: v${{package.version}}
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/net@v0.33.0
+      modroot: ray-operator
+
+  - uses: go/build
+    with:
+      modroot: ray-operator
+      packages: .
+      output: manager
+      ldflags: -X 'main._buildTime_=$(date "+%F %T")' -X 'main._commitId_=$(git rev-parse HEAD)'
+      go-package: go-fips
+
+update:
+  enabled: true
+  github:
+    identifier: ray-project/kuberay
+    strip-prefix: v
+
+test:
+  environment:
+    contents:
+      packages:
+        - git
+        - curl
+        - kustomize
+  pipeline:
+    - uses: test/kwok/cluster
+    - name: Fetch the kuberay from the source repo
+      runs: |
+        git clone --depth=1 https://github.com/ray-project/kuberay
+    - name: Let's install the CRDs
+      working-directory: kuberay/ray-operator/config
+      runs: |
+        kustomize build crd | kubectl apply --server-side=true -f -
+        # lets wait a couple of seconds for the CRDs to be installed
+        sleep 5
+
+        # let's start the operator
+        /usr/bin/manager --leader-election-namespace=default &
+
+        # let's wait a couple of seconds for the operator to start
+        sleep 5
+
+        # let's apply for a simple Ray Job
+        kubectl apply -f samples/ray-job.sample.yaml
+
+        # let's wait a couple of seconds for the Ray Job to be created
+        kubectl wait --for=condition=Ready pods --all -n default

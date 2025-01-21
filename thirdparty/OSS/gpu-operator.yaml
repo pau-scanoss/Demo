@@ -1,0 +1,69 @@
+package:
+  name: gpu-operator
+  version: 24.9.1
+  epoch: 2
+  description: NVIDIA GPU Operator creates/configures/manages GPUs atop Kubernetes
+  copyright:
+    - license: Apache-2.0
+  dependencies:
+    runtime:
+      - busybox
+      - kubectl
+
+environment:
+  contents:
+    packages:
+      - build-base
+      - busybox
+      - ca-certificates-bundle
+      - go
+  environment:
+    CGO_ENABLED: 0
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/NVIDIA/gpu-operator
+      tag: v${{package.version}}
+      expected-commit: 65c864c16c8f65c06a6d9d678e3deaa667e3fa3f
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+      modroot: .
+
+  - uses: go/build
+    with:
+      modroot: .
+      packages: ./cmd/gpu-operator
+      output: gpu-operator
+      ldflags: -s -w -X github.com/NVIDIA/gpu-operator/internal/info.gitCommit=$(git rev-list -1 HEAD) -X github.com/NVIDIA/gpu-operator/internal/info.version=v${{package.version}}
+      vendor: true
+
+  - runs: |
+      mkdir -p ${{targets.destdir}}/opt/${{package.name}}
+      mkdir -p ${{targets.destdir}}/opt/${{package.name}}/manifests
+      mkdir -p ${{targets.destdir}}/licenses
+
+      cp -r ./assets/* ${{targets.destdir}}/opt/${{package.name}}
+      cp -r ./manifests/* ${{targets.destdir}}/opt/${{package.name}}/manifests
+      cp hack/must-gather.sh ${{targets.destdir}}/usr/bin/gather
+
+      cp deployments/gpu-operator/crds/nvidia.com_clusterpolicies.yaml ${{targets.destdir}}/opt/${{package.name}}/nvidia.com_clusterpolicies.yaml
+      cp deployments/gpu-operator/charts/node-feature-discovery/crds/nfd-api-crds.yaml ${{targets.destdir}}/opt/${{package.name}}/nfd-api-crds.yaml
+      cp deployments/gpu-operator/crds/nvidia.com_nvidiadrivers.yaml ${{targets.destdir}}/opt/${{package.name}}/nvidia.com_nvidiadrivers.yaml
+
+  - uses: strip
+
+test:
+  pipeline:
+    - runs: |
+        gpu-operator --help
+        gpu-operator --help
+
+update:
+  enabled: true
+  github:
+    identifier: NVIDIA/gpu-operator
+    strip-prefix: v
+    use-tag: true

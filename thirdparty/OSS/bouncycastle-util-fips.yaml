@@ -1,0 +1,32 @@
+package:
+  name: bouncycastle-util-fips
+  version: 2.0.3
+  epoch: 0
+  description: BouncyCastle FIPS Utils dependencies for bcpkix, bcpg, and other auxiliar jars
+  copyright:
+    - license: MIT
+
+environment:
+  contents:
+    packages:
+      - busybox
+
+pipeline:
+  - uses: fetch
+    with:
+      uri: https://repo1.maven.org/maven2/org/bouncycastle/bcutil-fips/${{package.version}}/bcutil-fips-${{package.version}}.jar
+      expected-sha512: 49d5b90df3adface48e0c2490ac26f880d70a562e411e1c3896fc71c3ca7d47d6d1189491e7a744971f9d9ca10295e16f3b66d72ca6e3cc4c7c166fdc770a89d
+      extract: false
+
+  - runs: |
+      mkdir -p ${{targets.destdir}}/usr/share/java/bouncycastle-fips
+      cp bcutil-fips-${{package.version}}.jar ${{targets.destdir}}/usr/share/java/bouncycastle-fips/bcutil-fips.jar
+
+update:
+  enabled: false
+  exclude-reason: |
+    Please upgrade this always. Note this jar is outside of FIPS
+    boundary, and should always be updated to latest published version
+    on maven. There is no git repository where one can track version
+    numbers for it, as the upstream repo is private. Unless we write a
+    maven version tracker.

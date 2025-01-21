@@ -1,0 +1,41 @@
+package:
+  name: prometheus-node-exporter-fips
+  version: 1.8.2
+  epoch: 3
+  description: Prometheus Exporter for machine metrics
+  copyright:
+    - license: Apache-2.0
+
+vars:
+  PKG: "github.com/prometheus/common"
+
+pipeline:
+  - uses: git-checkout
+    with:
+      repository: https://github.com/prometheus/node_exporter
+      tag: v${{package.version}}
+      expected-commit: f1e0e8360aa60b6cb5e5cc1560bed348fc2c1895
+
+  - uses: go/bump
+    with:
+      deps: golang.org/x/crypto@v0.31.0 golang.org/x/net@v0.33.0
+
+  - uses: go/build
+    with:
+      go-package: go-fips
+      packages: .
+      output: node_exporter
+      ldflags: -X ${{vars.PKG}}/version.Revision=$(git rev-parse --short HEAD) -X ${{vars.PKG}}/version.BuildDate=$(date -u +'%Y-%m-%dT%H:%M:%SZ') -X ${{vars.PKG}}/version.Branch=$(git branch --show-current) -X ${{vars.PKG}}/version.Version=v${{package.version}}
+
+test:
+  pipeline:
+    - uses: test/go-fips-check
+    - runs: |
+        node_exporter --version
+        node_exporter --help
+
+update:
+  enabled: true
+  github:
+    identifier: prometheus/node_exporter
+    strip-prefix: v
