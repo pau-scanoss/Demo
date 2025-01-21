@@ -21,31 +21,88 @@ component_metadata = []
 vulnerability_data = []
 crypto_data = []
 
+# Obligations and SPDX links
+license_info = {
+    "Apache-2.0": {
+        "Obligations": "Must include NOTICE file and attribution.",
+        "Link": "https://spdx.org/licenses/Apache-2.0.html"
+    },
+    "MIT": {
+        "Obligations": "Attribution required.",
+        "Link": "https://spdx.org/licenses/MIT.html"
+    },
+    "BSD-3-Clause": {
+        "Obligations": "Attribution and NO endorsement clause.",
+        "Link": "https://spdx.org/licenses/BSD-3-Clause.html"
+    },
+    "GPL-2.0-only": {
+        "Obligations": "Must disclose source code and license.",
+        "Link": "https://spdx.org/licenses/GPL-2.0-only.html"
+    },
+    "BSD-2-Clause": {
+        "Obligations": "Attribution required.",
+        "Link": "https://spdx.org/licenses/BSD-2-Clause.html"
+    },
+    "CC-BY-SA-3.0": {
+        "Obligations": "Attribution and share-alike for derivatives.",
+        "Link": "https://spdx.org/licenses/CC-BY-SA-3.0.html"
+    },
+    "SSPL-1.0": {
+        "Obligations": "Must open source for cloud services.",
+        "Link": "https://spdx.org/licenses/SSPL-1.0.html"
+    },
+    "Ruby": {
+        "Obligations": "Attribution required.",
+        "Link": "https://spdx.org/licenses/Ruby.html"
+    },
+    "MPL-2.0": {
+        "Obligations": "Must disclose changes under same license.",
+        "Link": "https://spdx.org/licenses/MPL-2.0.html"
+    }
+}
+
+# Initialize license data for multiple result sets
+consolidated_license_data = {}
+
 # Process components for licenses and metadata
 print("[DEBUG] Processing components...")
-for component in components:
-    licenses = component.get("licenses", [])
-    license_names = [lic.get("license", {}).get("id", "Unknown") for lic in licenses]
-    license_data.extend(license_names)
-    print(f"[DEBUG] Processed component: {component.get('name', 'Unknown')} with licenses: {license_names}")
+result_sets = [components]  # Add additional sources if needed, e.g., external_components
+for result_set in result_sets:
+    for component in result_set:
+        licenses = component.get("licenses", [])
+        for lic in licenses:
+            license_id = lic.get("license", {}).get("id", "Unknown")
+            # Consolidate license data
+            if license_id not in consolidated_license_data:
+                consolidated_license_data[license_id] = {
+                    "Count": 0,
+                    "Obligations": license_info.get(license_id, {}).get("Obligations", "Unknown"),
+                    "Link": license_info.get(license_id, {}).get("Link", "-"),
+                    "Copyrights": set()
+                }
+            consolidated_license_data[license_id]["Count"] += 1
+            # Collect copyrights
+            publisher = component.get("publisher", "Unknown")
+            if publisher != "Unknown":
+                consolidated_license_data[license_id]["Copyrights"].add(publisher)
 
-    component_metadata.append({
-        "Name": component.get("name", "Unknown"),
-        "Publisher": component.get("publisher", "Unknown"),
-        "Version": component.get("version", "Unknown"),
-        "Licenses": ", ".join(license_names) if license_names else "None",
-        "Provenance": component.get("provenance", {}).get("country", "Unknown")
-    })
-
-    # Extract cryptographic data if available
-    cryptos = component.get("cryptography", [])
-    for crypto in cryptos:
-        crypto_data.append({
-            "Component": component.get("name", "Unknown"),
-            "Algorithm": crypto.get("algorithm", "Unknown"),
-            "Strength": crypto.get("strength", "Unknown"),
-            "ECCN": crypto.get("eccn", "Unknown")
+        component_metadata.append({
+            "Name": component.get("name", "Unknown"),
+            "Publisher": component.get("publisher", "Unknown"),
+            "Version": component.get("version", "Unknown"),
+            "Licenses": ", ".join([lic.get("license", {}).get("id", "Unknown") for lic in licenses]),
+            "Provenance": component.get("provenance", {}).get("country", "Unknown")
         })
+
+        # Extract cryptographic data if available
+        cryptos = component.get("cryptography", [])
+        for crypto in cryptos:
+            crypto_data.append({
+                "Component": component.get("name", "Unknown"),
+                "Algorithm": crypto.get("algorithm", "Unknown"),
+                "Strength": crypto.get("strength", "Unknown"),
+                "ECCN": crypto.get("eccn", "Unknown")
+            })
 
 # Process vulnerabilities
 print("[DEBUG] Processing vulnerabilities...")
@@ -73,29 +130,34 @@ for vuln in vulnerabilities:
 
 # Create DataFrames
 print("[DEBUG] Creating DataFrames...")
-license_df = pd.DataFrame(license_data, columns=["License"])
 component_df = pd.DataFrame(component_metadata)
 vuln_df = pd.DataFrame(vulnerability_data)
 crypto_df = pd.DataFrame(crypto_data)
 print("[DEBUG] DataFrames created successfully.")
 
-# Summarize licenses
-print("[DEBUG] Summarizing licenses...")
-license_summary = license_df["License"].value_counts().reset_index()
-license_summary.columns = ["License", "Count"]
-license_md = tabulate(license_summary.head(10).values, headers=["License", "Count"], tablefmt="github")
-print("[DEBUG] License summary generated.")
+# Enhance license summary
+print("[DEBUG] Enhancing license summary...")
+enhanced_license_summary = []
+for license_id, details in consolidated_license_data.items():
+    enhanced_license_summary.append([
+        license_id,
+        details["Count"],
+        details["Obligations"],
+        details["Link"],
+        ", ".join(details["Copyrights"]) or "None"
+    ])
 
-# Summarize vulnerabilities
-print("[DEBUG] Summarizing vulnerabilities...")
-vuln_summary = vuln_df["Severity"].value_counts().reset_index()
-vuln_summary.columns = ["Severity", "Count"]
-print("[DEBUG] Vulnerability summary generated.")
+enhanced_license_md = tabulate(
+    enhanced_license_summary,
+    headers=["License", "Count", "Obligations", "Full Text", "Copyrights / Attribution"],
+    tablefmt="github"
+)
+print("[DEBUG] Enhanced license summary generated.")
 
 # Generate charts
 print("[DEBUG] Generating charts...")
-plt.figure(figsize=(8, 6))
-license_summary.head(10).plot(kind="bar", x="License", y="Count", legend=False)
+license_df = pd.DataFrame(enhanced_license_summary, columns=["License", "Count", "Obligations", "Full Text", "Copyrights / Attribution"])
+license_df.head(10).plot(kind="bar", x="License", y="Count", legend=False)
 plt.title("Top Licenses in Components")
 plt.xlabel("License")
 plt.ylabel("Count")
@@ -105,7 +167,7 @@ print("[DEBUG] Saved 'top_licenses.png'.")
 plt.close()
 
 plt.figure(figsize=(8, 6))
-vuln_summary.plot(kind="bar", x="Severity", y="Count", legend=False, color="orange")
+vuln_df["Severity"].value_counts().plot(kind="bar", legend=False, color="orange")
 plt.title("Vulnerabilities by Severity")
 plt.xlabel("Severity")
 plt.ylabel("Count")
@@ -123,8 +185,9 @@ print("[DEBUG] Saved 'component_metadata.csv'.")
 print("[DEBUG] Generating Markdown summary...")
 with open("summary.md", "w") as f:
     f.write("# SCANOSS SBOM Dashboard 📊\n\n")
-    f.write("## License Distribution (Top 10)\n")
-    f.write(license_md + "\n\n")
+    f.write("## Enhanced License Distribution\n")
+    f.write(enhanced_license_md + "\n\n")
+
     f.write("## Cryptographic Algorithm Usage (Top 10)\n")
     if not crypto_df.empty:
         crypto_md = tabulate(
@@ -140,60 +203,15 @@ with open("summary.md", "w") as f:
     components_md = tabulate(component_df.head(10).values, headers=component_df.columns, tablefmt="github")
     f.write(components_md + "\n\n")
 
-    if not vuln_summary.empty:
+    if not vuln_df.empty:
         total_vulnerabilities = vuln_df.shape[0]
         f.write(f"## Vulnerability Summary\n- {total_vulnerabilities} vulnerabilities detected.\n")
         f.write("- Detailed vulnerability breakdown by severity:\n\n")
         vuln_details_md = tabulate(
-            vuln_summary.values,
+            vuln_df["Severity"].value_counts().reset_index().values,
             headers=["Severity", "Count"],
             tablefmt="github"
         )
         f.write(vuln_details_md + "\n\n")
-        f.write("- Detailed Vulnerabilities:\n\n")
-        vuln_table_md = tabulate(
-            vuln_df.head(10).values,
-            headers=vuln_df.columns,
-            tablefmt="github"
-        )
-        f.write(vuln_table_md + "\n\n")
-    else:
-        f.write("## Notes:\n- No vulnerabilities detected.\n")
-    f.write("- Full SBOM details are available in the uploaded artifact.\n")
-print("[DEBUG] Saved 'summary.md'.")
 
-# Output results to stdout
-print("\n# SCANOSS SBOM Dashboard 📊\n")
-print("## License Distribution (Top 10)\n")
-print(license_md)
-print("\n## Cryptographic Algorithm Usage (Top 10)\n")
-if not crypto_df.empty:
-    crypto_md = tabulate(
-        crypto_df.head(10).values,
-        headers=crypto_df.columns,
-        tablefmt="github"
-    )
-    print(crypto_md)
-else:
-    print("No cryptographic data available.\n")
-print("## Repository Component Metadata\n")
-components_md = tabulate(component_df.head(10).values, headers=component_df.columns, tablefmt="github")
-print(components_md)
-
-if not vuln_summary.empty:
-    total_vulnerabilities = vuln_df.shape[0]
-    print(f"\n## Vulnerability Summary\n- {total_vulnerabilities} vulnerabilities detected.")
-    print("- Detailed vulnerability breakdown by severity:")
-    print(tabulate(vuln_summary.values, headers=["Severity", "Count"], tablefmt="github"))
-    print("\n- Detailed Vulnerabilities:")
-    vuln_table_md = tabulate(
-        vuln_df.head(10).values,
-        headers=vuln_df.columns,
-        tablefmt="github"
-    )
-    print(vuln_table_md)
-else:
-    print("\n## Notes:\n- No vulnerabilities detected.")
-print("- Full SBOM details are available in the uploaded artifact.\n")
-
-print("[DEBUG] Script executed successfully!")
+print("[DEBUG] Markdown summary generated successfully.")
