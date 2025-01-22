@@ -20,6 +20,7 @@ crypto_data = []
 vulnerability_data = []
 component_metadata = []
 license_warnings = []
+weak_crypto = []
 
 # Helper function for license enrichment
 def enrich_license_data(license_name):
@@ -39,6 +40,30 @@ def enrich_license_data(license_name):
         "Problematic": is_problematic,
         "Full Text": f"https://spdx.org/licenses/{license_name}.html" if license_name != "Unknown" else "N/A",
     }
+
+# Weak crypto detection helper
+def is_weak_crypto(algorithm, strength):
+    weak_algorithms = {
+        "des": "DES is outdated and insecure.",
+        "md5": "MD5 is vulnerable to collision attacks.",
+        "sha1": "SHA-1 is vulnerable to collision attacks.",
+        "blowfish": "Blowfish has a small block size making it insecure.",
+    }
+    recommendation = {
+        "des": "Use AES instead.",
+        "md5": "Use SHA-256 or higher.",
+        "sha1": "Use SHA-256 or higher.",
+        "blowfish": "Use AES instead.",
+    }
+    reason = weak_algorithms.get(algorithm.lower())
+    if reason:
+        return {
+            "Algorithm": algorithm,
+            "Strength": strength,
+            "Reason": reason,
+            "Recommendation": recommendation.get(algorithm.lower(), "Upgrade to modern encryption."),
+        }
+    return None
 
 # Process Components
 print("[DEBUG] Processing components...")
@@ -81,10 +106,25 @@ for vuln in vulnerabilities:
         "Affected Components": ", ".join(affected_components_list),
     })
 
+# Process Crypto Data
+print("[DEBUG] Processing cryptographic data...")
+with open("crypto_results.txt", "r") as crypto_file:
+    crypto_results = json.load(crypto_file)
+
+for purl in crypto_results.get("purls", []):
+    for algorithm in purl.get("algorithms", []):
+        crypto_data.append({
+            "Algorithm": algorithm.get("algorithm", "Unknown"),
+            "Strength": algorithm.get("strength", "Unknown"),
+        })
+        weak = is_weak_crypto(algorithm.get("algorithm", ""), algorithm.get("strength", ""))
+        if weak:
+            weak_crypto.append(weak)
+
 # Generate DataFrames
 print("[DEBUG] Creating DataFrames...")
 license_df = pd.DataFrame(license_data, columns=["License"])
-crypto_df = pd.DataFrame(crypto_data, columns=["Algorithm"])
+crypto_df = pd.DataFrame(crypto_data)
 vulnerability_df = pd.DataFrame(vulnerability_data)
 component_df = pd.DataFrame(component_metadata)
 warnings_df = pd.DataFrame(license_warnings)
@@ -96,17 +136,9 @@ license_summary.columns = ["License", "Count"]
 license_summary["Obligations"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Obligations"])
 license_summary["Full Text"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Full Text"])
 
-# Save DataFrames as CSVs
-print("[DEBUG] Saving detailed data as CSVs...")
-license_df.to_csv("detailed_licenses.csv", index=False)
-crypto_df.to_csv("detailed_crypto.csv", index=False)
-vulnerability_df.to_csv("detailed_vulnerabilities.csv", index=False)
-component_df.to_csv("detailed_components.csv", index=False)
-warnings_df.to_csv("license_warnings.csv", index=False)
-
 # Generate Markdown Summary
 print("[DEBUG] Generating Markdown summary...")
-with open("summary.md", "w") as f:
+with open("summary.md", "w", encoding="utf-8") as f:
     f.write("# SCANOSS SBOM Dashboard 📊\n\n")
     f.write(f"## Summary\n\n- **Total Components**: {len(components)}\n- **Total Vulnerabilities**: {len(vulnerabilities)}\n\n---\n\n")
 
@@ -118,9 +150,13 @@ with open("summary.md", "w") as f:
     warnings_md = tabulate(warnings_df.values, headers=["License", "Obligations", "Full Text"], tablefmt="github")
     f.write(warnings_md + "\n\n")
 
-    f.write("## Cryptographic Algorithms (Top 10)\n\n")
-    crypto_md = tabulate(crypto_df.head(10).values, headers=["Algorithm"], tablefmt="github")
-    f.write(crypto_md if not crypto_df.empty else "No cryptographic data available.\n\n")
+    f.write("## Weak Cryptographic Algorithms ⚠️\n\n")
+    if weak_crypto:
+        weak_crypto_df = pd.DataFrame(weak_crypto)
+        weak_crypto_md = tabulate(weak_crypto_df.values, headers=weak_crypto_df.columns, tablefmt="github")
+        f.write(weak_crypto_md + "\n\n")
+    else:
+        f.write("No weak cryptographic algorithms detected.\n\n")
 
     f.write("## Vulnerabilities (Top 10)\n\n")
     vuln_md = tabulate(vulnerability_df.head(10).values, headers=vulnerability_df.columns, tablefmt="github")
