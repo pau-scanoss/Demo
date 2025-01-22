@@ -3,135 +3,131 @@ import pandas as pd
 from tabulate import tabulate
 import matplotlib.pyplot as plt
 
-# Debugging function
-def debug(msg):
-    print(f"[DEBUG] {msg}")
-
 # Load CycloneDX JSON
-debug("Loading CycloneDX JSON file...")
+print("[DEBUG] Loading CycloneDX JSON file...")
 with open("cycloneDX.json", "r") as file:
     data = json.load(file)
-debug("JSON file loaded successfully.")
+print("[DEBUG] JSON file loaded successfully.")
 
-# Extract components and vulnerabilities
 components = data.get("components", [])
 vulnerabilities = data.get("vulnerabilities", [])
-debug(f"Found {len(components)} components and {len(vulnerabilities)} vulnerabilities.")
 
-# Process components for licenses, cryptographic algorithms, and metadata
+print(f"[DEBUG] Found {len(components)} components and {len(vulnerabilities)} vulnerabilities.")
+
+# Data Containers
 license_data = []
 crypto_data = []
+vulnerability_data = []
 component_metadata = []
+license_warnings = []
 
-debug("Processing components...")
+# Helper function for license enrichment
+def enrich_license_data(license_name):
+    obligations = {
+        "GPL-3.0-only": "Disclose source, include GPL license, retain copyright.",
+        "LGPL-2.1-only": "Disclose source for modifications, allow linking without restrictions.",
+        "Apache-2.0": "Notify, include LICENSE and NOTICE files.",
+        "MIT": "Include copyright and license notice.",
+        "BSD-3-Clause": "Retain copyright and license notices, no endorsement clauses.",
+        "MPL-2.0": "Disclose source, include MPL license notice.",
+        "SSPL-1.0": "Open source service requirements.",
+        "Unknown": "N/A",
+    }
+    is_problematic = license_name in ["GPL-3.0-only", "LGPL-2.1-only", "SSPL-1.0"]
+    return {
+        "Obligations": obligations.get(license_name, "Custom license obligations."),
+        "Problematic": is_problematic,
+        "Full Text": f"https://spdx.org/licenses/{license_name}.html" if license_name != "Unknown" else "N/A",
+    }
+
+# Process Components
+print("[DEBUG] Processing components...")
 for component in components:
     licenses = component.get("licenses", [])
-    crypto_info = component.get("cryptography", [])
-    
-    # Process licenses
-    for lic in licenses:
-        license_data.append({
-            "License ID": lic.get("license", {}).get("id", "Unknown"),
-            "License Name": lic.get("license", {}).get("name", "Unknown"),
-            "Copyright": lic.get("attribution", {}).get("text", "None"),
-            "Obligations": lic.get("attribution", {}).get("obligations", "None")
-        })
-    
-    # Process cryptographic algorithms
-    for crypto in crypto_info:
-        crypto_data.append({
-            "Algorithm": crypto.get("algorithm", "Unknown"),
-            "Strength": crypto.get("strength", "Unknown"),
-            "Description": crypto.get("description", "None")
-        })
-    
-    # Metadata for components
+    license_names = [lic.get("license", {}).get("id", "Unknown") for lic in licenses]
+    license_data.extend(license_names)
+
     component_metadata.append({
         "Name": component.get("name", "Unknown"),
         "Version": component.get("version", "Unknown"),
         "Publisher": component.get("publisher", "Unknown"),
-        "Licenses": ", ".join([lic.get("license", {}).get("id", "Unknown") for lic in licenses])
+        "Licenses": ", ".join(license_names) if license_names else "None",
     })
 
-# Process vulnerabilities
-debug("Processing vulnerabilities...")
-vulnerability_data = []
+    for license_name in license_names:
+        enriched = enrich_license_data(license_name)
+        if enriched["Problematic"]:
+            license_warnings.append({
+                "License": license_name,
+                "Obligations": enriched["Obligations"],
+                "Full Text": enriched["Full Text"],
+            })
+
+# Process Vulnerabilities
+print("[DEBUG] Processing vulnerabilities...")
 for vuln in vulnerabilities:
-    affected_components = []
-    affects = vuln.get("affects", {})
-    if isinstance(affects, dict):
-        affected_components = [
-            c.get("name", "Unknown") for c in affects.get("components", [])
-        ]
-    elif isinstance(affects, list):
-        for affect in affects:
-            if isinstance(affect, dict):
-                affected_components.extend(
-                    [c.get("name", "Unknown") for c in affect.get("components", [])]
-                )
+    affected_components_list = (
+        [c.get("name", "Unknown") for c in vuln.get("affects", {}).get("components", [])]
+        if isinstance(vuln.get("affects", {}).get("components", []), list)
+        else ["Unknown"]
+    )
     vulnerability_data.append({
         "ID": vuln.get("id", "Unknown"),
         "Severity": vuln.get("ratings", [{}])[0].get("severity", "Unknown"),
         "Description": vuln.get("description", "No description available."),
-        "Affected Components": ", ".join(affected_components) if affected_components else "Unknown"
+        "Affected Components": ", ".join(affected_components_list),
     })
 
-# Convert data to DataFrames
-debug("Creating DataFrames...")
-license_df = pd.DataFrame(license_data)
-crypto_df = pd.DataFrame(crypto_data)
+# Generate DataFrames
+print("[DEBUG] Creating DataFrames...")
+license_df = pd.DataFrame(license_data, columns=["License"])
+crypto_df = pd.DataFrame(crypto_data, columns=["Algorithm"])
+vulnerability_df = pd.DataFrame(vulnerability_data)
 component_df = pd.DataFrame(component_metadata)
-vuln_df = pd.DataFrame(vulnerability_data)
+warnings_df = pd.DataFrame(license_warnings)
 
-# Generate charts
-debug("Generating charts...")
-license_summary = license_df["License ID"].value_counts().reset_index()
+# License Summary
+print("[DEBUG] Enhancing license summary...")
+license_summary = license_df["License"].value_counts().reset_index()
 license_summary.columns = ["License", "Count"]
-license_chart = license_summary.head(10)
+license_summary["Obligations"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Obligations"])
+license_summary["Full Text"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Full Text"])
 
-plt.figure(figsize=(8, 6))
-license_chart.plot(kind="bar", x="License", y="Count", legend=False)
-plt.title("Top Licenses in Components")
-plt.xlabel("License")
-plt.ylabel("Count")
-plt.tight_layout()
-plt.savefig("top_licenses.png")
-debug("Saved 'top_licenses.png'.")
-
-# Save detailed reports
-debug("Saving detailed reports as artifacts...")
+# Save DataFrames as CSVs
+print("[DEBUG] Saving detailed data as CSVs...")
 license_df.to_csv("detailed_licenses.csv", index=False)
 crypto_df.to_csv("detailed_crypto.csv", index=False)
+vulnerability_df.to_csv("detailed_vulnerabilities.csv", index=False)
 component_df.to_csv("detailed_components.csv", index=False)
-vuln_df.to_csv("detailed_vulnerabilities.csv", index=False)
+warnings_df.to_csv("license_warnings.csv", index=False)
 
 # Generate Markdown Summary
-debug("Generating Markdown summary...")
-markdown_lines = [
-    "# SCANOSS SBOM Dashboard 📊",
-    "\n## Summary\n",
-    f"- Total Components: {len(components)}",
-    f"- Total Vulnerabilities: {len(vulnerabilities)}",
-    "\n## License Distribution (Top 10)\n",
-    tabulate(license_summary.head(10), headers="keys", tablefmt="github"),
-    "\n## Cryptographic Algorithms (Top 10)\n",
-    tabulate(crypto_df.head(10), headers="keys", tablefmt="github") if not crypto_df.empty else "No cryptographic data available.\n",
-    "\n## Vulnerabilities (Top 10)\n",
-    tabulate(vuln_df.head(10), headers="keys", tablefmt="github") if not vuln_df.empty else "No vulnerabilities detected.\n",
-    "\n## Repository Components (Top 10)\n",
-    tabulate(component_df.head(10), headers="keys", tablefmt="github"),
-    "\n## Additional Details\n",
-    "- [Full License Data](./detailed_licenses.csv)",
-    "- [Full Cryptographic Data](./detailed_crypto.csv)",
-    "- [Full Component Data](./detailed_components.csv)",
-    "- [Full Vulnerability Data](./detailed_vulnerabilities.csv)",
-]
-
-# Write Markdown Summary
+print("[DEBUG] Generating Markdown summary...")
 with open("summary.md", "w") as f:
-    f.write("\n".join(markdown_lines))
-debug("Markdown summary saved as 'summary.md'.")
+    f.write("# SCANOSS SBOM Dashboard 📊\n\n")
+    f.write(f"## Summary\n\n- **Total Components**: {len(components)}\n- **Total Vulnerabilities**: {len(vulnerabilities)}\n\n---\n\n")
 
-# Output truncated summary to stdout
-print("\n".join(markdown_lines[:15] + ["..."]))
-debug("Script execution completed successfully.")
+    f.write("## License Distribution (Top 10)\n\n")
+    license_md = tabulate(license_summary.head(10).values, headers=["License", "Count", "Obligations", "Full Text"], tablefmt="github")
+    f.write(license_md + "\n\n")
+
+    f.write("## License Warnings\n\n")
+    warnings_md = tabulate(warnings_df.values, headers=["License", "Obligations", "Full Text"], tablefmt="github")
+    f.write(warnings_md + "\n\n")
+
+    f.write("## Cryptographic Algorithms (Top 10)\n\n")
+    crypto_md = tabulate(crypto_df.head(10).values, headers=["Algorithm"], tablefmt="github")
+    f.write(crypto_md if not crypto_df.empty else "No cryptographic data available.\n\n")
+
+    f.write("## Vulnerabilities (Top 10)\n\n")
+    vuln_md = tabulate(vulnerability_df.head(10).values, headers=vulnerability_df.columns, tablefmt="github")
+    f.write(vuln_md + "\n\n")
+
+    f.write("## Repository Components (Top 10)\n\n")
+    components_md = tabulate(component_df.head(10).values, headers=component_df.columns, tablefmt="github")
+    f.write(components_md + "\n\n")
+
+    f.write("## Notes:\n- Detailed reports are saved as artifacts and accessible via linked resources.\n\n")
+
+print("[DEBUG] Markdown summary generated successfully.")
+print("[DEBUG] Script execution completed!")
