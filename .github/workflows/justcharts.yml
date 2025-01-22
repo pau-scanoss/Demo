@@ -20,6 +20,7 @@ jobs:
       - name: Run SCANOSS Analysis for License - Encryption - Vulnerabilities
         run: |
           docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
+          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 comp crypto --key txnUfW0xwF0KI1U1RW5sDSBL --purl pkg:github/heimdal/heimdal > crypto_results.txt
 
       - name: Upload Artifacts
