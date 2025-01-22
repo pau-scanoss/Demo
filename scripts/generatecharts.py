@@ -32,7 +32,7 @@ def enrich_license_data(license_name):
         "BSD-3-Clause": "Retain copyright and license notices, no endorsement clauses.",
         "MPL-2.0": "Disclose source, include MPL license notice.",
         "SSPL-1.0": "Open source service requirements.",
-        "Unknown": "N/A",
+        "AGPL-3.0": "It requires the operator of a network server to provide the source code of the modified version running there to the users of that server.",
     }
     is_problematic = license_name in ["GPL-3.0-only", "LGPL-2.1-only", "SSPL-1.0"]
     return {
@@ -146,7 +146,7 @@ with open("summary.md", "w", encoding="utf-8") as f:
     license_md = tabulate(license_summary.head(10).values, headers=["License", "Count", "Obligations", "Full Text"], tablefmt="github")
     f.write(license_md + "\n\n")
 
-    f.write("## License Warnings\n\n")
+    f.write("## License Warnings ⚠️\n\n")
     warnings_md = tabulate(warnings_df.values, headers=["License", "Obligations", "Full Text"], tablefmt="github")
     f.write(warnings_md + "\n\n")
 
