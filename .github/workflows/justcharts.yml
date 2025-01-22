@@ -57,9 +57,11 @@ jobs:
             cat crypto_results.txt >> $GITHUB_STEP_SUMMARY
           else
             echo "Crypto analysis results not found." >> $GITHUB_STEP_SUMMARY
+          fi
       - name: Display Results and Charts in Workflow Summary
         run: |
           if [ -f summary.md ]; then
             cat summary.md >> $GITHUB_STEP_SUMMARY
           else
+          fi
             echo "summary.md not found." >> $GITHUB_STEP_SUMMARY
