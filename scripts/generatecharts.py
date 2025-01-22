@@ -32,7 +32,7 @@ def enrich_license_data(license_name):
         "BSD-3-Clause": "Retain copyright and license notices, no endorsement clauses.",
         "MPL-2.0": "Disclose source, include MPL license notice.",
         "SSPL-1.0": "Open source service requirements.",
-        "AGPL-3.0": "It requires the operator of a network server to provide the source code of the modified version running there to the users of that server.",
+        "Unknown": "N/A",
     }
     is_problematic = license_name in ["GPL-3.0-only", "LGPL-2.1-only", "SSPL-1.0"]
     return {
@@ -41,27 +41,22 @@ def enrich_license_data(license_name):
         "Full Text": f"https://spdx.org/licenses/{license_name}.html" if license_name != "Unknown" else "N/A",
     }
 
-# Weak crypto detection helper
+# Helper function for weak crypto detection
 def is_weak_crypto(algorithm, strength):
     weak_algorithms = {
-        "des": "DES is outdated and insecure.",
         "md5": "MD5 is vulnerable to collision attacks.",
-        "sha1": "SHA-1 is vulnerable to collision attacks.",
-        "blowfish": "Blowfish has a small block size making it insecure.",
+        "sha1": "SHA-1 is deprecated due to vulnerabilities.",
+        "des": "DES is outdated and insecure.",
+        "3des": "3DES is considered weak and insecure.",
+        "rsa": "RSA with less than 2048 bits is insecure.",
+        "blowfish": "Blowfish is outdated; use AES instead.",
     }
-    recommendation = {
-        "des": "Use AES instead.",
-        "md5": "Use SHA-256 or higher.",
-        "sha1": "Use SHA-256 or higher.",
-        "blowfish": "Use AES instead.",
-    }
-    reason = weak_algorithms.get(algorithm.lower())
-    if reason:
+    if algorithm.lower() in weak_algorithms:
         return {
             "Algorithm": algorithm,
             "Strength": strength,
-            "Reason": reason,
-            "Recommendation": recommendation.get(algorithm.lower(), "Upgrade to modern encryption."),
+            "Reason": weak_algorithms[algorithm.lower()],
+            "Recommendation": "Use modern algorithms such as AES or SHA-256.",
         }
     return None
 
@@ -129,13 +124,6 @@ vulnerability_df = pd.DataFrame(vulnerability_data)
 component_df = pd.DataFrame(component_metadata)
 warnings_df = pd.DataFrame(license_warnings)
 
-# License Summary
-print("[DEBUG] Enhancing license summary...")
-license_summary = license_df["License"].value_counts().reset_index()
-license_summary.columns = ["License", "Count"]
-license_summary["Obligations"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Obligations"])
-license_summary["Full Text"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Full Text"])
-
 # Generate Markdown Summary
 print("[DEBUG] Generating Markdown summary...")
 with open("summary.md", "w", encoding="utf-8") as f:
@@ -143,17 +131,28 @@ with open("summary.md", "w", encoding="utf-8") as f:
     f.write(f"## Summary\n\n- **Total Components**: {len(components)}\n- **Total Vulnerabilities**: {len(vulnerabilities)}\n\n---\n\n")
 
     f.write("## License Distribution (Top 10)\n\n")
+    license_summary = license_df["License"].value_counts().reset_index()
+    license_summary.columns = ["License", "Count"]
+    license_summary["Obligations"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Obligations"])
+    license_summary["Full Text"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Full Text"])
     license_md = tabulate(license_summary.head(10).values, headers=["License", "Count", "Obligations", "Full Text"], tablefmt="github")
     f.write(license_md + "\n\n")
 
-    f.write("## License Warnings ⚠️\n\n")
+    f.write("## License Warnings\n\n")
     warnings_md = tabulate(warnings_df.values, headers=["License", "Obligations", "Full Text"], tablefmt="github")
     f.write(warnings_md + "\n\n")
+
+    f.write("## Crypto Analysis Results\n\n")
+    if crypto_df.empty:
+        f.write("No cryptographic data available.\n\n")
+    else:
+        crypto_md = tabulate(crypto_df.head(10).values, headers=crypto_df.columns, tablefmt="github")
+        f.write(crypto_md + "\n\n")
 
     f.write("## Weak Cryptographic Algorithms ⚠️\n\n")
     if weak_crypto:
         weak_crypto_df = pd.DataFrame(weak_crypto)
-        weak_crypto_md = tabulate(weak_crypto_df.values, headers=weak_crypto_df.columns, tablefmt="github")
+        weak_crypto_md = tabulate(weak_crypto_df.values, headers=["Algorithm", "Strength", "Reason", "Recommendation"], tablefmt="github")
         f.write(weak_crypto_md + "\n\n")
     else:
         f.write("No weak cryptographic algorithms detected.\n\n")
@@ -169,4 +168,3 @@ with open("summary.md", "w", encoding="utf-8") as f:
     f.write("## Notes:\n- Detailed reports are saved as artifacts and accessible via linked resources.\n\n")
 
 print("[DEBUG] Markdown summary generated successfully.")
-print("[DEBUG] Script execution completed!")
