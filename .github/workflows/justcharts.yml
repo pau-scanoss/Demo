@@ -54,15 +54,6 @@ jobs:
           mkdir -p charts
           python scripts/generatecharts.py
 
-      - name: Append Crypto Results to Summary
-        run: |
-          if [ -f crypto_results.txt ]; then
-            echo "## Crypto Analysis Results" >> $GITHUB_STEP_SUMMARY
-            cat crypto_results.txt >> $GITHUB_STEP_SUMMARY
-          else
-            echo "Crypto analysis results not found." >> $GITHUB_STEP_SUMMARY
-          fi
-
       - name: Display Results and Charts in Workflow Summary
         run: |
           if [ -f summary.md ]; then
