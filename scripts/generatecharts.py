@@ -2,6 +2,16 @@ import json
 import pandas as pd
 from tabulate import tabulate
 import matplotlib.pyplot as plt
+import subprocess
+
+# Append the crypto scan result to the markdown summary
+crypto_scan_result = run_crypto_scan()
+
+if crypto_scan_result:
+    print("[DEBUG] Adding crypto scan results to Markdown summary...")
+    with open("summary.md", "a") as f:
+        f.write("\n## Crypto Scan Results\n\n")
+        f.write(f"```\n{crypto_scan_result}\n```\n")
 
 # Load CycloneDX JSON
 print("[DEBUG] Loading CycloneDX JSON file...")

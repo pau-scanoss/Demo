@@ -6,7 +6,7 @@ on:
       - '*'
 
 jobs:
-  generate-sbom:
+  scan-and-generate-sbom:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,26 +17,29 @@ jobs:
         if: env.DOCKER_AUTH_REQUIRED == 'true'
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Checking the Code for License, Vulnerabilities, Weak Encryption & Provenace
+      - name: Run SCANOSS Analysis
         run: |
           docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
-          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL -o results.json
+          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
+          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 comp crypto --key txnUfW0xwF0KI1U1RW5sDSBL --purl pkg:github/heimdal/heimdal > crypto_results.txt
 
-      - name: Upload SBOM and PURLs JSON as Artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: scanoss-results
-          path: ./results.json
+          path: |
+            ./cycloneDX.json
+            ./crypto_results.txt
 
   generate-charts:
     runs-on: ubuntu-latest
-    needs: generate-sbom
+    needs: scan-and-generate-sbom
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Download SBOM and PURLs JSON
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
           name: scanoss-results
@@ -52,12 +55,17 @@ jobs:
           mkdir -p charts
           python scripts/generatecharts.py
 
+      - name: Append Crypto Results to Summary
+        run: |
+          if [ -f crypto_results.txt ]; then
+            echo "## Crypto Analysis Results" >> $GITHUB_STEP_SUMMARY
+            cat crypto_results.txt >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Crypto analysis results not found." >> $GITHUB_STEP_SUMMARY
+
       - name: Display Results and Charts in Workflow Summary
         run: |
           if [ -f summary.md ]; then
             cat summary.md >> $GITHUB_STEP_SUMMARY
           else
             echo "summary.md not found." >> $GITHUB_STEP_SUMMARY
-          fi
-       
-           
