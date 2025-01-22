@@ -17,7 +17,7 @@ jobs:
         if: env.DOCKER_AUTH_REQUIRED == 'true'
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: SCANOSS Vulnerability, License and Encryption Scan
+      - name: SCANOSS Code Scan fofr Licenses - Vulnerabilities - Encryption
         run: |
           docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
