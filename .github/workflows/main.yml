@@ -6,7 +6,7 @@ on:
       - '*'
 
 jobs:
-  SCANOSS_ANALYSIS:
+  scan-and-generate-sbom:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
         if: env.DOCKER_AUTH_REQUIRED == 'true'
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: SCANOSS Code Scan fofr Licenses - Vulnerabilities - Encryption
+      - name: Run SCANOSS Aanlysis for License - Encryption - Vulnerabilities
         run: |
           docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
@@ -62,7 +62,6 @@ jobs:
             cat crypto_results.txt >> $GITHUB_STEP_SUMMARY
           else
             echo "Crypto analysis results not found." >> $GITHUB_STEP_SUMMARY
-          fi
 
       - name: Display Results and Charts in Workflow Summary
         run: |
@@ -70,4 +69,3 @@ jobs:
             cat summary.md >> $GITHUB_STEP_SUMMARY
           else
             echo "summary.md not found." >> $GITHUB_STEP_SUMMARY
-          fi
