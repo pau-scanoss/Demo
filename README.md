@@ -28,11 +28,27 @@ This repository demonstrates how to integrate [SCANOSS](https://www.scanoss.com)
 ## Usage
 
 ### Triggering the Action
-- Push code to the `main` branch:
-  ```bash
-  git add .
-  git commit -m "Your commit message"
-  git push origin main
+Open your Github Repo in the Web-based Ediitor https://docs.github.com/en/codespaces/the-githubdev-web-based-editor
+Make a change to some code and commit the changes. next swtich to worflows and observer the scan running and view the results in the Workflow Summary 
+
+Commit your changes
+In the Activity Bar, click the Source Control view.
+
+![image](https://github.com/user-attachments/assets/3c3a74c9-ff72-4358-a3b5-6095ebeee1ac)
+
+To stage your changes, click  next to the file you've changed, or next to Changes if you've changed multiple files and you want to stage them all.
+
+![image](https://github.com/user-attachments/assets/694c2ae8-49d5-4434-b44b-880e4ef9986d)
+
+In the text box, type a commit message describing the change you've made.
+
+![image](https://github.com/user-attachments/assets/359a745f-cecf-4a52-a45a-56de78286fbd)
+
+
+Sample Results 
+
+<img width="1863" alt="image" src="https://github.com/user-attachments/assets/285144da-f60c-4b70-a94f-d31e56f435d0" />
+
 
 
 
@@ -41,6 +57,8 @@ This repository demonstrates how to integrate [SCANOSS](https://www.scanoss.com)
 1. Go to the **Actions** tab in your repository.
 2. Select the **SCANOSS Scan** workflow run.
 3. View detailed logs and download the generated SBOM from the **Artifacts** section.
+
+https://github.com/${{ github.repository }}/actions/
 
 ---
 
