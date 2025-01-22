@@ -6,7 +6,7 @@ on:
       - '*'
 
 jobs:
-  scan-and-generate-sbom:
+  SCANOSS_ANALYSIS:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
         if: env.DOCKER_AUTH_REQUIRED == 'true'
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Run SCANOSS Analysis
+      - name: SCANOSS Vulnerability, License and Encryption Scan
         run: |
           docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
