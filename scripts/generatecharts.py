@@ -138,7 +138,7 @@ with open("summary.md", "w", encoding="utf-8") as f:
     license_md = tabulate(license_summary.head(10).values, headers=["License", "Count", "Obligations", "Full Text"], tablefmt="github")
     f.write(license_md + "\n\n")
 
-    f.write("## License Warnings ⚠️\n\n")
+    f.write("## License Warnings\n\n")
     warnings_md = tabulate(warnings_df.values, headers=["License", "Obligations", "Full Text"], tablefmt="github")
     f.write(warnings_md + "\n\n")
 
