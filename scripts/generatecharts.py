@@ -66,11 +66,14 @@ for component in components:
 # Process Vulnerabilities
 print("[DEBUG] Processing vulnerabilities...")
 for vuln in vulnerabilities:
-    affected_components_list = (
-        [c.get("name", "Unknown") for c in vuln.get("affects", {}).get("components", [])]
-        if isinstance(vuln.get("affects", {}).get("components", []), list)
-        else ["Unknown"]
-    )
+    affects_data = vuln.get("affects", {})
+    if isinstance(affects_data, list):
+        affected_components_list = [comp.get("name", "Unknown") for comp in affects_data if isinstance(comp, dict)]
+    elif isinstance(affects_data, dict):
+        affected_components_list = [comp.get("name", "Unknown") for comp in affects_data.get("components", [])]
+    else:
+        affected_components_list = ["Unknown"]
+
     vulnerability_data.append({
         "ID": vuln.get("id", "Unknown"),
         "Severity": vuln.get("ratings", [{}])[0].get("severity", "Unknown"),
