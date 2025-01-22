@@ -91,10 +91,25 @@ with open("summary.md", "w", encoding="utf-8") as f:
     f.write("## Key Highlights\n\n")
     f.write(f"- **Total Components**: {len(components)}\n")
     f.write(f"- **Total Vulnerabilities**: {len(vulnerabilities)}\n")
+    f.write(f"- **Licenses**: {len(components)}\n")
     f.write(f"- **Critical Vulnerabilities**: {len(critical_vulnerabilities)}\n")
     f.write(f"- **Weak Cryptographic Algorithms**: {len([c for c in weak_crypto if c['Status'] == 'Weak'])}\n\n")
     f.write("---\n\n")
 
+# License Analysis
+    f.write("## License Distribution (Top 10)\n\n")
+    license_summary = license_df["License"].value_counts().reset_index()
+    license_summary.columns = ["License", "Count"]
+    license_summary["Obligations"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Obligations"])
+    license_summary["Full Text"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Full Text"])
+    license_md = tabulate(license_summary.head(10).values, headers=["License", "Count", "Obligations", "Full Text"], tablefmt="github")
+    f.write(license_md + "\n\n")
+   
+ # License Warnings   
+    f.write("## License Warnings\n\n")
+    warnings_md = tabulate(warnings_df.values, headers=["License", "Obligations", "Full Text"], tablefmt="github")
+    f.write(warnings_md + "\n\n")
+    
     # Cryptographic Analysis
     f.write("## Cryptographic Analysis Results\n\n")
     if weak_crypto:
@@ -118,4 +133,3 @@ with open("summary.md", "w", encoding="utf-8") as f:
     f.write("(License analysis data would be included here.)\n\n")
 
 print("[DEBUG] Markdown summary generated successfully.")
-
