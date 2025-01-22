@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 from tabulate import tabulate
-
+import os
 # Load JSON data with error handling
 def load_json(file_path):
     try:
@@ -83,33 +83,34 @@ for vuln in vulnerabilities:
             "Affected Components": ", ".join(affected_components)
         })
 
+# Process license data
+print("[DEBUG] Processing license data...")
+license_data = []
+for component in components:
+    licenses = component.get("licenses", [])
+    for lic in licenses:
+        license_id = lic.get("license", {}).get("id", "Unknown")
+        license_data.append({"License": license_id})
+
+# Create license DataFrame if there is data
+if license_data:
+    license_df = pd.DataFrame(license_data)
+else:
+    print("[WARNING] No license data found in SBOM components.")
+    license_df = pd.DataFrame(columns=["License"])
+
 # Generate Markdown Summary
 print("[DEBUG] Generating Markdown summary...")
 with open("summary.md", "w", encoding="utf-8") as f:
     # Key Highlights
-    f.write("# SCANOSS SBOM Dashboard 📊\n\n")
+    f.write("# SCANOSS SBOM Dashboard \U0001F4CA\n\n")
     f.write("## Key Highlights\n\n")
     f.write(f"- **Total Components**: {len(components)}\n")
     f.write(f"- **Total Vulnerabilities**: {len(vulnerabilities)}\n")
-    f.write(f"- **Licenses**: {len(components)}\n")
     f.write(f"- **Critical Vulnerabilities**: {len(critical_vulnerabilities)}\n")
     f.write(f"- **Weak Cryptographic Algorithms**: {len([c for c in weak_crypto if c['Status'] == 'Weak'])}\n\n")
     f.write("---\n\n")
 
-# License Analysis
-    f.write("## License Distribution (Top 10)\n\n")
-    license_summary = license_df["License"].value_counts().reset_index()
-    license_summary.columns = ["License", "Count"]
-    license_summary["Obligations"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Obligations"])
-    license_summary["Full Text"] = license_summary["License"].apply(lambda x: enrich_license_data(x)["Full Text"])
-    license_md = tabulate(license_summary.head(10).values, headers=["License", "Count", "Obligations", "Full Text"], tablefmt="github")
-    f.write(license_md + "\n\n")
-   
- # License Warnings   
-    f.write("## License Warnings\n\n")
-    warnings_md = tabulate(warnings_df.values, headers=["License", "Obligations", "Full Text"], tablefmt="github")
-    f.write(warnings_md + "\n\n")
-    
     # Cryptographic Analysis
     f.write("## Cryptographic Analysis Results\n\n")
     if weak_crypto:
@@ -128,8 +129,19 @@ with open("summary.md", "w", encoding="utf-8") as f:
     else:
         f.write("No critical vulnerabilities found.\n\n")
 
-    # Placeholder for License Analysis
-    f.write("## License Analysis\n\n")
-    f.write("(License analysis data would be included here.)\n\n")
+    # License Analysis
+    f.write("## License Distribution (Top 10)\n\n")
+    if not license_df.empty:
+        license_summary = license_df["License"].value_counts().reset_index()
+        license_summary.columns = ["License", "Count"]
+        license_summary["Obligations"] = license_summary["License"].apply(lambda x: "Obligations TBD")  # Placeholder
+        license_summary["Full Text"] = license_summary["License"].apply(lambda x: f"https://spdx.org/licenses/{x}.html" if x != "Unknown" else "N/A")
+        license_md = tabulate(license_summary.head(10).values, headers=["License", "Count", "Obligations", "Full Text"], tablefmt="github")
+        f.write(license_md + "\n\n")
+    else:
+        f.write("No license data available.\n\n")
 
 print("[DEBUG] Markdown summary generated successfully.")
+
+from os import system 
+system("cat summary.md")
