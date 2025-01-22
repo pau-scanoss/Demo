@@ -1,294 +1,120 @@
-package org.bouncycastle.openpgp.operator;
+import json
+import pandas as pd
+from tabulate import tabulate
 
-import org.bouncycastle.bcpg.ContainedPacket;
-import org.bouncycastle.bcpg.MPInteger;
-import org.bouncycastle.bcpg.PublicKeyAlgorithmTags;
-import org.bouncycastle.bcpg.PublicKeyEncSessionPacket;
-import org.bouncycastle.openpgp.PGPException;
-import org.bouncycastle.openpgp.PGPPublicKey;
-import org.bouncycastle.util.Properties;
+# Load JSON data with error handling
+def load_json(file_path):
+    try:
+        with open(file_path, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print(f"[ERROR] File not found: {file_path}")
+        return {}
+    except json.JSONDecodeError:
+        print(f"[ERROR] Invalid JSON format in file: {file_path}")
+        return {}
 
-import java.io.IOException;
-import java.math.BigInteger;
+# Load data
+print("[DEBUG] Loading CycloneDX JSON file...")
+sbom_data = load_json("cycloneDX.json")
+print("[DEBUG] Loading crypto results...")
+crypto_data = load_json("crypto_results.txt")
 
-/**
- * Abstract generator class for encryption methods that produce PKESK (public-key encrypted session key) packets.
- * PKESKs are used when encrypting a message for a recipients public key.
- * The purpose of this class is to allow subclasses to decide, which implementation to use.
- * This is a Change I'm making to a File
- */
-public abstract class PublicKeyKeyEncryptionMethodGenerator
-    implements PGPKeyEncryptionMethodGenerator
-{
-    public static final String SESSION_KEY_OBFUSCATION_PROPERTY = "org.bouncycastle.openpgp.session_key_obfuscation";
-    public static final long WILDCARD_KEYID = 0L;
-    /**
-     * @deprecated use WILDCARD_KEYID
-     */
-    public static final long WILDCARD = 0L;
-    public static final byte[] WILDCARD_FINGERPRINT = new byte[0];
+# Containers for data
+components = sbom_data.get("components", [])
+vulnerabilities = sbom_data.get("vulnerabilities", [])
+weak_crypto = []
+critical_vulnerabilities = []
 
-    private static boolean getSessionKeyObfuscationDefault()
-    {
-        // by default we want this to be true.
-        return !Properties.isOverrideSetTo(SESSION_KEY_OBFUSCATION_PROPERTY, false);
-    }
-
-    private final PGPPublicKey pubKey;
-
-    protected boolean sessionKeyObfuscation;
-    protected boolean useWildcardRecipient;
-
-    protected PublicKeyKeyEncryptionMethodGenerator(
-        PGPPublicKey pubKey)
-    {
-        switch (pubKey.getAlgorithm())
-        {
-        case PGPPublicKey.RSA_ENCRYPT:
-        case PGPPublicKey.RSA_GENERAL:
-        case PGPPublicKey.ELGAMAL_ENCRYPT:
-        case PGPPublicKey.ELGAMAL_GENERAL:
-        case PGPPublicKey.ECDH:
-        case PGPPublicKey.X25519:
-        case PGPPublicKey.X448:
-            break;
-        case PGPPublicKey.RSA_SIGN:
-            throw new IllegalArgumentException("Can't use an RSA_SIGN key for encryption.");
-        case PGPPublicKey.DSA:
-            throw new IllegalArgumentException("Can't use DSA for encryption.");
-        case PGPPublicKey.ECDSA:
-            throw new IllegalArgumentException("Can't use ECDSA for encryption.");
-        case PublicKeyAlgorithmTags.Ed448:
-        case PublicKeyAlgorithmTags.Ed25519:
-        case PublicKeyAlgorithmTags.EDDSA_LEGACY:
-            throw new IllegalArgumentException("Can't use EdDSA for encryption.");
-        default:
-            throw new IllegalArgumentException("unknown asymmetric algorithm: " + pubKey.getAlgorithm());
-        }
-
-        this.pubKey = pubKey;
-        this.sessionKeyObfuscation = getSessionKeyObfuscationDefault();
-    }
-
-    /**
-     * Controls whether to obfuscate the size of ECDH session keys using extra padding where necessary.
-     * <p>
-     * The default behaviour can be configured using the system property
-     * "org.bouncycastle.openpgp.session_key_obfuscation", or else it will default to enabled.
-     * </p>
-     *
-     * @return the current generator.
-     */
-    public PublicKeyKeyEncryptionMethodGenerator setSessionKeyObfuscation(boolean enabled)
-    {
-        this.sessionKeyObfuscation = enabled;
-
-        return this;
-    }
-
-    /**
-     * Controls whether the recipient key ID/fingerprint is hidden (replaced by a wildcard value).
-     *
-     * @param enabled boolean
-     * @return this
-     * @deprecated use {@link #setUseWildcardRecipient(boolean)} instead
-     * TODO: Remove in a future release
-     */
-    @Deprecated
-    public PublicKeyKeyEncryptionMethodGenerator setUseWildcardKeyID(boolean enabled)
-    {
-        return setUseWildcardRecipient(enabled);
-    }
-
-    /**
-     * Controls whether the recipient key ID/fingerprint is hidden (replaced by a wildcard value).
-     *
-     * @param enabled boolean
-     * @return this
-     */
-    public PublicKeyKeyEncryptionMethodGenerator setUseWildcardRecipient(boolean enabled)
-    {
-        this.useWildcardRecipient = enabled;
-        return this;
-    }
-
-    public byte[][] encodeEncryptedSessionInfo(
-        byte[] encryptedSessionInfo)
-        throws PGPException
-    {
-        byte[][] data;
-
-        switch (pubKey.getAlgorithm())
-        {
-        case PGPPublicKey.RSA_ENCRYPT:
-        case PGPPublicKey.RSA_GENERAL:
-            data = new byte[1][];
-
-            data[0] = convertToEncodedMPI(encryptedSessionInfo);
-            break;
-        case PGPPublicKey.ELGAMAL_ENCRYPT:
-        case PGPPublicKey.ELGAMAL_GENERAL:
-            byte[] b1 = new byte[encryptedSessionInfo.length / 2];
-            byte[] b2 = new byte[encryptedSessionInfo.length / 2];
-
-            System.arraycopy(encryptedSessionInfo, 0, b1, 0, b1.length);
-            System.arraycopy(encryptedSessionInfo, b1.length, b2, 0, b2.length);
-
-            data = new byte[2][];
-            data[0] = convertToEncodedMPI(b1);
-            data[1] = convertToEncodedMPI(b2);
-            break;
-        case PGPPublicKey.ECDH:
-        case PGPPublicKey.X448:
-        case PGPPublicKey.X25519:
-            data = new byte[1][];
-
-            data[0] = encryptedSessionInfo;
-            break;
-        default:
-            throw new PGPException("unknown asymmetric algorithm: " + pubKey.getAlgorithm());
-        }
-
-        return data;
-    }
-
-    private byte[] convertToEncodedMPI(byte[] encryptedSessionInfo)
-        throws PGPException
-    {
-        try
-        {
-            return new MPInteger(new BigInteger(1, encryptedSessionInfo)).getEncoded();
-        }
-        catch (IOException e)
-        {
-            throw new PGPException("Invalid MPI encoding: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Generate a Public-Key Encrypted Session-Key (PKESK) packet of version 3.
-     * PKESKv3 packets are used with Symmetrically-Encrypted-Integrity-Protected Data (SEIPD) packets of
-     * version 1 or with Symmetrically-Encrypted Data (SED) packets and MUST NOT be used with SEIPDv2 packets.
-     * PKESKv3 packets are used with keys that do not support {@link org.bouncycastle.bcpg.sig.Features#FEATURE_SEIPD_V2}
-     * or as a fallback.
-     * <p/>
-     * Generate a Public-Key Encrypted Session-Key (PKESK) packet of version 6.
-     * PKESKv6 packets are used with Symmetrically-Encrypted Integrity-Protected Data (SEIPD) packets
-     * of version 2 only.
-     * PKESKv6 packets are used with keys that support {@link org.bouncycastle.bcpg.sig.Features#FEATURE_SEIPD_V2}.
-     *
-     * @param sessionKey session-key algorithm id + session-key + checksum
-     * @return PKESKv6 or v3 packet
-     * @throws PGPException if the PKESK packet cannot be generated
-     * @see <a href="https://www.rfc-editor.org/rfc/rfc9580.html#name-version-6-public-key-encryp">
-     * RFC9580 - Version 6 Public Key Encrypted Session Key Packet</a>
-     * @see <a href="https://www.rfc-editor.org/rfc/rfc9580.html#name-version-3-public-key-encryp">
-     * RFC9580 - Version 3 Public Key Encrypted Session Key Packet</a>
-     */
-    public ContainedPacket generate(PGPDataEncryptorBuilder dataEncryptorBuilder, byte[] sessionKey)
-        throws PGPException
-    {
-        if (dataEncryptorBuilder.getAeadAlgorithm() <= 0 || dataEncryptorBuilder.isV5StyleAEAD())
-        {
-            long keyId;
-            if (useWildcardRecipient)
-            {
-                keyId = WILDCARD_KEYID;
-            }
-            else
-            {
-                keyId = pubKey.getKeyID();
-            }
-            byte[] encryptedSessionInfo = encryptSessionInfo(pubKey, sessionKey, (byte)dataEncryptorBuilder.getAlgorithm(), true);
-            byte[][] encodedEncSessionInfo = encodeEncryptedSessionInfo(encryptedSessionInfo);
-            return PublicKeyEncSessionPacket.createV3PKESKPacket(keyId, pubKey.getAlgorithm(), encodedEncSessionInfo);
-        }
-        else
-        {
-            byte[] keyFingerprint;
-            int keyVersion;
-            if (useWildcardRecipient)
-            {
-                keyFingerprint = WILDCARD_FINGERPRINT;
-                keyVersion = 0;
-            }
-            else
-            {
-                keyFingerprint = pubKey.getFingerprint();
-                keyVersion = pubKey.getVersion();
-            }
-            // In V6, do not include the symmetric-key algorithm in the session-info
-
-            byte[] encryptedSessionInfo = encryptSessionInfo(pubKey, sessionKey, (byte)dataEncryptorBuilder.getAlgorithm(), false);
-            byte[][] encodedEncSessionInfo = encodeEncryptedSessionInfo(encryptedSessionInfo);
-            return PublicKeyEncSessionPacket.createV6PKESKPacket(keyVersion, keyFingerprint, pubKey.getAlgorithm(), encodedEncSessionInfo);
-        }
-    }
-
-    protected byte[] createSessionInfo(
-        byte algorithm,
-        byte[] keyBytes)
-    {
-        byte[] sessionInfo;
-        if (algorithm != 0)
-        {
-            sessionInfo = new byte[keyBytes.length + 3];
-            sessionInfo[0] = algorithm;
-            System.arraycopy(keyBytes, 0, sessionInfo, 1, keyBytes.length);
-            addCheckSum(sessionInfo, 1);
-        }
-        else
-        {
-            sessionInfo = new byte[keyBytes.length + 2];
-            System.arraycopy(keyBytes, 0, sessionInfo, 0, keyBytes.length);
-            addCheckSum(sessionInfo, 0);
-        }
-        return sessionInfo;
-    }
-
-    private void addCheckSum(byte[] sessionInfo, int pos)
-    {
-        int check = 0;
-
-        for (int i = pos; i != sessionInfo.length - 2; i++)
-        {
-            check += sessionInfo[i] & 0xff;
-        }
-
-        sessionInfo[sessionInfo.length - 2] = (byte)(check >> 8);
-        sessionInfo[sessionInfo.length - 1] = (byte)(check);
-    }
-
-    /**
-     * Encrypt a session key using the recipients public key.
-     *
-     * @param pubKey      recipients public key
-     * @param sessionKey  session-key
-     * @param symAlgId for v3: session key algorithm ID; for v6: 0
-     * @return encrypted session info
-     * @throws PGPException
-     */
-    protected abstract byte[] encryptSessionInfo(PGPPublicKey pubKey,
-                                                 byte[] sessionKey,
-                                                 byte symAlgId,
-                                                 boolean isV3)
-        throws PGPException;
-
-    protected static byte[] getSessionInfo(byte[] ephPubEncoding, byte optSymKeyAlgorithm, byte[] wrappedSessionKey)
-    {
-        int len = ephPubEncoding.length + wrappedSessionKey.length + (optSymKeyAlgorithm == 0 ? 1 : 2);
-        byte[] out = new byte[len];
-        // ephemeral pub key
-        System.arraycopy(ephPubEncoding, 0, out, 0, ephPubEncoding.length);
-        // len of two/one next fields
-        out[ephPubEncoding.length] = (byte)(len - ephPubEncoding.length - 1);
-        // sym key alg
-        if (optSymKeyAlgorithm != 0)
-        {
-            out[ephPubEncoding.length + 1] = optSymKeyAlgorithm;
-        }
-        // wrapped session key
-        System.arraycopy(wrappedSessionKey, 0, out, len - wrappedSessionKey.length, wrappedSessionKey.length);
-        return out;
-    }
+# Weak crypto mappings
+weak_crypto_recommendations = {
+    "des": {"Status": "Weak", "Recommendation": "Use AES with 256-bit keys."},
+    "md5": {"Status": "Weak", "Recommendation": "Use SHA-256 or SHA-3."},
+    "sha1": {"Status": "Weak", "Recommendation": "Use SHA-256 or SHA-3."},
+    "rsa": {"Status": "Weak", "Recommendation": "Use ECC or RSA with 2048-bit keys."},
+    "blowfish": {"Status": "Weak", "Recommendation": "Use AES with 256-bit keys."},
+    "tdes": {"Status": "Weak", "Recommendation": "Use AES with 256-bit keys."},
+    "rc4": {"Status": "Weak", "Recommendation": "Use AES-GCM or AES-CCM."},
+    "diffiehellman": {"Status": "Weak", "Recommendation": "Use ECDH or Diffie-Hellman with 2048-bit keys."},
 }
+
+# Process cryptographic algorithms
+print("[DEBUG] Processing cryptographic data...")
+for purl_entry in crypto_data.get("purls", []):
+    for algo_entry in purl_entry.get("algorithms", []):
+        algo_name = algo_entry.get("algorithm", "Unknown").lower()
+        algo_strength = algo_entry.get("strength", "Unknown")
+        if algo_name in weak_crypto_recommendations:
+            status = weak_crypto_recommendations[algo_name]["Status"]
+            recommendation = weak_crypto_recommendations[algo_name]["Recommendation"]
+        else:
+            status = "Strong"
+            recommendation = "No action required."
+
+        # Append to weak_crypto list
+        weak_crypto.append({
+            "Algorithm": algo_name.upper(),
+            "Strength": algo_strength,
+            "Status": status,
+            "Recommendation": recommendation
+        })
+
+# Process vulnerabilities
+print("[DEBUG] Processing vulnerabilities...")
+for vuln in vulnerabilities:
+    severity = vuln.get("ratings", [{}])[0].get("severity", "Unknown").lower()
+    if severity == "critical":
+        affects = vuln.get("affects", [])
+        affected_components = []
+        if isinstance(affects, list):
+            affected_components = [
+                comp.get("name", "Unknown") if isinstance(comp, dict) else "Unknown"
+                for comp in affects
+            ]
+        elif isinstance(affects, dict):
+            affected_components = [
+                comp.get("name", "Unknown")
+                for comp in affects.get("components", [])
+            ]
+
+        critical_vulnerabilities.append({
+            "ID": vuln.get("id", "Unknown"),
+            "Description": vuln.get("description", "No description available."),
+            "Affected Components": ", ".join(affected_components)
+        })
+
+# Generate Markdown Summary
+print("[DEBUG] Generating Markdown summary...")
+with open("summary.md", "w", encoding="utf-8") as f:
+    # Key Highlights
+    f.write("# SCANOSS SBOM Dashboard 📊\n\n")
+    f.write("## Key Highlights\n\n")
+    f.write(f"- **Total Components**: {len(components)}\n")
+    f.write(f"- **Total Vulnerabilities**: {len(vulnerabilities)}\n")
+    f.write(f"- **Critical Vulnerabilities**: {len(critical_vulnerabilities)}\n")
+    f.write(f"- **Weak Cryptographic Algorithms**: {len([c for c in weak_crypto if c['Status'] == 'Weak'])}\n\n")
+    f.write("---\n\n")
+
+    # Cryptographic Analysis
+    f.write("## Cryptographic Analysis Results\n\n")
+    if weak_crypto:
+        crypto_df = pd.DataFrame(weak_crypto)
+        crypto_md = tabulate(crypto_df, headers="keys", tablefmt="github", showindex=False)
+        f.write(crypto_md + "\n\n")
+    else:
+        f.write("No cryptographic analysis data available.\n\n")
+
+    # Vulnerabilities
+    f.write("## Critical Vulnerabilities (Top 10)\n\n")
+    if critical_vulnerabilities:
+        critical_vuln_df = pd.DataFrame(critical_vulnerabilities)
+        critical_vuln_md = tabulate(critical_vuln_df.head(10), headers="keys", tablefmt="github", showindex=False)
+        f.write(critical_vuln_md + "\n\n")
+    else:
+        f.write("No critical vulnerabilities found.\n\n")
+
+    # Placeholder for License Analysis
+    f.write("## License Analysis\n\n")
+    f.write("(License analysis data would be included here.)\n\n")
+
+print("[DEBUG] Markdown summary generated successfully.")
