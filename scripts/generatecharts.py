@@ -98,40 +98,40 @@ plt.tight_layout()
 plt.savefig("top_licenses.png")
 debug("Saved 'top_licenses.png'.")
 
-# Markdown Summary Generation
+# Save detailed reports
+debug("Saving detailed reports as artifacts...")
+license_df.to_csv("detailed_licenses.csv", index=False)
+crypto_df.to_csv("detailed_crypto.csv", index=False)
+component_df.to_csv("detailed_components.csv", index=False)
+vuln_df.to_csv("detailed_vulnerabilities.csv", index=False)
+
+# Generate Markdown Summary
 debug("Generating Markdown summary...")
 markdown_lines = [
     "# SCANOSS SBOM Dashboard 📊",
+    "\n## Summary\n",
+    f"- Total Components: {len(components)}",
+    f"- Total Vulnerabilities: {len(vulnerabilities)}",
     "\n## License Distribution (Top 10)\n",
-    tabulate(license_chart, headers="keys", tablefmt="github"),
-    "\n\n## Cryptographic Algorithms\n",
+    tabulate(license_summary.head(10), headers="keys", tablefmt="github"),
+    "\n## Cryptographic Algorithms (Top 10)\n",
     tabulate(crypto_df.head(10), headers="keys", tablefmt="github") if not crypto_df.empty else "No cryptographic data available.\n",
-    "\n\n## Vulnerabilities\n",
+    "\n## Vulnerabilities (Top 10)\n",
     tabulate(vuln_df.head(10), headers="keys", tablefmt="github") if not vuln_df.empty else "No vulnerabilities detected.\n",
-    "\n\n## Repository Components\n",
+    "\n## Repository Components (Top 10)\n",
     tabulate(component_df.head(10), headers="keys", tablefmt="github"),
-    "\n\n## Detailed License Information\n",
-    tabulate(license_df, headers="keys", tablefmt="github"),
-    "\n\n## Notes\n",
-    "- Detailed SBOM data and visualizations are stored as artifacts.",
-    "- Obligations for each license are placeholders and should be verified manually if required."
+    "\n## Additional Details\n",
+    "- [Full License Data](./detailed_licenses.csv)",
+    "- [Full Cryptographic Data](./detailed_crypto.csv)",
+    "- [Full Component Data](./detailed_components.csv)",
+    "- [Full Vulnerability Data](./detailed_vulnerabilities.csv)",
 ]
 
-# Save Markdown Summary
+# Write Markdown Summary
 with open("summary.md", "w") as f:
     f.write("\n".join(markdown_lines))
 debug("Markdown summary saved as 'summary.md'.")
 
-# Output results to stdout
-print("\n".join(markdown_lines))
-
-# Save additional artifacts
-debug("Saving component metadata to CSV...")
-component_df.to_csv("component_metadata.csv", index=False)
-debug("Saved 'component_metadata.csv'.")
-
-debug("Saving vulnerability data to CSV...")
-vuln_df.to_csv("vulnerabilities.csv", index=False)
-debug("Saved 'vulnerabilities.csv'.")
-
+# Output truncated summary to stdout
+print("\n".join(markdown_lines[:15] + ["..."]))
 debug("Script execution completed successfully.")
