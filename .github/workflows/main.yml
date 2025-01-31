@@ -106,10 +106,10 @@ jobs:
           name: vulnerability-charts
           path: charts/
 
-      - name: Display Results in Workflow Summary
-        run: |
-          if [ -f summary.md ]; then
-            cat summary.md >> $GITHUB_STEP_SUMMARY
-          else
-            echo "summary.md not found." >> $GITHUB_STEP_SUMMARY
-          fi
+- name: Append Chart Insights to GitHub Summary
+  run: |
+    if [ -f summary.md ]; then
+      cat summary.md >> $GITHUB_STEP_SUMMARY
+    else
+      echo "❌ Error: summary.md not found!" >> $GITHUB_STEP_SUMMARY
+    fi
