@@ -1,147 +1,164 @@
-import json
-import pandas as pd
-from tabulate import tabulate
 import os
-# Load JSON data with error handling
-def load_json(file_path):
+import json
+import time
+import requests
+import matplotlib.pyplot as plt
+import numpy as np
+from pathlib import Path
+
+# API URLs
+EPSS_API = "https://api.first.org/data/v1/epss"
+KEV_API = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+NVD_API_BASE = "https://services.nvd.nist.gov/rest/json/cve/1.0/"
+EXPLOIT_DB_SEARCH = "https://www.exploit-db.com/search?cve="
+
+# Rate Limit Handling
+NVD_RATE_LIMIT = 6  # 6 requests per 30 seconds
+NVD_SLEEP_TIME = 30  # Sleep for 30 seconds after hitting rate limit
+
+def extract_cves_from_cyclonedx(sbom_file):
+    """Extract CVEs from a CycloneDX JSON SBOM file."""
     try:
-        with open(file_path, "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        print(f"[ERROR] File not found: {file_path}")
+        with open(sbom_file, "r") as file:
+            sbom_data = json.load(file)
+
+        cve_list = set()
+        
+        if "vulnerabilities" in sbom_data:
+            for vuln in sbom_data["vulnerabilities"]:
+                cve_id = vuln.get("id")
+                if cve_id and cve_id.startswith("CVE-"):
+                    cve_list.add(cve_id)
+
+        if "components" in sbom_data:
+            for component in sbom_data["components"]:
+                if "externalReferences" in component:
+                    for ref in component["externalReferences"]:
+                        if ref.get("type") == "vulnerability" and "url" in ref:
+                            if "CVE-" in ref["url"]:
+                                cve_id = ref["url"].split("/")[-1]
+                                cve_list.add(cve_id)
+
+        return list(cve_list)
+
+    except Exception as e:
+        print(f"Error reading SBOM file {sbom_file}: {e}")
+        return []
+
+def fetch_epss_scores(cve_list):
+    """Fetch EPSS scores for a list of CVEs."""
+    if not cve_list:
         return {}
-    except json.JSONDecodeError:
-        print(f"[ERROR] Invalid JSON format in file: {file_path}")
+
+    cve_query = ",".join(cve_list)
+    url = f"{EPSS_API}?cve={cve_query}"
+    response = requests.get(url)
+
+    try:
+        data = response.json()
+        return {entry["cve"]: entry["epss"] for entry in data.get("data", [])}
+    except Exception as e:
+        print(f"Error fetching EPSS scores: {e}")
         return {}
 
-# Load data
-print("[DEBUG] Loading CycloneDX JSON file...")
-sbom_data = load_json("cycloneDX.json")
-print("[DEBUG] Loading crypto results...")
-crypto_data = load_json("crypto_results.txt")
+def fetch_kev_entries(cve_list):
+    """Check if CVEs are listed in the CISA KEV database."""
+    response = requests.get(KEV_API)
+    
+    try:
+        kev_data = response.json()
+        kev_cves = {entry["cveID"] for entry in kev_data.get("vulnerabilities", [])}
+        return {cve: cve in kev_cves for cve in cve_list}
+    except Exception as e:
+        print(f"Error fetching KEV data: {e}")
+        return {}
 
-# Containers for data
-components = sbom_data.get("components", [])
-vulnerabilities = sbom_data.get("vulnerabilities", [])
-weak_crypto = []
-critical_vulnerabilities = []
+def fetch_nvd_data(cve_id):
+    """Fetch NVD data for a specific CVE."""
+    time.sleep(1)  # Basic rate limiting
+    response = requests.get(f"{NVD_API_BASE}{cve_id}")
 
-# Weak crypto mappings
-weak_crypto_recommendations = {
-    "des": {"Status": "Weak", "Recommendation": "Use AES with 256-bit keys."},
-    "md5": {"Status": "Weak", "Recommendation": "Use SHA-256 or SHA-3."},
-    "sha1": {"Status": "Weak", "Recommendation": "Use SHA-256 or SHA-3."},
-    "rsa": {"Status": "Weak", "Recommendation": "Use ECC or RSA with 2048-bit keys."},
-    "blowfish": {"Status": "Weak", "Recommendation": "Use AES with 256-bit keys."},
-    "tdes": {"Status": "Weak", "Recommendation": "Use AES with 256-bit keys."},
-    "rc4": {"Status": "Weak", "Recommendation": "Use AES-GCM or AES-CCM."},
-    "diffiehellman": {"Status": "Weak", "Recommendation": "Use ECDH or Diffie-Hellman with 2048-bit keys."},
-}
+    try:
+        data = response.json()
+        cvss_score = data.get("result", {}).get("CVE_Items", [{}])[0].get("impact", {}).get("baseMetricV3", {}).get("cvssV3", {}).get("baseScore", "N/A")
+        return cvss_score
+    except Exception as e:
+        print(f"Error fetching NVD data for {cve_id}: {e}")
+        return "N/A"
 
-# Process cryptographic algorithms
-print("[DEBUG] Processing cryptographic data...")
-for purl_entry in crypto_data.get("purls", []):
-    for algo_entry in purl_entry.get("algorithms", []):
-        algo_name = algo_entry.get("algorithm", "Unknown").lower()
-        algo_strength = algo_entry.get("strength", "Unknown")
-        if algo_name in weak_crypto_recommendations:
-            status = weak_crypto_recommendations[algo_name]["Status"]
-            recommendation = weak_crypto_recommendations[algo_name]["Recommendation"]
+def scan_sboms(directory):
+    """Scan multiple SBOM files for CVEs and check against KEV, EPSS, NVD, and ExploitDB."""
+    results = []
+    
+    for sbom_file in Path(directory).glob("*.json"):
+        print(f"Processing: {sbom_file}")
+        if "cyclonedx" in sbom_file.name.lower():
+            cve_list = extract_cves_from_cyclonedx(sbom_file)
         else:
-            status = "Strong"
-            recommendation = "No action required."
+            continue  # Skip unknown formats
 
-        # Append to weak_crypto list
-        weak_crypto.append({
-            "Algorithm": algo_name.upper(),
-            "Strength": algo_strength,
-            "Status": status,
-            "Recommendation": recommendation
-        })
+        epss_scores = fetch_epss_scores(cve_list)
+        kev_results = fetch_kev_entries(cve_list)
 
-# Process vulnerabilities
-print("[DEBUG] Processing vulnerabilities...")
-for vuln in vulnerabilities:
-    severity = vuln.get("ratings", [{}])[0].get("severity", "Unknown").lower()
-    if severity == "critical":
-        affects = vuln.get("affects", [])
-        affected_components = []
-        if isinstance(affects, list):
-            affected_components = [
-                comp.get("name", "Unknown") if isinstance(comp, dict) else "Unknown"
-                for comp in affects
-            ]
-        elif isinstance(affects, dict):
-            affected_components = [
-                comp.get("name", "Unknown")
-                for comp in affects.get("components", [])
-            ]
+        for cve in cve_list:
+            cvss_score = fetch_nvd_data(cve)
+            exploit_db_link = f"{EXPLOIT_DB_SEARCH}{cve}"
 
-        critical_vulnerabilities.append({
-            "ID": vuln.get("id", "Unknown"),
-            "Description": vuln.get("description", "No description available."),
-            "Affected Components": ", ".join(affected_components)
-        })
+            results.append({
+                "CVE": cve,
+                "EPSS_Score": float(epss_scores.get(cve, 0)),
+                "CVSS_Score": float(cvss_score) if cvss_score != "N/A" else None,
+                "In_KEV": kev_results.get(cve, False),
+                "ExploitDB_Link": exploit_db_link
+            })
 
-# Process license data
-print("[DEBUG] Processing license data...")
-license_data = []
-for component in components:
-    licenses = component.get("licenses", [])
-    for lic in licenses:
-        license_id = lic.get("license", {}).get("id", "Unknown")
-        license_data.append({"License": license_id})
+    return results
 
-# Create license DataFrame if there is data
-if license_data:
-    license_df = pd.DataFrame(license_data)
-else:
-    print("[WARNING] No license data found in SBOM components.")
-    license_df = pd.DataFrame(columns=["License"])
+def save_report(results, output_file):
+    """Save results to a JSON file."""
+    with open(output_file, "w") as file:
+        json.dump(results, file, indent=4)
+    print(f"Vulnerability report saved to {output_file}")
 
-# Generate Markdown Summary
-print("[DEBUG] Generating Markdown summary...")
-with open("summary.md", "w", encoding="utf-8") as f:
-    # Key Highlights
-    f.write("# SCANOSS SBOM Dashboard \U0001F4CA\n\n")
-    f.write("## Key Highlights\n\n")
-    f.write(f"- **Total Components**: {len(components)}\n")
-    f.write(f"- **Total Vulnerabilities**: {len(vulnerabilities)}\n")
-    f.write(f"- **Critical Vulnerabilities**: {len(critical_vulnerabilities)}\n")
-    f.write(f"- **Weak Cryptographic Algorithms**: {len([c for c in weak_crypto if c['Status'] == 'Weak'])}\n\n")
-    f.write("---\n\n")
+def plot_charts(results):
+    """Generate charts from the vulnerability scan results."""
 
-    # Cryptographic Analysis
-    f.write("## Cryptographic Analysis Results\n\n")
-    if weak_crypto:
-        crypto_df = pd.DataFrame(weak_crypto)
-        crypto_md = tabulate(crypto_df, headers="keys", tablefmt="github", showindex=False)
-        f.write(crypto_md + "\n\n")
-    else:
-        f.write("No cryptographic analysis data available.\n\n")
+    # Extract data for plotting
+    epss_scores = [entry["EPSS_Score"] for entry in results if entry["EPSS_Score"] is not None]
+    cvss_scores = [entry["CVSS_Score"] for entry in results if entry["CVSS_Score"] is not None]
+    kev_counts = sum(1 for entry in results if entry["In_KEV"])
 
-    # Vulnerabilities
-    f.write("## Critical Vulnerabilities (Top 10)\n\n")
-    if critical_vulnerabilities:
-        critical_vuln_df = pd.DataFrame(critical_vulnerabilities)
-        critical_vuln_md = tabulate(critical_vuln_df.head(10), headers="keys", tablefmt="github", showindex=False)
-        f.write(critical_vuln_md + "\n\n")
-    else:
-        f.write("No critical vulnerabilities found.\n\n")
+    # EPSS Score Distribution (Histogram)
+    plt.figure(figsize=(10, 5))
+    plt.hist(epss_scores, bins=10, color="blue", alpha=0.7, edgecolor="black")
+    plt.xlabel("EPSS Score")
+    plt.ylabel("Number of CVEs")
+    plt.title("EPSS Score Distribution")
+    plt.grid(True)
+    plt.show()
 
-    # License Analysis
-    f.write("## License Distribution (Top 10)\n\n")
-    if not license_df.empty:
-        license_summary = license_df["License"].value_counts().reset_index()
-        license_summary.columns = ["License", "Count"]
-        license_summary["Obligations"] = license_summary["License"].apply(lambda x: "Obligations TBD")  # Placeholder
-        license_summary["Full Text"] = license_summary["License"].apply(lambda x: f"https://spdx.org/licenses/{x}.html" if x != "Unknown" else "N/A")
-        license_md = tabulate(license_summary.head(10).values, headers=["License", "Count", "Obligations", "Full Text"], tablefmt="github")
-        f.write(license_md + "\n\n")
-    else:
-        f.write("No license data available.\n\n")
+    # CVSS Score Distribution (Bar Chart)
+    plt.figure(figsize=(10, 5))
+    plt.hist(cvss_scores, bins=np.arange(0, 10.5, 0.5), color="green", alpha=0.7, edgecolor="black")
+    plt.xlabel("CVSS Score")
+    plt.ylabel("Number of CVEs")
+    plt.title("CVSS Score Distribution")
+    plt.grid(True)
+    plt.show()
 
-print("[DEBUG] Markdown summary generated successfully.")
+    # KEV Pie Chart
+    plt.figure(figsize=(6, 6))
+    labels = ["In KEV", "Not in KEV"]
+    sizes = [kev_counts, len(results) - kev_counts]
+    colors = ["red", "gray"]
+    plt.pie(sizes, labels=labels, autopct="%1.1f%%", colors=colors, startangle=140, shadow=True)
+    plt.title("KEV Coverage")
+    plt.show()
 
-from os import system 
-system("cat summary.md")
+if __name__ == "__main__":
+    sbom_dir = "./"
+    report_file = "vulnerability_report.json"
+
+    results = scan_sboms(sbom_dir)
+    save_report(results, report_file)
+    plot_charts(results)
