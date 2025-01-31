@@ -2,7 +2,6 @@ import os
 import json
 import time
 import requests
-import csv
 from pathlib import Path
 
 # API URLs
@@ -13,7 +12,7 @@ EXPLOIT_DB_SEARCH = "https://www.exploit-db.com/search?cve="  # No API, just loo
 
 # Rate Limit Handling
 NVD_RATE_LIMIT = 6  # 6 requests per 30 seconds
-NVD_SLEEP_TIME = 30  # Sleep for 30 seconds after hitting rate limit
+NVD_SLEEP_TIME = 30  # Sleep if rate limit exceeded
 
 def extract_cves_from_cyclonedx(sbom_file):
     """Extract CVEs from a CycloneDX JSON SBOM file."""
@@ -44,66 +43,68 @@ def extract_cves_from_cyclonedx(sbom_file):
         print(f"Error reading SBOM file {sbom_file}: {e}")
         return []
 
-def extract_cves_from_spdx(sbom_file):
-    """Extract CVEs from an SPDX JSON SBOM file."""
-    try:
-        with open(sbom_file, "r") as file:
-            sbom_data = json.load(file)
-
-        cve_list = set()
-        
-        for item in sbom_data.get("@graph", []):
-            if "hasVulnerability" in item:
-                for vuln in item["hasVulnerability"]:
-                    if isinstance(vuln, dict) and "cveId" in vuln:
-                        cve_list.add(vuln["cveId"])
-
-        return list(cve_list)
-
-    except Exception as e:
-        print(f"Error reading SPDX SBOM file {sbom_file}: {e}")
-        return []
-
 def fetch_epss_scores(cve_list):
     """Fetch EPSS scores for a list of CVEs."""
     if not cve_list:
         return {}
 
-    cve_query = ",".join(cve_list)
-    url = f"{EPSS_API}?cve={cve_query}"
-    response = requests.get(url)
-
     try:
+        cve_query = ",".join(cve_list)
+        url = f"{EPSS_API}?cve={cve_query}"
+        response = requests.get(url)
+        response.raise_for_status()
         data = response.json()
         return {entry["cve"]: entry["epss"] for entry in data.get("data", [])}
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print(f"Error fetching EPSS scores: {e}")
         return {}
 
 def fetch_kev_entries(cve_list):
     """Check if CVEs are listed in the CISA KEV database."""
-    response = requests.get(KEV_API)
-    
     try:
+        response = requests.get(KEV_API)
+        response.raise_for_status()
         kev_data = response.json()
         kev_cves = {entry["cveID"] for entry in kev_data.get("vulnerabilities", [])}
         return {cve: cve in kev_cves for cve in cve_list}
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print(f"Error fetching KEV data: {e}")
         return {}
 
-def fetch_nvd_data(cve_id):
-    """Fetch NVD data for a specific CVE."""
-    time.sleep(1)  # Basic rate limiting
-    response = requests.get(f"{NVD_API_BASE}{cve_id}")
+def fetch_nvd_data(cve_id, retries=3):
+    """Fetch NVD CVSS data with error handling and rate-limiting."""
+    url = f"{NVD_API_BASE}{cve_id}"
 
-    try:
-        data = response.json()
-        cvss_score = data.get("result", {}).get("CVE_Items", [{}])[0].get("impact", {}).get("baseMetricV3", {}).get("cvssV3", {}).get("baseScore", "N/A")
-        return cvss_score
-    except Exception as e:
-        print(f"Error fetching NVD data for {cve_id}: {e}")
-        return "N/A"
+    for attempt in range(retries):
+        try:
+            response = requests.get(url, timeout=10)
+
+            if response.status_code == 429:
+                print(f"NVD API rate limit exceeded. Sleeping for {NVD_SLEEP_TIME} seconds...")
+                time.sleep(NVD_SLEEP_TIME)
+                continue  
+
+            if response.status_code != 200:
+                print(f"Error fetching NVD data for {cve_id}: HTTP {response.status_code}")
+                return "N/A"
+
+            data = response.json()
+            if not data:
+                print(f"Empty response for {cve_id} from NVD API.")
+                return "N/A"
+
+            cve_items = data.get("result", {}).get("CVE_Items", [])
+            if cve_items:
+                impact_data = cve_items[0].get("impact", {}).get("baseMetricV3", {}).get("cvssV3", {})
+                return impact_data.get("baseScore", "N/A")
+
+            return "N/A"
+
+        except requests.exceptions.RequestException as e:
+            print(f"Request error for {cve_id}: {e}")
+            time.sleep(5)  
+
+    return "N/A"  
 
 def scan_sboms(directory):
     """Scan multiple SBOM files for CVEs and check against KEV, EPSS, NVD, and ExploitDB."""
@@ -113,22 +114,20 @@ def scan_sboms(directory):
         print(f"Processing: {sbom_file}")
         if "cyclonedx" in sbom_file.name.lower():
             cve_list = extract_cves_from_cyclonedx(sbom_file)
-        elif "spdx" in sbom_file.name.lower():
-            cve_list = extract_cves_from_spdx(sbom_file)
         else:
-            continue  # Skip unknown formats
+            continue  
 
         epss_scores = fetch_epss_scores(cve_list)
         kev_results = fetch_kev_entries(cve_list)
 
         for cve in cve_list:
-            cvss_score = fetch_nvd_data(cve)  # Fetching CVSS Score
-            exploit_db_link = f"{EXPLOIT_DB_SEARCH}{cve}"  # Construct ExploitDB link
+            cvss_score = fetch_nvd_data(cve)  
+            exploit_db_link = f"{EXPLOIT_DB_SEARCH}{cve}"  
 
             results.append({
                 "CVE": cve,
-                "EPSS_Score": epss_scores.get(cve, "N/A"),
-                "CVSS_Score": cvss_score,
+                "EPSS_Score": float(epss_scores.get(cve, 0)),
+                "CVSS_Score": float(cvss_score) if cvss_score != "N/A" else None,
                 "In_KEV": kev_results.get(cve, False),
                 "ExploitDB_Link": exploit_db_link
             })
@@ -142,7 +141,7 @@ def save_report(results, output_file):
     print(f"Vulnerability report saved to {output_file}")
 
 if __name__ == "__main__":
-    sbom_dir = "./"  # Directory where SBOMs are stored
+    sbom_dir = "./"  
     report_file = "vulnerability_report.json"
 
     results = scan_sboms(sbom_dir)
