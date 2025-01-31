@@ -103,17 +103,17 @@ def generate_summary(results, summary_file):
     kev_cves = [entry["CVE"] for entry in results if entry["In_KEV"]]
 
     summary_content = []
-    summary_content.append("# Vulnerability Scan Report\n")
-    summary_content.append(f"- **Total CVEs Scanned:** {len(results)}\n")
-    summary_content.append(f"- **CVEs in KEV Database:** {len(kev_cves)}\n")
+    summary_content.append("# 📊 Vulnerability Scan Report\n\n")
+    summary_content.append(f"- **🔍 Total CVEs Scanned:** {len(results)}\n")
+    summary_content.append(f"- **🚨 CVEs in KEV Database:** {len(kev_cves)}\n")
 
     if epss_scores:
-        summary_content.append(f"- **Highest EPSS Score:** {max(epss_scores):.2f}\n")
+        summary_content.append(f"- **🔥 Highest EPSS Score:** {max(epss_scores):.2f}\n")
     if cvss_scores:
-        summary_content.append(f"- **Highest CVSS Score:** {max(cvss_scores):.1f}\n")
+        summary_content.append(f"- **💣 Highest CVSS Score:** {max(cvss_scores):.1f}\n")
 
     if kev_cves:
-        summary_content.append("\n### Top 5 CVEs in KEV Database:\n")
+        summary_content.append("\n### ⚠️ Top 5 CVEs in KEV Database:\n")
         for cve in kev_cves[:5]:
             summary_content.append(f"- {cve}\n")
 
@@ -121,7 +121,7 @@ def generate_summary(results, summary_file):
     with open(summary_file, "w") as summary:
         summary.writelines(summary_content)
 
-    print("Summary report saved to summary.md")
+    print("✅ Summary report saved to summary.md")
 
 if __name__ == "__main__":
     sbom_dir = "./"  
