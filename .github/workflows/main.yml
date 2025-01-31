@@ -1,39 +1,44 @@
-name: SCANOSS WorkFlow Demo
+name: SCANOSS WorkFlow Demo  # Workflow name
 
 on:
   push:
     branches:
-      - '*'
+      - '*'  # Runs the workflow on any branch push
 
 jobs:
   scan-and-generate-sbom:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Specifies the runner environment
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Checks out repository code
 
       - name: Log in to GitHub Docker Registry
-        if: env.DOCKER_AUTH_REQUIRED == 'true'
+        if: env.DOCKER_AUTH_REQUIRED == 'true'  # Conditional login if Docker authentication is required
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Run SCANOSS Analysis for License - Encryption - Vulnerabilities
         run: |
+          # Pull the latest SCANOSS container image
           docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
+
+          # Run SCANOSS scan and generate a CycloneDX SBOM
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
+
+          # Run SCANOSS cryptography component analysis and save results
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 comp crypto --key txnUfW0xwF0KI1U1RW5sDSBL --purl pkg:github/heimdal/heimdal > crypto_results.txt
 
       - name: Upload SBOM Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4  # Stores artifacts for use in later jobs
         with:
           name: scanoss-results
           path: |
             ./cycloneDX.json
-            ./crypto_results.txt
+            ./crypto_results.txt  # Uploads both SBOM and cryptography results
 
   process-vulnerabilities:
     runs-on: ubuntu-latest
-    needs: scan-and-generate-sbom
+    needs: scan-and-generate-sbom  # Ensures this job runs only after SBOM generation is complete
 
     steps:
       - name: Checkout Code
@@ -42,34 +47,43 @@ jobs:
       - name: Download SBOM Results
         uses: actions/download-artifact@v4
         with:
-          name: scanoss-results
+          name: scanoss-results  # Retrieves the previously generated SBOM and crypto results
           path: ./
 
       - name: Install Python Dependencies
         run: |
+          # Upgrade pip and install necessary Python libraries for vulnerability processing
           python -m pip install --upgrade pip
           pip install pandas requests tabulate matplotlib kaleido numpy
 
       - name: Process EPSS, KEV, and NVD Data
         run: |
+          # Ensure the script exists before running it
+          if [ ! -f scripts/epss.py ]; then
+            echo "Error: scripts/epss.py not found!"
+            exit 1
+          fi
+
+          # Execute the vulnerability processing script
           python scripts/epss.py
 
       - name: Check Generated Vulnerability Report
         run: |
+          # Validate that the vulnerability report was created
           if [ ! -f vulnerability_report.json ]; then
             echo "Error: vulnerability_report.json not found!"
             exit 1
           fi
 
       - name: Upload Enriched Vulnerability Data
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4  # Stores the vulnerability report for later use
         with:
           name: enriched-vulnerability-data
           path: vulnerability_report.json
 
   generate-charts:
     runs-on: ubuntu-latest
-    needs: process-vulnerabilities
+    needs: process-vulnerabilities  # Ensures this job runs only after vulnerability processing
 
     steps:
       - name: Checkout Code
@@ -78,38 +92,50 @@ jobs:
       - name: Download Enriched Vulnerability Data
         uses: actions/download-artifact@v4
         with:
-          name: enriched-vulnerability-data
+          name: enriched-vulnerability-data  # Retrieves the processed vulnerability report
           path: ./
 
       - name: Install Python Dependencies
         run: |
+          # Install Python libraries needed for data visualization
           python -m pip install --upgrade pip
           pip install pandas requests tabulate matplotlib kaleido numpy
 
       - name: Ensure Charts Directory Exists
-        run: mkdir -p charts
+        run: mkdir -p charts  # Creates the charts directory if it does not exist
+
+      - name: Check if `generatecharts.py` exists
+        run: |
+          # Validate that the chart generation script exists
+          if [ ! -f scripts/generatecharts.py ]; then
+            echo "Error: scripts/generatecharts.py not found!"
+            exit 1
+          fi
 
       - name: Generate Charts
         run: |
+          # Execute the script that generates charts from vulnerability data
           python scripts/generatecharts.py
 
       - name: Check Generated Charts
         run: |
+          # Ensure at least one chart file exists in the directory
           if [ -z "$(ls -A charts)" ]; then
             echo "Error: No charts were generated!"
             exit 1
           fi
 
       - name: Upload Charts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4  # Stores generated charts as artifacts
         with:
           name: vulnerability-charts
           path: charts/
 
-      - name: Append Chart Insights to GitHub Summary  # ✅ Fix: Ensure summary.md is appended
+      - name: Append Chart Insights to GitHub Summary
         run: |
+          # Append the contents of summary.md (if it exists) to GitHub's job summary
           if [ -f summary.md ]; then
             cat summary.md >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Error: summary.md not found!" >> $GITHUB_STEP_SUMMARY
-         fi
+          fi
