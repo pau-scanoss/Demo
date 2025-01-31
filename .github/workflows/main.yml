@@ -112,3 +112,4 @@ jobs:
             cat summary.md >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Error: summary.md not found!" >> $GITHUB_STEP_SUMMARY
+         fi
