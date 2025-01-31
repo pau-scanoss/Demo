@@ -30,7 +30,6 @@ jobs:
           path: |
             ./cycloneDX.json
             ./crypto_results.txt
-
  name: SCANOSS WorkFlow Demo
 
 on:
