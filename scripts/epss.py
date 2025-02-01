@@ -70,6 +70,6 @@ def save_results_to_csv(results, output_file="epss_kev_results.csv"):
         writer.writerows(results)
 
 # Example usage
-sbom_file = "sbom.json"
+sbom_file = "cycloneDX.json"
 results = process_sbom(sbom_file)
 save_results_to_csv(results)
