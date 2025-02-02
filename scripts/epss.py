@@ -113,4 +113,4 @@ summary_md += """
 with open("summary.md", "w", encoding="utf-8") as f:
     f.write(summary_md)
 
-print("✅ Markdown report generated: summary.md")
+print("✅ Markdown report generated: vulsummary.md")
