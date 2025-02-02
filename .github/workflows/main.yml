@@ -116,7 +116,7 @@ jobs:
           name: vulnerability-summary
           path: reports/
 
-       - name: Append Summary to GitHub Summary
+      - name: Append Summary to GitHub Summary
         run: |
           echo "📄 Checking for summary.md in reports/..."
           if [ -f reports/summary.md ]; then
