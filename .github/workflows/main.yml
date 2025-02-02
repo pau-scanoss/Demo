@@ -116,12 +116,14 @@ jobs:
           name: vulnerability-summary
           path: reports/
 
-      - name: Append Summary to GitHub Summary
+       - name: Append Summary to GitHub Summary
         run: |
-          echo "📄 Adding report summary to GitHub summary..."
+          echo "📄 Checking for summary.md in reports/..."
           if [ -f reports/summary.md ]; then
+            echo "✅ summary.md found in reports/! Appending to GitHub summary..."
             cat reports/summary.md >> $GITHUB_STEP_SUMMARY
-            echo "✅ Summary appended."
           else
-            echo "❌ Error: summary.md not found!" >> $GITHUB_STEP_SUMMARY
+            echo "❌ Error: summary.md not found! Debugging..."
+            ls -lah reports/  # Debugging step: list files in the directory
+            exit 1
           fi

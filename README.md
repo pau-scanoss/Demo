@@ -20,7 +20,7 @@ This repository demonstrates how to integrate [SCANOSS](https://www.scanoss.com)
 - **GitHub Repository**: A repository where you want to set up the SCANOSS GitHub Action.
 - **SCANOSS API Key**: Obtain an API key from your [SCANOSS account](https://www.scanoss.com).
 - **Configured Workflow File**: A `.yml` file in the `.github/workflows` directory of your repository.
-
+- **Configured Workflow File**: SCANOSS Settings File `root Dir`
 
 
 ---

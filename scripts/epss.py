@@ -2,6 +2,12 @@ import json
 import os
 import numpy as np
 
+# Ensure the reports directory exists
+output_dir = "reports"
+if not os.path.exists(output_dir):
+    print(f"📁 Creating missing directory: {output_dir}")
+    os.makedirs(output_dir)
+
 # File path for vulnerability report
 vuln_file = "vulnerability_report.json"
 
@@ -109,8 +115,11 @@ summary_md += """
 ---
 """
 
+# Define correct output path
+summary_path = os.path.join(output_dir, "summary.md")
+
 # Write summary to file
-with open("summary.md", "w", encoding="utf-8") as f:
+with open(summary_path, "w", encoding="utf-8") as f:
     f.write(summary_md)
 
-print("✅ Markdown report generated: summary.md")
+print(f"✅ Markdown report generated: {summary_path}")
