@@ -81,7 +81,7 @@ jobs:
           name: enriched-vulnerability-data
           path: vulnerability_report.json
 
-  generate-charts:
+  generate-summary:
     runs-on: ubuntu-latest
     needs: process-vulnerabilities  # Ensures this job runs only after vulnerability processing
 
@@ -97,45 +97,24 @@ jobs:
 
       - name: Install Python Dependencies
         run: |
-          # Install Python libraries needed for data visualization
+          # Install Python libraries needed for markdown generation
           python -m pip install --upgrade pip
-          pip install pandas requests tabulate matplotlib kaleido numpy
+          pip install numpy matplotlib pandas
 
-      - name: Ensure Charts Directory Exists
-        run: mkdir -p charts  # Creates the charts directory if it does not exist
+      - name: Run `score.py` to Generate Report
+        run: python score.py
 
-      - name: Check if `generatecharts.py` exists
-        run: |
-          # Validate that the chart generation script exists
-          if [ ! -f scripts/generatecharts.py ]; then
-            echo "Error: scripts/generatecharts.py not found!"
-            exit 1
-          fi
-
-      - name: Generate Charts
-        run: |
-          # Execute the script that generates charts from vulnerability data
-          python scripts/generatecharts.py
-
-      - name: Check Generated Charts
-        run: |
-          # Ensure at least one chart file exists in the directory
-          if [ -z "$(ls -A charts)" ]; then
-            echo "Error: No charts were generated!"
-            exit 1
-          fi
-
-      - name: Upload Charts
-        uses: actions/upload-artifact@v4  # Stores generated charts as artifacts
+      - name: Upload Summary Report
+        uses: actions/upload-artifact@v4
         with:
-          name: vulnerability-charts
-          path: charts/
+          name: vulnerability-summary
+          path: reports/
 
-      - name: Append Chart Insights to GitHub Summary
+      - name: Append Summary to GitHub Summary
         run: |
-          # Append the contents of summary.md (if it exists) to GitHub's job summary
-          if [ -f summary.md ]; then
-            cat summary.md >> $GITHUB_STEP_SUMMARY
+          # Ensure summary.md exists before appending
+          if [ -f reports/summary.md ]; then
+            cat reports/summary.md >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Error: summary.md not found!" >> $GITHUB_STEP_SUMMARY
           fi
