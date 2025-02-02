@@ -15,18 +15,23 @@ jobs:
 
       - name: Log in to GitHub Docker Registry
         if: env.DOCKER_AUTH_REQUIRED == 'true'  # Conditional login if Docker authentication is required
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: |
+          echo "🔑 Logging into GitHub Container Registry..."
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo "✅ Login successful."
 
       - name: Run SCANOSS Analysis for License - Encryption - Vulnerabilities
         run: |
-          # Pull the latest SCANOSS container image
+          echo "🚀 Pulling SCANOSS Docker image..."
           docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
 
-          # Run SCANOSS scan and generate a CycloneDX SBOM
+          echo "📊 Running SCANOSS scan for license, encryption, and vulnerabilities..."
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
+          echo "✅ SCANOSS scan completed."
 
-          # Run SCANOSS cryptography component analysis and save results
+          echo "🔍 Running SCANOSS cryptography component analysis..."
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 comp crypto --key txnUfW0xwF0KI1U1RW5sDSBL --purl pkg:github/heimdal/heimdal > crypto_results.txt
+          echo "✅ Cryptography analysis completed."
 
       - name: Upload SBOM Results
         uses: actions/upload-artifact@v4  # Stores artifacts for use in later jobs
@@ -52,28 +57,31 @@ jobs:
 
       - name: Install Python Dependencies
         run: |
-          # Upgrade pip and install necessary Python libraries for vulnerability processing
+          echo "📦 Installing required Python dependencies..."
           python -m pip install --upgrade pip
           pip install pandas requests tabulate matplotlib kaleido numpy
+          echo "✅ Dependencies installed."
 
       - name: Process EPSS, KEV, and NVD Data
         run: |
-          # Ensure the script exists before running it
+          echo "📜 Checking if vulnerability processing script exists..."
           if [ ! -f scripts/epss.py ]; then
-            echo "Error: scripts/epss.py not found!"
+            echo "❌ Error: scripts/epss.py not found!"
             exit 1
           fi
 
-          #Execute the vulnerability processing script
+          echo "⚙️ Running the EPSS vulnerability processing script..."
           python scripts/epss.py
+          echo "✅ Processing completed."
 
       - name: Check Generated Vulnerability Report
         run: |
-          # Validate that the vulnerability report was created
+          echo "📋 Validating the generated vulnerability report..."
           if [ ! -f vulnerability_report.json ]; then
-            echo "Error: vulnerability_report.json not found!"
+            echo "❌ Error: vulnerability_report.json not found!"
             exit 1
           fi
+          echo "✅ Vulnerability report found and validated."
 
       - name: Upload Enriched Vulnerability Data
         uses: actions/upload-artifact@v4  # Stores the vulnerability report for later use
@@ -97,9 +105,10 @@ jobs:
 
       - name: Install Python Dependencies
         run: |
-          # Install Python libraries needed for markdown generation
+          echo "📦 Installing Python libraries for report generation..."
           python -m pip install --upgrade pip
           pip install numpy matplotlib pandas
+          echo "✅ Dependencies installed."
 
       - name: Upload Summary Report
         uses: actions/upload-artifact@v4
@@ -109,9 +118,10 @@ jobs:
 
       - name: Append Summary to GitHub Summary
         run: |
-          # Ensure summary.md exists before appending
+          echo "📄 Adding report summary to GitHub summary..."
           if [ -f reports/summary.md ]; then
             cat reports/summary.md >> $GITHUB_STEP_SUMMARY
+            echo "✅ Summary appended."
           else
             echo "❌ Error: summary.md not found!" >> $GITHUB_STEP_SUMMARY
           fi
