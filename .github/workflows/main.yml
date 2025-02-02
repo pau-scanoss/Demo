@@ -64,7 +64,7 @@ jobs:
             exit 1
           fi
 
-          # Execute the vulnerability processing script
+          #Execute the vulnerability processing script
           python scripts/epss.py
 
       - name: Check Generated Vulnerability Report
@@ -100,9 +100,6 @@ jobs:
           # Install Python libraries needed for markdown generation
           python -m pip install --upgrade pip
           pip install numpy matplotlib pandas
-
-      - name: Run `score.py` to Generate Report
-        run: python score.py
 
       - name: Upload Summary Report
         uses: actions/upload-artifact@v4
