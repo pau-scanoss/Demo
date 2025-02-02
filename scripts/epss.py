@@ -1,75 +1,116 @@
-import requests
 import json
-import csv
+import os
+import numpy as np
 
-# API Endpoints
-EPSS_API = "https://api.first.org/data/v1/epss"
-KEV_API = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+# File path for vulnerability report
+vuln_file = "vulnerability_report.json"
 
-def fetch_epss_scores(cve_list):
-    """Fetch EPSS scores for a list of CVEs."""
-    try:
-        cve_query = ",".join(cve_list)
-        url = f"{EPSS_API}?cve={cve_query}"
-        response = requests.get(url)
-        data = response.json()
-        return {item["cve"]: float(item["epss"]) for item in data.get("data", [])}
-    except Exception as e:
-        print(f"Error fetching EPSS scores: {e}")
-        return {}
-
-def fetch_kev_data():
-    """Fetch KEV data from CISA's KEV database."""
-    try:
-        response = requests.get(KEV_API)
-        kev_data = response.json()
-        kev_results = {}
-        for vuln in kev_data.get("vulnerabilities", []):
-            cve = vuln.get("cveID")
-            kev_results[cve] = {
-                "Exploitability": vuln.get("knownExploitability", "Unverified"),
-                "Date Added": vuln.get("dateAdded"),
-            }
-        return kev_results
-    except Exception as e:
-        print(f"Error fetching KEV data: {e}")
-        return {}
-
-def process_sbom(sbom_file):
-    """Scan an SBOM file for CVEs and check against KEV, EPSS."""
-    with open(sbom_file, "r") as f:
-        sbom_data = json.load(f)
-
-    cve_list = {vuln.get("id") for vuln in sbom_data.get("vulnerabilities", []) if vuln.get("id", "").startswith("CVE-")}
-    epss_scores = fetch_epss_scores(cve_list)
-    kev_results = fetch_kev_data()
-
+# Check if the vulnerability report exists
+if not os.path.exists(vuln_file):
+    print(f"⚠️ Warning: {vuln_file} not found. Generating an empty summary.")
     results = []
-    for cve in cve_list:
-        epss_score = epss_scores.get(cve, 0)
-        risk_category = "High" if epss_score > 0.7 else "Medium" if epss_score > 0.3 else "Low"
-        kev_entry = kev_results.get(cve, {"Exploitability": "Unverified", "Date Added": "Unknown"})
+else:
+    # Load the vulnerability report
+    with open(vuln_file, "r", encoding="utf-8") as file:
+        results = json.load(file)
 
-        results.append({
-            "CVE": cve,
-            "EPSS_Score": epss_score,
-            "EPSS Risk": risk_category,
-            "In_KEV": cve in kev_results,
-            "KEV Exploitability": kev_entry["Exploitability"],
-            "KEV Date Added": kev_entry["Date Added"],
-        })
+# Ensure there's data in the report
+if not results:
+    print("⚠️ No vulnerabilities found. Creating a basic summary.")
+    results = []
 
-    return results
+# Extract data safely and replace None with 0.0
+for entry in results:
+    entry["EPSS_Score"] = entry.get("EPSS_Score", 0.0) if isinstance(entry.get("EPSS_Score"), (int, float)) else 0.0
+    entry["CVSS_Score"] = entry.get("CVSS_Score", 0.0) if isinstance(entry.get("CVSS_Score"), (int, float)) else 0.0
 
-def save_results_to_csv(results, output_file="epss_kev_results.csv"):
-    """Save the processed KEV and EPSS data to CSV."""
-    keys = results[0].keys() if results else []
-    with open(output_file, "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=keys)
-        writer.writeheader()
-        writer.writerows(results)
+# Collecting valid scores for mean calculations
+epss_scores = [entry["EPSS_Score"] for entry in results]
+cvss_scores = [entry["CVSS_Score"] for entry in results]
+kev_count = sum(1 for entry in results if entry.get("In_KEV", False))
+total_cves = len(results)
 
-# Example usage
-sbom_file = "cycloneDX.json"
-results = process_sbom(sbom_file)
-save_results_to_csv(results)
+# Categorize CVEs by risk
+high_risk = [entry for entry in results if entry["EPSS_Score"] >= 0.7]
+medium_risk = [entry for entry in results if 0.3 <= entry["EPSS_Score"] < 0.7]
+low_risk = [entry for entry in results if entry["EPSS_Score"] < 0.3]
+
+# Handle empty datasets to prevent mean calculation errors
+avg_epss = np.mean(epss_scores) if epss_scores else 0.0
+avg_cvss = np.mean(cvss_scores) if cvss_scores else 0.0
+
+# Generate markdown report
+summary_md = f"""
+# 📊 Vulnerability Scan Summary
+
+## 🛡️ Overview
+- 🔎 **Total CVEs Scanned:** {total_cves}
+- 🛑 **Total KEV CVEs:** {kev_count}
+- 📉 **Average EPSS Score:** {avg_epss:.2f}
+- 💣 **Average CVSS Score:** {avg_cvss:.1f}
+
+---
+
+## 🚨 High-Risk Vulnerabilities (EPSS > 0.7)
+"""
+summary_md += "\n".join(
+    f"- **{cve['CVE']}** (EPSS: {cve['EPSS_Score']:.2f}) 🔴 [ExploitDB](https://www.exploit-db.com/search?cve={cve['CVE']})"
+    for cve in high_risk
+) if high_risk else "None"
+
+summary_md += """
+
+---
+
+## ⚠️ Medium-Risk Vulnerabilities (0.3 < EPSS ≤ 0.7)
+"""
+summary_md += "\n".join(
+    f"- **{cve['CVE']}** (EPSS: {cve['EPSS_Score']:.2f}) 🟠 [ExploitDB](https://www.exploit-db.com/search?cve={cve['CVE']})"
+    for cve in medium_risk
+) if medium_risk else "None"
+
+summary_md += """
+
+---
+
+## ✅ Low-Risk Vulnerabilities (EPSS ≤ 0.3)
+"""
+summary_md += "\n".join(
+    f"- **{cve['CVE']}** (EPSS: {cve['EPSS_Score']:.2f}) 🟢 [ExploitDB](https://www.exploit-db.com/search?cve={cve['CVE']})"
+    for cve in low_risk
+) if low_risk else "None"
+
+summary_md += """
+
+---
+
+## 📈 Charts Summary
+![EPSS Score Distribution](charts/epss_distribution.png)
+![KEV Coverage](charts/kev_pie_chart.png)
+![EPSS vs. CVSS](charts/epss_vs_cvss.png)
+
+---
+
+## 📜 Full CVE Report
+<details>
+<summary>Click to Expand Full Report</summary>
+
+| CVE ID | EPSS Score | CVSS Score | In KEV? | ExploitDB |
+|--------|------------|------------|--------|-----------|
+"""
+summary_md += "\n".join(
+    f"| {entry['CVE']} | {entry['EPSS_Score']:.2f} | {entry['CVSS_Score']:.1f} | {'✅' if entry.get('In_KEV', False) else '❌'} | [Link](https://www.exploit-db.com/search?cve={entry['CVE']}) |"
+    for entry in results
+) if results else "| No vulnerabilities found | - | - | - | - |"
+
+summary_md += """
+</details>
+
+---
+"""
+
+# Write summary to file
+with open("summary.md", "w", encoding="utf-8") as f:
+    f.write(summary_md)
+
+print("✅ Markdown report generated: summary.md")
