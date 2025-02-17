@@ -8,7 +8,7 @@ The ways to donate to the project, as well as details on how the funds are
 used, are described on [Godot's website](https://godotengine.org/donate).
 
 The following is a list of the current monthly donors, who will have their
-generous deed immortalized in the next stable release of Godot Engine.
+generous deed immortalized in the next stable release of Godot Engine. #this a small change 
 
 ## Patrons
 
