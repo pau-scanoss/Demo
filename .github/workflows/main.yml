@@ -26,12 +26,12 @@ jobs:
           docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
 
           echo "📊 Running SCANOSS scan for license, encryption, and vulnerabilities..."
-          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
+          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:latest scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
           echo "✅ SCANOSS scan completed."
 
           echo "🔍 Running SCANOSS cryptography component analysis..."
-          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 comp crypto --key txnUfW0xwF0KI1U1RW5sDSBL --purl pkg:github/heimdal/heimdal > crypto_results.txt
-          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 comp prov -o prov_results.txt
+          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:latest comp crypto --key txnUfW0xwF0KI1U1RW5sDSBL --purl pkg:github/heimdal/heimdal > crypto_results.txt
+          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:latest comp prov -o prov_results.txt
           echo "✅ Cryptography analysis completed."
 
       - name: Upload SBOM Results
