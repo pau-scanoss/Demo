@@ -23,7 +23,7 @@ jobs:
       - name: Run SCANOSS Analysis for License - Encryption - Vulnerabilities
         run: |
           echo "🚀 Pulling SCANOSS Docker image..."
-          docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
+          docker pull ghcr.io/scanoss/scanoss-py:latest
 
           echo "📊 Running SCANOSS scan for license, encryption, and vulnerabilities..."
           docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:latest scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
