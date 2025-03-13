@@ -19,21 +19,16 @@ jobs:
           echo "🔑 Logging into GitHub Container Registry..."
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           echo "✅ Login successful."
-
       - name: Run SCANOSS Analysis for License - Encryption - Vulnerabilities
         run: |
           echo "🚀 Pulling SCANOSS Docker image..."
-          docker pull ghcr.io/scanoss/scanoss-py:latest
-
+          docker pull ghcr.io/scanoss/scanoss-py:v1.19.0
           echo "📊 Running SCANOSS scan for license, encryption, and vulnerabilities..."
-          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:latest scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
+          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 scan ./ --key txnUfW0xwF0KI1U1RW5sDSBL --format cyclonedx -o cycloneDX.json
           echo "✅ SCANOSS scan completed."
-
           echo "🔍 Running SCANOSS cryptography component analysis..."
-          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:latest comp crypto --key txnUfW0xwF0KI1U1RW5sDSBL --purl pkg:github/heimdal/heimdal > crypto_results.txt
-          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:latest comp prov -o prov_results.txt
+          docker run --rm -v $(pwd):/scanoss ghcr.io/scanoss/scanoss-py:v1.19.0 comp crypto --key txnUfW0xwF0KI1U1RW5sDSBL --purl pkg:github/heimdal/heimdal > crypto_results.txt
           echo "✅ Cryptography analysis completed."
-
       - name: Upload SBOM Results
         uses: actions/upload-artifact@v4  # Stores artifacts for use in later jobs
         with:
@@ -41,7 +36,6 @@ jobs:
           path: |
             ./cycloneDX.json
             ./crypto_results.txt  # Uploads both SBOM and cryptography results
-
   process-vulnerabilities:
     runs-on: ubuntu-latest
     needs: scan-and-generate-sbom  # Ensures this job runs only after SBOM generation is complete
@@ -62,7 +56,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas requests tabulate matplotlib kaleido numpy
           echo "✅ Dependencies installed."
-
       - name: Process EPSS, KEV, and NVD Data
         run: |
           echo "📜 Checking if vulnerability processing script exists..."
@@ -70,11 +63,9 @@ jobs:
             echo "❌ Error: scripts/epss.py not found!"
             exit 1
           fi
-
           echo "⚙️ Running the EPSS vulnerability processing script..."
           python scripts/epss.py
           echo "✅ Processing completed."
-
       - name: Check Generated Vulnerability Report
         run: |
           echo "📋 Validating the generated vulnerability report..."
@@ -83,7 +74,6 @@ jobs:
             exit 1
           fi
           echo "✅ Vulnerability report found and validated."
-
       - name: Upload Enriched Vulnerability Data
         uses: actions/upload-artifact@v4  # Stores the vulnerability report for later use
         with:
@@ -110,7 +100,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install numpy matplotlib pandas
           echo "✅ Dependencies installed."
-
       - name: Upload Summary Report
         uses: actions/upload-artifact@v4
         with:
